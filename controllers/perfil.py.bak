@@ -1,0 +1,10 @@
+# coding: utf8
+# try something like
+def index(): return dict(message="hello from perfil.py")
+
+def misfeeds():
+    fdata = db(db.feed.created_by == auth.user_id).select(db.feed.id,db.feed.title,db.feed.categoria,db.feed.is_active)
+    ftable = TABLE(THEAD(TR(TH('Título'),TH('Categoría'),TH('Activado'),TH('Editar'))))
+    for f in fdata:
+        ftable.append(TR(TD(f.title),TD(f.categoria.title),TD(f.is_active),TH(A('editar',_href=f.id))))
+    return dict(ftable=ftable)

@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /welcome
+Disallow: /gestion
+Disallow: /varpub
+Disallow: /admin
+Disallow: */default/user
+Disallow: /examples
+Disallow: /b2
+Disallow: /bdev

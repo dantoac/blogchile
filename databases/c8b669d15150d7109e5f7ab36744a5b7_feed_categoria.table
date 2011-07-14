@@ -1,0 +1,34 @@
+(dp1
+S'feed'
+p2
+S'INTEGER REFERENCES feed(id) ON DELETE CASCADE'
+p3
+sS'categoria'
+p4
+S'INTEGER REFERENCES categoria(id) ON DELETE CASCADE'
+p5
+sS'modified_by'
+p6
+S'INTEGER REFERENCES auth_user(id) ON DELETE CASCADE'
+p7
+sS'is_active'
+p8
+S'CHAR(1)'
+p9
+sS'created_by'
+p10
+S'INTEGER REFERENCES auth_user(id) ON DELETE CASCADE'
+p11
+sS'created_on'
+p12
+S'TIMESTAMP'
+p13
+sS'modified_on'
+p14
+S'TIMESTAMP'
+p15
+sS'id'
+p16
+S'INTEGER PRIMARY KEY AUTOINCREMENT'
+p17
+s.

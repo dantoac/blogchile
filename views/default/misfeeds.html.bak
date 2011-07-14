@@ -1,0 +1,4 @@
+<div style='margin:auto;width:600px;'>
+<h1>Mis Feeds</h1>
+{{=ftable}}
+</div>

@@ -1,0 +1,77 @@
+def sitemaps():
+    sm = [str('<?xml version="1.0" encoding="UTF-8" ?> <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')]
+
+    prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
+
+    for i in xrange(1,4):
+        sm.append(str(TAG.sitemap(
+            TAG.loc(prefix,URL(c='default',f='sitemap%s.xml' % i))
+            )))
+            
+    #sm.append('</urlset>')
+    return sm
+
+
+def sitemap1():
+    sm = [str('<?xml version="1.0" encoding="UTF-8" ?> <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')]
+
+    prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
+
+    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(0,10))
+    for noti in data:
+        sm.append(str(TAG.url(
+            TAG.loc(prefix,URL(c='default',f='go',args=[noti.slug,noti.id],extension='')),
+            TAG.lastmod(noti.created_on.date()),
+            TAG.changefreq('always')
+            )))
+            
+    sm.append('</urlset>')
+    return sm
+
+def sitemap2():
+    sm = [str('<?xml version="1.0" encoding="UTF-8" ?> <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')]
+
+    prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
+
+    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(10000,20000))
+    for noti in data:
+        sm.append(str(TAG.url(
+            TAG.loc(prefix,URL(c='default',f='go',args=[noti.slug,noti.id],extension='')),
+            TAG.lastmod(noti.created_on.date()),
+            TAG.changefreq('always')
+            )))
+            
+    sm.append('</urlset>')
+    return sm
+    
+def sitemap3():
+    sm = [str('<?xml version="1.0" encoding="UTF-8" ?> <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')]
+
+    prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
+
+    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(20000,30000))
+    for noti in data:
+        sm.append(str(TAG.url(
+            TAG.loc(prefix,URL(c='default',f='go',args=[noti.slug,noti.id],extension='')),
+            TAG.lastmod(noti.created_on.date()),
+            TAG.changefreq('always')
+            )))
+            
+    sm.append('</urlset>')
+    return sm
+    
+def sitemap4():
+    sm = [str('<?xml version="1.0" encoding="UTF-8" ?> <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')]
+
+    prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
+
+    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(30000,40000))
+    for noti in data:
+        sm.append(str(TAG.url(
+            TAG.loc(prefix,URL(c='default',f='go',args=[noti.slug,noti.id],extension='')),
+            TAG.lastmod(noti.created_on.date()),
+            TAG.changefreq('always')
+            )))
+            
+    sm.append('</urlset>')
+    return sm

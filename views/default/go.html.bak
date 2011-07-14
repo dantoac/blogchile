@@ -1,0 +1,17 @@
+{{block header}}
+<style>
+html, body, #godiv, #container, #wrapper, #page, #content {height:100%;margin:0;padding:0em;overflow:hidden;}
+#statusbar {display:none;}
+</style>
+{{end}}
+
+
+{{block panel}}
+{{=referer}}<g:plusone count="true"></g:plusone>
+{{end}}
+
+{{extend 'plantilla.html'}}
+
+<script>var _wau = _wau || []; _wau.push(["tab", "c1xd914rpptg", "qvz", "right-upper"]);(function() { var s=document.createElement("script"); s.async=true; s.src="http://widgets.amung.us/tab.js";document.getElementsByTagName("head")[0].appendChild(s);})();</script>
+
+{{=go}}

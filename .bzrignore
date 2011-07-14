@@ -1,0 +1,7 @@
+cache/*
+sessions/*
+errors/*
+
+*~
+*#
+.git

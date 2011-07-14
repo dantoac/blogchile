@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="{{=T.accepted_language or 'es'}}" class="no-js"><!-- no-js need it for modernzr -->
+  <head>
+
+    <meta charset="utf-8" />
+    
+    <!--[if IE]><![endif]-->
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>{{=response.title or request.application}}</title>
+
+    <!-- http://dev.w3.org/html5/markup/meta.name.html -->
+    <meta name="application-name" content="{{=request.application}}" />
+
+    <meta name="google-site-verification" content="VAnrDyZZ-gOh2OomijaqUUs_9YKZATCoN3CPh-uX6qY" />
+
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
+
+    <link rel="shortcut icon" href="{{=URL('static','favicon.ico')}}" type="image/x-icon">
+    <link rel="apple-touch-icon" href="{{=URL('static','favicon.png')}}">
+
+    <link rel="stylesheet" media="handheld" href="{{=URL('static','css/handheld.css')}}">
+
+    <script src="{{=URL('static','js/modernizr-1.7.min.js')}}"></script>
+    
+    
+    <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
+    
+    
+    {{response.files.append(URL('static','css/base.css'))}}
+    {{response.files.append(URL('static','css/superfish.css'))}}
+    {{response.files.append(URL('static','css/planeta.css'))}}
+    {{response.files.append(URL('static','js/superfish.js'))}}
+
+    {{include 'web2py_ajax.html'}}
+
+    {{
+    #using sidebars need to know what sidebar you want to use
+    #prior of using it, because of static width size of content, you can use
+    #left_sidebar, right_sidebar, both or none (False left and right)
+    left_sidebar_enabled = globals().get('left_sidebar_enabled',False)
+    right_sidebar_enabled = globals().get('right_sidebar_enabled',False)
+    if left_sidebar_enabled and right_sidebar_enabled: width_content='63%'
+    elif left_sidebar_enabled != right_sidebar_enabled: width_content='740px'
+    else: width_content='100%'
+    if left_sidebar_enabled: left_sidebar_style = 'style="display: block;"'
+    else: left_sidebar_style = 'style="display: none;"'
+    if right_sidebar_enabled: right_sidebar_style = 'style="display: block;"'
+    else: right_sidebar_style = 'style="display: none;"'
+    style_content = 'style="width: %s"' % width_content
+    }}
+
+    <!-- asynchronous google analytics: mathiasbynens.be/notes/async-analytics-snippet
+         change the UA-XXXXX-X to be your site's ID -->
+    
+           <script>
+             var _gaq = [['_setAccount', 'UA-23950473-1'], ['_trackPageview']];
+             (function(d, t) {
+             var g = d.createElement(t),
+             s = d.getElementsByTagName(t)[0];
+             g.async = true;
+             g.src = '//www.google-analytics.com/ga.js';
+             s.parentNode.insertBefore(g, s);
+             })(document, 'script');
+           </script>
+           
+  </head>
+
+  <!--[if lt IE 7 ]> <body class="ie6"> <![endif]-->
+  <!--[if IE 7 ]>    <body class="ie7"> <![endif]-->
+  <!--[if IE 8 ]>    <body class="ie8"> <![endif]-->
+  <!--[if IE 9 ]>    <body class="ie9"> <![endif]-->
+  <!--[if (gt IE 9)|!(IE)]><!--> <body> <!--<![endif]-->
+  
+    <div id="panel">
+    {{block panel}}
+    
+    {{if request.args(0):}}
+    {{catslug = str(request.args(0)).replace('-',' ').capitalize()}}
+    {{else: catslug=''}}
+    {{pass}}
+    {{if auth.is_logged_in():}}
+    {{=A(SPAN(_class = 'icon cog'), 'Panel', _href = URL('gestion', 'agregar'), _class = 'pill button primary negative', cid = 'content')}}{{pass}}
+    {{=A(SPAN(_class = 'icon home'), 'Portada ', _class = 'button left', _href = URL('default', 'index'))}}{{=A(SPAN(_class = 'icon rss'), 'RSS %s ' % catslug, _class = 'button middle ', _href = URL(f = 'respira.rss', args = request.args(0)))
+    }}{{=A(SPAN(_class='icon magnifier'), 'Buscar ', _class='button right', _href = URL(c='default',f='buscar'))}}
+    {{try:}}{{=auth.navbar(action=URL('default','user'))}}{{except:pass}}
+    
+    {{end}}
+    </div>
+    <div id="flash" class="flash">{{=response.flash or ''}}</div>
+
+    <div id="container">
+    
+      <div id="wrapper">
+
+        <div id="header">
+            {{block header}}
+            
+            
+            
+          <div id="logo">{{=A(SPAN('Blogs Chilenos',_id='appname'),_href=URL('default','index'))}} (ßeta)</div>
+            {{=LOAD(c='plugin_wiki',f='page.load',args=['sitemsge'],target='sitemsge')}}
+          <div style="clear: both;"></div>       
+         
+          {{end}}
+          
+        </div><!-- header  -->
+
+        <div id="statusbar">
+          {{block statusbar}}
+           
+          {{#------ superfish menu ------}}
+          
+          {{#=MENU(response.menu,_class='sf-menu')}}
+          
+          <div id="gbuscar">
+<form action="http://www.google.cl/cse" id="cse-search-box" target="_blank">
+  <div>
+    <input type="hidden" name="cx" value="partner-pub-9647318851151478:2839135910" />
+    <input type="hidden" name="ie" value="UTF-8" />
+    <input type="text" name="q" size="55" />
+    <input type="submit" name="sa" value="Buscar" />
+  </div>
+</form>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">google.load("elements", "1", {packages: "transliteration"});</script>
+<script type="text/javascript" src="http://www.google.com/cse/t13n?form=cse-search-box&t13n_langs=en"></script>
+
+<script type="text/javascript" src="http://www.google.cl/coop/cse/brand?form=cse-search-box&amp;lang=es"></script>
+
+    
+          </div>
+          
+      <small>Categorías:</small>    
+      {{=response.menubkn}}<g:plusone count="true"></g:plusone>
+         
+          <div style="clear: both;"></div>
+          {{end}}
+        </div>
+
+        <div id="page">
+
+          {{if left_sidebar_enabled:}}
+          <div id="left_sidebar" {{=XML(left_sidebar_style)}} >
+            <div style="padding: 4px;">
+              {{block left_sidebar}}Content Left Sidebar{{end}}
+            </div>
+          </div>
+          {{pass}}
+
+
+          <div id="content" {{=XML(style_content)}} >
+             {{include}}
+          </div>
+
+
+          {{if right_sidebar_enabled:}}
+          <div id="right_sidebar" {{=XML(right_sidebar_style)}} >
+            <div style="padding: 4px;">
+              {{block right_sidebar}}Content Right Sidebar{{end}}
+            </div>
+          </div>
+          {{pass}}
+
+
+          <div style="clear: both;"></div>
+
+        </div>
+
+        <div id="footer">
+          {{block footer}}
+          <!-- {{=A('Sitemap', _href=URL(c='default',f='sitemap'),_class='button')}} -->
+          
+          
+          <div style="clear: both;"></div>
+          
+          {{end}}
+          {{=A('Política de Privacidad', _onclick='jQuery("#privacidad").modal({overlayClose: true});')}} |
+
+          {{=A('Sitemap', _href=URL(c='default',f='sitemap',extension='html'))}} |
+          <em>Los créditos a los artículos recolectados son de cada fuente.</em> |
+         
+
+
+          {{=LOAD(c='plugin_wiki',f='page.load',args='politica-de-privacidad', target='privacidad', _style='display:none;',ajax=True)}}
+        </div>
+      </div>
+    </div>
+
+    <!--[if lt IE 7 ]>
+        <script src="{{=URL('static','js/dd_belatedpng.js')}}"></script>
+        <script> DD_belatedPNG.fix('img, .png_bg'); //fix any <img> or .png_bg background-images </script>
+        <![endif]-->
+
+
+           
+  </body>
+</html>

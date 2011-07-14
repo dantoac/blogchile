@@ -1,0 +1,91 @@
+(dp1
+S'feed'
+p2
+(dp3
+S'type'
+p4
+S'reference feed'
+p5
+sS'sortable'
+p6
+I2
+sS'sql'
+p7
+S'INT, INDEX feed__idx (feed), FOREIGN KEY (feed) REFERENCES feed(id) ON DELETE CASCADE'
+p8
+ssS'categoria'
+p9
+(dp10
+g4
+S'reference categoria'
+p11
+sg6
+I3
+sg7
+S'INT, INDEX categoria__idx (categoria), FOREIGN KEY (categoria) REFERENCES categoria(id) ON DELETE CASCADE'
+p12
+ssS'modified_by'
+p13
+(dp14
+g4
+S'reference auth_user'
+p15
+sg6
+I8
+sg7
+S'INT, INDEX modified_by__idx (modified_by), FOREIGN KEY (modified_by) REFERENCES auth_user(id) ON DELETE CASCADE'
+p16
+ssS'is_active'
+p17
+(dp18
+g4
+S'boolean'
+p19
+sg6
+I4
+sg7
+S'CHAR(1)'
+p20
+ssS'created_by'
+p21
+(dp22
+g4
+g15
+sg6
+I6
+sg7
+S'INT, INDEX created_by__idx (created_by), FOREIGN KEY (created_by) REFERENCES auth_user(id) ON DELETE CASCADE'
+p23
+ssS'created_on'
+p24
+(dp25
+g4
+S'datetime'
+p26
+sg6
+I5
+sg7
+S'DATETIME'
+p27
+ssS'modified_on'
+p28
+(dp29
+g4
+g26
+sg6
+I7
+sg7
+S'DATETIME'
+p30
+ssS'id'
+p31
+(dp32
+g4
+S'id'
+p33
+sg6
+I1
+sg7
+S'INT AUTO_INCREMENT NOT NULL'
+p34
+ss.

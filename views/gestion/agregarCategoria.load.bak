@@ -1,0 +1,4 @@
+{{=H2('Nueva categoría')}}
+Considera que siempre intentaremos de equilibrar la cantidad de categorías sin perjudicar la clasificación de tus feeds, por lo que podríamos fusionar categorías a posteriori.
+
+{{=nueva_categoria}}

@@ -1,0 +1,9 @@
+{{=A(SPAN(_class='icon plus'),'Agregar feed', _onclick='jQuery("#nuevo_feed").modal({overlayClose:true,focus:true});',_class='big button')}}
+{{=A(SPAN(_class='icon plus'),'Agregar categoria', _onclick='jQuery("#nueva_categoria").modal({overlayClose:true,focus:true});',_class='big button')}}
+{{=A(SPAN(_class='icon pen'),'Mis Feeds',_class='big button positive',_href=URL(c='default',f='misfeeds'),_cid='misfeeds')}}
+<div style="clear:both;">
+{{=mensaje}}
+{{=DIV(_id='misfeeds')}}
+{{=DIV(H3('Nuevo feed ATOM/RSS'),nuevo_feed,_id='nuevo_feed',_style='display:none;')}}
+{{=DIV(H3('Nueva Categoría'),nueva_categoria,_id='nueva_categoria',_style='display:none;')}}
+</div>
