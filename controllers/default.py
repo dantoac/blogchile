@@ -186,26 +186,25 @@ def buscar():
         try:
             for patron in buscado:
                 #resultados = db((db.noticia.title.contains(patron)) | (db.noticia.description.contains(patron))
-                resultados = db((db.noticia.title.contains(patron))).select(db.noticia.id,db.noticia.title, db.noticia.created_on, db.noticia.slug,db.noticia.feed, orderby=~db.noticia.id, limitby=(0,100))
+                resultados = db((db.noticia.title.contains(patron))).select(db.noticia.id,db.noticia.title, db.noticia.created_on, db.noticia.slug,db.noticia.feed, orderby=~db.noticia.id, distinct=True)
 
 
             lista_resultados = TABLE(THEAD(TR(TH('Título'),TH('Fuente'))), _id='search_results')
             for n,resultado in enumerate(resultados):
                 n=n+1
 
-                title = A(resultado.title.capitalize()+':',_href=URL(f='go',args=[resultado.slug,resultado.id]),_target='new')
+                title = A(resultado.title.capitalize(),_href=URL(f='go',args=[resultado.slug,resultado.id]),_target='new')
 
                 #body = nltk.util.clean_html(XML(resultado.description))+'(...)'
                 meta = 'Obtenido el %(fecha)s desde %(fuente)s' % dict(fuente=resultado.feed.title, fecha = str(resultado.created_on))
 
-                #lista_resultados.append(DIV(SPAN(str(n)+' '),title,meta,body,_class='search_result'))
-                #lista_resultados.append(TR(TD(meta,_class='meta'),TD(title,_class='title'),TD(body,_class='description'),_class='search_result'))
+
                 lista_resultados.append(TR(TD(title,_class='title'),TD(meta,_class='meta'),_class='search_result'))
 
 
 
-            #response.flash = str(n)+' resultado(s). Puedes filtrarlos usando la entrada que aparece ahora bajo el BOTON de búsqueda.'
-            response.flash = 'Mostrando los últimos 100 artículos'
+            response.flash = ' %s resultado(s). Puedes filtrarlos usando la entrada.' % n
+            #response.flash = 'Mostrando los últimos 100 artículos'
         except Exception,e:
             #response.flash = e
             response.flash = 'No encontré artículos con esas palabras. Intenta usando el buscador de google que está más arriba.'
