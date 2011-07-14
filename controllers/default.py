@@ -201,9 +201,7 @@ def buscar():
 
                 lista_resultados.append(TR(TD(title,_class='title'),TD(meta,_class='meta'),_class='search_result'))
 
-
-
-            response.flash = ' %s resultado(s). Puedes filtrarlos usando la entrada.' % n
+            response.flash = 'Encontré %s resultado(s).' % n
             #response.flash = 'Mostrando los últimos 100 artículos'
         except Exception,e:
             #response.flash = e
