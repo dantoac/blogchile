@@ -8,7 +8,7 @@
 ## - download is for downloading files uploaded in the db (does streaming)
 ## - call exposes all registered services (none by default)
 #########################################################################
-import locale 
+import locale
 locale.setlocale(locale.LC_TIME, 'es_CL.UTF8')
 
 response.title = 'Blogs chilenos importantes'
@@ -26,10 +26,10 @@ def respira():
     from gluon.tools import prettydate
     import locale
     locale.setlocale(locale.LC_ALL,locale='es_CL.UTF8')
-    response.files.append(URL('static', 'js/jquery.simplemodal.1.4.1.min.js'))
+    response.files.append(URL('static', 'js/jquery.simplemodal.min.js'))
 
     try:
-        catslug = request.args(0) or db.categoria[1].slug        
+        catslug = request.args(0) or db.categoria[1].slug
     except Exception,e:
         #redirect(URL(c='default',f='user'))
         response.flash = e
@@ -76,38 +76,38 @@ def respira():
         feedbox = DIV(DIV(feedincat.title, _class = 'feed_titulo'), _class = 'feedbox feed_bloque  izq')
 
         for n in db(db.noticia.feed == feedincat.id).select(db.noticia.ALL, orderby =~ db.noticia.id, limitby=(0,3)):
-            
+
 
             if n.updated != None:
                 actualizado = n.updated
             else:
                 actualizado = n.created_on
-            
+
             # armando la url que va en el rss
             localurl = 'http://' + request.env.http_host + URL(c = 'default', f = 'go', args = [n.slug,n.id], extension='html')
-            
+
             # armando el bloque para la visa en html
             feedbox.append(DIV(DIV(A(n.title.lower()+'...', _name = n.slug, _href = URL(r = request, f = 'go', args = [n.slug,n.id]), _class = 'noticia_link', _target='_new'), _class = 'noticia_contenido'), DIV(prettydate(actualizado, T), _class = 'noticia_meta'), _class = 'noticia'))
-                       
+
             entradas.append(dict(title =unicode(n.title,'utf8'), link = localurl, description = unicode('%s (%s)' % (n.description, n.feed.title),'utf8'), created_on = request.now))
 
-        
+
         box.append(feedbox)
-        
-        
+
+
     #test='TTEESSTT'
     if request.extension == 'rss':
        rss = dict(title = request.application.upper(),
                   link = 'http://' + request.env.http_host + request.url,
                   description = unicode(response.meta.description, 'utf8'),
                   created_on = request.now,
-                  entries = entradas                  
+                  entries = entradas
                   )
        contenido = rss
     else:
-        
+
        contenido = dict(box = box)
-        
+
     return response.render(contenido)
 
 
@@ -125,35 +125,34 @@ def go():
     if request.extension!='html':
         request.extension = 'html'
 
-    response.files.append(URL('static','css/go.css'))        
-    
+    response.files.append(URL('static','css/go.css'))
+
     slugnoticia = request.args(0) #para mostrar la noticia en la url; SEO
     nid = request.args(1)
-    
+
     #titulo = db.noticia[nid].title
     titulo = slugnoticia.capitalize().replace('-',' ')
-    
+
     categoria = db.noticia[nid].feed.categoria.title
-    
+
     response.title='%s: %s' % (categoria.capitalize(),titulo.capitalize())
-    #response.title = " %s" % catslug.capitalize().replace('-',' ')
     response.meta.description = '%s %s' % (response.title,db.noticia[nid].feed.title)
 
     shorturl = db.noticia[nid].shorturl
     #titulo = db.noticia[nid].title
-    
+
     if 'http://lmddgtfy' in shorturl:
         response.flash = 'El enlace se ha perdido por algún motivo. Te dirigiremos a una búsqueda privada al respecto.'
-    
+
     if request.env.http_referer!=None:
         goback = A(SPAN(_class = 'icon leftarrow'), 'Volver', _class = 'button', _style = 'margin-bottom:1em;float:left;',
                    _href = request.env.http_referer)
     else:
         goback = A(SPAN(_class = 'icon home'), 'Blogosfera.cl', _class = 'positive primary button', _style = 'margin-bottom:1em;float:left;',
                    _href = 'http://blogosfera.cl')
-    
+
     #cerrarmarco = A(SPAN(_class = 'icon cross'), 'Ir a la Fuente', _class = 'negative button', _style = 'margin-bottom:1em;float:right;', _href = shorturl)
-    
+
     referer = DIV(goback)
     go = DIV(IFRAME(_src = shorturl, _style = 'height:inherit;width:inherit;border:0;'), _id = 'godiv', _style = 'display:block;height:100%;width:100%;')
 
@@ -164,54 +163,52 @@ def go():
 def buscar():
     #session.flash = 'El algoritmo de búsqueda está en proceso de optimización hasta un próximo momento'
     #redirect(URL(c='default',f='respira'))
-    response.files.append(URL('static','DataTables-1.8.1/media/js/jquery.dataTables.min.js'))
-    response.files.append(URL('static','DataTables-1.8.1/media/css/demo_table.css'))
-    response.files.append(URL('static','DataTables-1.8.1/media/css/demo_page.css'))
-    response.files.append(URL('static','DataTables-1.8.1/media/css/demo_table_jui.css'))
+    response.files.append(URL('static','datatables/js/jquery.dataTables.min.js'))
+    response.files.append(URL('static','datatables/css/demo_table.css'))
+    response.files.append(URL('static','datatables/css/demo_page.css'))
+    response.files.append(URL('static','datatables/css/demo_table_jui.css'))
     #response.view = 'plantilla.html'
-    response.title = 'En mantención'
+    #response.title = 'En mantención'
 
     #from html2text import *
     #from gluon.html import markmin_serializer
-    response.title = 'Busca en Blogosfera.cl'
+    response.title = 'Buscar últimos títulos'
     #response.files.append(URL('static','css/smartpaginator.css'))
     #response.files.append(URL('static','js/smartpaginator.js'))
     #import nltk.util
-    
-    form = FORM('Buscar', INPUT(_name='buscando', requires=IS_LENGTH(minsize=6,error_message='intenta especificar más tu búsqueda, por favor')),INPUT(_type='submit'))
+
+    form = FORM('Buscar Artículo', INPUT(_name='buscando', requires=IS_LENGTH(minsize=6,error_message='Intenta especificar más tu búsqueda.')),INPUT(_type='submit'))
     lista_resultados = ''
     if form.accepts(request.post_vars):
-        
+
         buscado = XML(form.vars.buscando)
         buscado = buscado.split()
         try:
             for patron in buscado:
                 #resultados = db((db.noticia.title.contains(patron)) | (db.noticia.description.contains(patron))
-                resultados = db((db.noticia.title.contains(patron))).select(db.noticia.id,db.noticia.title, db.noticia.created_on, db.noticia.slug,db.noticia.feed, orderby=~db.noticia.id)
-                
-            #lista_resultados = DIV(_id='search_results')
-            #lista_resultados = TABLE(THEAD(TR(TH('Fuente'),TH('Título'),TH('Extracto'))), _id='search_results')
-            lista_resultados = TABLE(THEAD(TR(TH('Fuente'),TH('Título'))), _id='search_results')
+                resultados = db((db.noticia.title.contains(patron))).select(db.noticia.id,db.noticia.title, db.noticia.created_on, db.noticia.slug,db.noticia.feed, orderby=~db.noticia.id, distinct=True)
+
+
+            lista_resultados = TABLE(THEAD(TR(TH('Título'),TH('Fuente'))), _id='search_results')
             for n,resultado in enumerate(resultados):
                 n=n+1
 
-                title = A(resultado.title+':',_href=URL(f='go',args=[resultado.slug,resultado.id]),_target='new')
-                
+                title = A(resultado.title.capitalize(),_href=URL(f='go',args=[resultado.slug,resultado.id]),_target='new')
+
                 #body = nltk.util.clean_html(XML(resultado.description))+'(...)'
-                meta = resultado.feed.title+' el '+str(resultado.created_on)
-                
-                #lista_resultados.append(DIV(SPAN(str(n)+' '),title,meta,body,_class='search_result'))
-                #lista_resultados.append(TR(TD(meta,_class='meta'),TD(title,_class='title'),TD(body,_class='description'),_class='search_result'))
-                lista_resultados.append(TR(TD(meta,_class='meta'),TD(title,_class='title'),_class='search_result'))
-            
-            
-           
-            response.flash = str(n)+' resultado(s). Puedes filtrarlos usando la entrada que aparece ahora bajo el BOTON de búsqueda.'
-            
+                meta = 'Obtenido el %(fecha)s desde %(fuente)s' % dict(fuente=resultado.feed.title, fecha = str(resultado.created_on))
+
+
+                lista_resultados.append(TR(TD(title,_class='title'),TD(meta,_class='meta'),_class='search_result'))
+
+
+
+            response.flash = ' %s resultado(s). Puedes filtrarlos usando la entrada.' % n
+            #response.flash = 'Mostrando los últimos 100 artículos'
         except Exception,e:
             #response.flash = e
-            response.flash = 'No encontré noticias con esas palabras. Intenta en otro momento.'
-            lista_resultados = 'Sin resultados.'
+            response.flash = 'No encontré artículos con esas palabras. Intenta usando el buscador de google que está más arriba.'
+            lista_resultados = XML(SPAN('Sin Resultados', _class='error'))
     return dict(form=form,lista_resultados=lista_resultados)
 
 @auth.requires(request.cid)
@@ -220,20 +217,20 @@ def misfeeds():
     ftable = TABLE(THEAD(TR(TH('Título'),TH('Categoría'),TH('Activado'))))
     for f in fdata:
         ftable.append(TR(TD(f.title),TD(f.categoria.title),TD(f.is_active),TH(A(SPAN(_class='icon pen'),'Editar',_href=URL(c='default',f='editarFeed.load',args=[f.id]),_class='negative button',cid='editmyfeed'))))
-        
+
     return dict(ftable=ftable)
 
 @auth.requires(request.cid)
 def editarFeed():
     db.feed.is_active.readable=True
     db.feed.is_active.writable=True
-    form = ''            
+    form = ''
     if request.args(0):
         if db.feed[int(request.args(0))].created_by == auth.user_id:
             form = SQLFORM(db.feed,request.args(0),deletable=True)
             if form.accepts(request.vars,session):
                 response.flash = 'El Feed ha sido editado exitosamente'
-            
+
         else:
             response.flash = 'El feed que referencias no es válido'
     return dict(form=form)
@@ -253,7 +250,7 @@ def user():
     to decorate functions that need access control
     """
     return dict(form = auth())
-    
+
 def sitemap():
     if request.extension == 'xml':
         sm = [str('<?xml version="1.0" encoding="UTF-8" ?> <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')]
@@ -272,7 +269,7 @@ def sitemap():
     elif request.extension == 'html':
         #response.view = 'plantilla.html'
         sm = DIV(_id='sitemap')
-    
+
         for cat in db(db.categoria.id>0).select(db.categoria.id,db.categoria.title,db.categoria.slug):
 
             categorias = DIV(H2(A(cat.title.capitalize(),_href=URL(r=request,c='default',f='respira.',args=[cat.slug]))))

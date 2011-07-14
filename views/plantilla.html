@@ -3,7 +3,7 @@
   <head>
 
     <meta charset="utf-8" />
-    
+
     <!--[if IE]><![endif]-->
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -23,14 +23,14 @@
     <link rel="stylesheet" media="handheld" href="{{=URL('static','css/handheld.css')}}">
 
     <script src="{{=URL('static','js/modernizr-1.7.min.js')}}"></script>
-    
-    
+
+
     <script type="text/javascript" src="https://apis.google.com/js/plusone.js"></script>
-    
-    
+
+
     {{response.files.append(URL('static','css/base.css'))}}
     {{response.files.append(URL('static','css/superfish.css'))}}
-    {{response.files.append(URL('static','css/planeta.css'))}}
+    {{response.files.append(URL('static','css/blogosfera.css'))}}
     {{response.files.append(URL('static','js/superfish.js'))}}
 
     {{include 'web2py_ajax.html'}}
@@ -53,7 +53,7 @@
 
     <!-- asynchronous google analytics: mathiasbynens.be/notes/async-analytics-snippet
          change the UA-XXXXX-X to be your site's ID -->
-    
+
            <script>
              var _gaq = [['_setAccount', 'UA-23950473-1'], ['_trackPageview']];
              (function(d, t) {
@@ -64,7 +64,7 @@
              s.parentNode.insertBefore(g, s);
              })(document, 'script');
            </script>
-           
+
   </head>
 
   <!--[if lt IE 7 ]> <body class="ie6"> <![endif]-->
@@ -72,10 +72,10 @@
   <!--[if IE 8 ]>    <body class="ie8"> <![endif]-->
   <!--[if IE 9 ]>    <body class="ie9"> <![endif]-->
   <!--[if (gt IE 9)|!(IE)]><!--> <body> <!--<![endif]-->
-  
+
     <div id="panel">
     {{block panel}}
-    
+
     {{if request.args(0):}}
     {{catslug = str(request.args(0)).replace('-',' ').capitalize()}}
     {{else: catslug=''}}
@@ -85,35 +85,35 @@
     {{=A(SPAN(_class = 'icon home'), 'Portada ', _class = 'button left', _href = URL('default', 'index'))}}{{=A(SPAN(_class = 'icon rss'), 'RSS %s ' % catslug, _class = 'button middle ', _href = URL(f = 'respira.rss', args = request.args(0)))
     }}{{=A(SPAN(_class='icon magnifier'), 'Buscar ', _class='button right', _href = URL(c='default',f='buscar'))}}
     {{try:}}{{=auth.navbar(action=URL('default','user'))}}{{except:pass}}
-    
+
     {{end}}
     </div>
     <div id="flash" class="flash">{{=response.flash or ''}}</div>
 
     <div id="container">
-    
+
       <div id="wrapper">
 
         <div id="header">
             {{block header}}
-            
-            
-            
+
+
+
           <div id="logo">{{=A(SPAN('Blogs Chilenos',_id='appname'),_href=URL('default','index'))}} (ßeta)</div>
             {{=LOAD(c='plugin_wiki',f='page.load',args=['sitemsge'],target='sitemsge')}}
-          <div style="clear: both;"></div>       
-         
+          <div style="clear: both;"></div>
+
           {{end}}
-          
+
         </div><!-- header  -->
 
         <div id="statusbar">
           {{block statusbar}}
-           
+
           {{#------ superfish menu ------}}
-          
+
           {{#=MENU(response.menu,_class='sf-menu')}}
-          
+
           <div id="gbuscar">
 <form action="http://www.google.cl/cse" id="cse-search-box" target="_blank">
   <div>
@@ -129,12 +129,12 @@
 
 <script type="text/javascript" src="http://www.google.cl/coop/cse/brand?form=cse-search-box&amp;lang=es"></script>
 
-    
+
           </div>
-          
-      <small>Categorías:</small>    
+
+      <small>Categorías:</small>
       {{=response.menubkn}}<g:plusone count="true"></g:plusone>
-         
+
           <div style="clear: both;"></div>
           {{end}}
         </div>
@@ -171,16 +171,16 @@
         <div id="footer">
           {{block footer}}
           <!-- {{=A('Sitemap', _href=URL(c='default',f='sitemap'),_class='button')}} -->
-          
-          
+
+
           <div style="clear: both;"></div>
-          
+
           {{end}}<em>Los créditos a los artículos recolectados son de cada fuente.</em> |
           {{=A('Política de Privacidad', _onclick='jQuery("#privacidad").modal({overlayClose: true});')}} |
 
-          {{=A('Sitemap', _href=URL(c='default',f='sitemap',extension='html'))}} 
-           
-         
+          {{=A('Sitemap', _href=URL(c='default',f='sitemap',extension='html'))}}
+
+
 
 
           {{=LOAD(c='plugin_wiki',f='page.load',args='politica-de-privacidad', target='privacidad', _style='display:none;',ajax=True)}}
@@ -194,6 +194,6 @@
         <![endif]-->
 
 
-           
+
   </body>
 </html>
