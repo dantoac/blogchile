@@ -16,7 +16,7 @@ response.meta.copyright = 'Copyright 2011'
 response.menubkn = DIV()
 
 try:
-        cats4menu = db(db.categoria.id > 0).select(db.categoria.id, db.categoria.title, db.categoria.slug, orderby = db.categoria.slug)
+        cats4menu = db((db.categoria.id > 0) & (db.categoria.is_active == True)).select(db.categoria.id, db.categoria.title, db.categoria.slug, orderby = db.categoria.slug)
         for cat in cats4menu:
 
             if cat.slug == request.args(0):
