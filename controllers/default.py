@@ -268,7 +268,7 @@ def sitemap():
         #response.view = 'plantilla.html'
         sm = DIV(_id='sitemap')
 
-        for cat in db(db.categoria.id>0).select(db.categoria.id,db.categoria.title,db.categoria.slug):
+        for cat in db((db.categoria.id>0) & (db.categoria.is_active==True)).select(db.categoria.id,db.categoria.title,db.categoria.slug):
 
             categorias = DIV(H2(A(cat.title.capitalize(),_href=URL(r=request,c='default',f='respira.',args=[cat.slug]))))
             noticias = UL()
