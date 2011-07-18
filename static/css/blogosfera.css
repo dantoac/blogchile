@@ -118,41 +118,23 @@ a.noticia_link:visited {
 #nueva_categoria, #nuevo_feed {max-width:350px;margin:auto;}
 
 #search_results  {
-    margin-bottom:1em;
-    padding:0 1em;
-    width:100%;
+    margin:1em auto;
+    padding:1em;
+    width:auto;
     clear:both;
+    background:#fff;
+
 }
 .search_result .title {
     width:75%;
 }
 .search_result .meta {width:25%;}
 
-#search_results tr.odd,
-#search_results tr.even,
-#search_results tr.odd td,
-#search_results tr.even td {
+#search_results li {
     vertical-align: middle;
     padding:.5em;
+    list-style:none;
     }
-
-#search_results tr.odd,
-#search_results tr.odd td
-{
-    background: #fff !important;
-}
-
-#search_results thead th {
-    background:none;
-    border-bottom:1px solid #ccc;
-    color:#000;
-    }
-
-#search_results tr.even,
-#search_results tr.even td
-{
-    background: #eee;
-}
 
 .search_result  .title a {
     text-decoration:none;
