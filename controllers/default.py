@@ -303,7 +303,7 @@ def sitemapindex():
 
     prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
 
-    for i in xrange(1,4):
+    for i in xrange(1,5):
         sm.append(str(TAG.sitemap(
             TAG.loc(prefix,URL(c='default',f='sitemap%s.xml' % i))
             )))
