@@ -78,7 +78,10 @@ a.noticia_link:visited {
     color:#000;
     padding:0 .3em;
     overflow:hidden;
+    height:1em;
 }
+
+.hidden {display:none !important;}
 
 .noticia_meta {
     font:italic .8em sans-serif;

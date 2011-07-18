@@ -921,3 +921,15 @@ CREATE TABLE auth_cas(
 faked!
 timestamp: 2011-06-06T11:01:03.000508
 ALTER TABLE categoria DROP COLUMN modified_by;
+timestamp: 2011-07-17T20:34:28.760585
+ALTER TABLE categoria ADD description LONGTEXT;
+success!
+timestamp: 2011-07-17T20:36:58.812939
+ALTER TABLE feed ADD url VARCHAR(255);
+success!
+timestamp: 2011-07-17T20:55:49.629187
+ALTER TABLE feed ADD source VARCHAR(255);
+success!
+timestamp: 2011-07-17T20:55:50.080168
+ALTER TABLE feed DROP COLUMN url;
+success!

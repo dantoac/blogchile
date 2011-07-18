@@ -22,18 +22,18 @@ try:
             if cat.slug == request.args(0):
 
                 if cat == cats4menu[len(cats4menu) - 1]:
-                    response.menubkn.append(A(cat.title.capitalize()+' ', _href = URL(r = request, f = 'respira', args = cat.slug), _class = 'primary pill button right boton_categoria_activa'))
+                    response.menubkn.append(A(cat.title.capitalize()+' ', _href = URL(r = request, f = 'index', args = cat.slug), _class = 'primary pill button right boton_categoria_activa'))
                 elif cat == cats4menu[0]:
-                    response.menubkn.append(A(cat.title.capitalize()+' ', _href = URL(r = request, f = 'respira', args = cat.slug), _class = 'primary pill button left boton_categoria_activa'))
+                    response.menubkn.append(A(cat.title.capitalize()+' ', _href = URL(r = request, f = 'index', args = cat.slug), _class = 'primary pill button left boton_categoria_activa'))
                 else:
-                    response.menubkn.append(A(cat.title.capitalize()+' ', _href = URL(r = request, f = 'respira', args = cat.slug), _class = 'primary pill button middle boton_categoria_activa'))
+                    response.menubkn.append(A(cat.title.capitalize()+' ', _href = URL(r = request, f = 'index', args = cat.slug), _class = 'primary pill button middle boton_categoria_activa'))
             else:
                 if cat == cats4menu[len(cats4menu) - 1]:
-                    response.menubkn.append(A(cat.title.capitalize()+' ', _href = URL(r = request, f = 'respira', args = cat.slug), _class = 'pill button right'))
+                    response.menubkn.append(A(cat.title.capitalize()+' ', _href = URL(r = request, f = 'index', args = cat.slug), _class = 'pill button right'))
                 elif cat == cats4menu[0]:
-                    response.menubkn.append(A(cat.title.capitalize()+' ', _href = URL(r = request, f = 'respira', args = cat.slug), _class = 'pill button left'))                
+                    response.menubkn.append(A(cat.title.capitalize()+' ', _href = URL(r = request, f = 'index', args = cat.slug), _class = 'pill button left'))                
                 else:
-                    response.menubkn.append(A(cat.title.capitalize()+' ', _href = URL(r = request, f = 'respira', args = cat.slug), _class = 'pill button middle'))
+                    response.menubkn.append(A(cat.title.capitalize()+' ', _href = URL(r = request, f = 'index', args = cat.slug), _class = 'pill button middle'))
             
 except Exception, e:
         raise HTTP(400, 'No hay categorías registradas: %s' % e)
