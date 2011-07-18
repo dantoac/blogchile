@@ -103,6 +103,7 @@ tabla('categoria',
     #Field('super', 'reference categoria', comment = 'SIN EFECTO todavía. Permitirá la jerarquización de categorías.'),
     #Field('freq', 'integer', requires = IS_INT_IN_RANGE(300, 604801, error_message = 'conozco desde 300 hasta 604800 '), label = T('Frecuencia de actualización'), comment = 'SIN USO AÚN'),
 #    Field('actualizado', 'datetime', default = request.now, writable = False, readable = False),
+    Field('description', 'text', label = T('Descripción'),comment=T('(opcional)')),
     auth.signature,
     format = '%(title)s',
     )
@@ -115,8 +116,8 @@ db.categoria.is_active.readable = False
 
 tabla('feed',
     Field('categoria', 'reference categoria', comment = T('*requerido')),
-    Field('title', label = T('Sitio'), comment = T('*requerido (sugerencia: "misitio.tld")')),
-    #Field('description', 'text', label = T('Descripción'),comment=T('(opcional)')),
+    Field('title', label = T('Nombre del Sitio'), comment = T('*requerido (sugerencia: "misitio.tld")')),
+    Field('source', label = T('URL al Sitio'), comment = T('URL completa a la portada del sitio, ejemplo: http://www.sitio.tld')),
     Field('link', requires = IS_URL(), label = T('URL feed'), comment = T('*requerido')),
     auth.signature,
     format = '%(title)s',
