@@ -1,5 +1,5 @@
 @charset "UTF-8";
-a {text-decoration:none;}
+a, a:link, a:visited {text-decoration:none;}
 body {
     background: #9cf url('/blogosfera/static/images/bgnubes.png') repeat-x center top fixed;
     color:#445;
@@ -38,12 +38,11 @@ body {
     overflow:hide;
     margin:1em;
     text-align: justify;
-    border:1px dotted #acf;
+    border:0px dotted #acf;
     -moz-border-radius:10px;
     -webkit-border-radius:10px;
     border-radius:10px;
     background:#fff;
-    opacity:.8;
 }
 
 /*
@@ -86,7 +85,7 @@ a.noticia_link:visited {
 .noticia_meta {
     font:italic .8em sans-serif;
     text-align:right;
-    background:none;
+    background:#def;
     color:#00f;
 
 }
@@ -157,9 +156,10 @@ a.noticia_link:visited {
 
 .search_result  .title a {
     text-decoration:none;
-    font:1.1em sans-serif;
-    color:#00f;
+    color:#000;
 }
+
+.search_result .title a:hover {background:#cdf;}
 
 #search {
     width:auto;
@@ -189,3 +189,14 @@ tr.search_result {border-bottom:1px solid #ccc;}
 
 #gbuscar {text-align:right;}
 #cse-search-results iframe {width:100%;background:#fff;padding:1em;margin:auto;}
+
+#filtro {
+    text-align:center;
+    margin:auto;
+    background:#9f9;
+    border:1px solid #0c0;
+    padding:.5em;
+    border-radius:10px;
+}
+
+#blogs:first-child {font:bold 1.3em sans-serif;}
