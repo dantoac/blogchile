@@ -1,0 +1,25 @@
+<!-- google_ad_section_start -->
+<script>
+function filtro(){
+jQuery("#filtrando").keyup(function () {
+    var filter = jQuery(this).val(), count = 0;
+
+    jQuery(".box .feedbox .noticia").each(function () {
+        if (jQuery(this).text().search(new RegExp(filter, "i")) < 0) {
+            jQuery(this).addClass("hidden");
+        } else {
+            jQuery(this).removeClass("hidden");
+            count++;
+        }
+    });
+    jQuery("#filtrado").text(count);
+});
+}
+
+jQuery(document).ready(filtro);
+</script>
+{{=H3('Últimos artículos:')}}
+<div id="filtro">Filtrar: <input id="filtrando" name="filtrando"> Filtrados: <span id="filtrado">0</span> artículo(s).</div>
+
+{{=P(DIV(box,_style='clear:both;'))}}
+<!-- google_ad_section_end -->
