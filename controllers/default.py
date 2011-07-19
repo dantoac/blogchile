@@ -165,8 +165,9 @@ def go():
 
 #@auth.requires(request.cid)
 def buscar():
-    #session.flash = 'El algoritmo de búsqueda está en proceso de optimización hasta un próximo momento'
-    #redirect(URL(c='default',f='respira'))
+    session.flash = 'El algoritmo de búsqueda está en proceso de optimización hasta un próximo momento. Intenta usando el buscador de Google de la esquina superior derecha.'
+    return redirect(URL(c='default',f='index'))
+
     response.files.append(URL('static','datatables/js/jquery.dataTables.min.js'))
     response.files.append(URL('static','datatables/css/demo_table.css'))
     response.files.append(URL('static','datatables/css/demo_page.css'))
