@@ -162,25 +162,36 @@ def go():
     return dict(go=go,shorturl=shorturl,referer=referer)
 
 
+def busca():
+    '''
+    Función de búsqueda usando la api de Google para su motor personalizado.
+    '''
+    import urllib2
+    import urllib 
+    term = request.args
+    ua = "Mozilla/5.0 (compatible; Konqueror/3.5.8; Linux)"  
+    h = {"User-Agent": ua}  
+
+    uri = 'http://www.google.cl/cse?cx=partner-pub-9647318851151478%3A2839135910&ie=UTF-8&q=' + '+'.join(term)
+    #url = urllib.encode(uri)
+    r = urllib2.Request(uri, headers=h)  
+    res = urllib2.urlopen(r).read()
+
+    #html = TAG(res)
+    html = res[2850:len(res)-9]
+
+
+    return dict(www = XML(html))
+
+
+
+
 #@auth.requires(request.cid)
 def buscar():
-    session.flash = 'El algoritmo de búsqueda está en proceso de optimización hasta un próximo momento. Intenta usando el buscador de Google de la esquina superior derecha.'
-    return redirect(URL(c='default',f='index'))
 
-    response.files.append(URL('static','datatables/js/jquery.dataTables.min.js'))
-    response.files.append(URL('static','datatables/css/demo_table.css'))
-    response.files.append(URL('static','datatables/css/demo_page.css'))
-    response.files.append(URL('static','datatables/css/demo_table_jui.css'))
-    #response.view = 'plantilla.html'
-    #response.title = 'En mantención'
+    #redirect(URL(c='default',f='respira'))
 
-    #from html2text import *
-    #from gluon.html import markmin_serializer
-    response.title = 'Buscar últimos títulos'
-    #response.files.append(URL('static','css/smartpaginator.css'))
-    #response.files.append(URL('static','js/smartpaginator.js'))
-    #import nltk.util
-
+    response.title = 'Buscar publicaciones en blogs chilenos.'
 
     ads_busqueda = XML('''
 <script type="text/javascript"><!--
@@ -196,7 +207,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
 ''')
 
-    form = FORM('Buscar Artículo', INPUT(_name='buscando', requires=IS_LENGTH(minsize=6,error_message='Intenta especificar más tu búsqueda.')),INPUT(_type='submit'))
+    form = FORM('Buscar Publicación', INPUT(_name='buscando', requires=IS_LENGTH(minsize=6,error_message='Intenta especificar más tu búsqueda.')),INPUT(_type='submit'))
     lista_resultados = ''
     if form.accepts(request.post_vars):
 
@@ -208,7 +219,8 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
                 resultados = db((db.noticia.title.contains(patron))).select(db.noticia.id,db.noticia.title, db.noticia.created_on, db.noticia.slug,db.noticia.feed, orderby=~db.noticia.id, distinct=True)
 
 
-            lista_resultados = TABLE(THEAD(TR(TH('Resultados'))), _id='search_results')
+            #lista_resultados = TABLE(THEAD(TR(TH('Resultados'))), _id='search_results')
+            lista_resultados = UL( _id='search_results')
             for n,resultado in enumerate(resultados):
                 n=n+1
 
@@ -217,7 +229,8 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
                 #body = nltk.util.clean_html(XML(resultado.description))+'(...)'
                 meta = 'Obtenido el %(fecha)s desde %(fuente)s' % dict(fuente=A(resultado.feed.title, _href=resultado.feed.source, _target='_blank'), fecha = str(resultado.created_on))
                 
-                lista_resultados.append(TR(TD(XML('%(meta)s <br />%(title)s<br />%(ads)s' % dict(title=title,meta=meta,ads = ads_busqueda)),_class='title'),_class='search_result'))
+                #lista_resultados.append(TR(TD(XML('%(meta)s <br />%(title)s<br />%(ads)s' % dict(title=title,meta=meta,ads = ads_busqueda)),_class='title'),_class='search_result'))
+                lista_resultados.append(LI(SPAN(XML('%(meta)s <br />%(title)s<br />%(ads)s' % dict(title=title,meta=meta,ads = ads_busqueda)),_class='title'),_class='search_result'))
 
             response.flash = 'Encontré %s resultado(s).' % n
             #response.flash = 'Mostrando los últimos 100 artículos'

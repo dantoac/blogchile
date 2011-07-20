@@ -9,12 +9,22 @@ body {
 .izq {float:left;}
 .der {float:right;}
 
-#header #logo {float:left;width:400px;height:50px;margin:5pt;background:none;color:#000;}
+#right_sidebar {width:20%;}
+
+#header #logo {float:left;margin:0pt;background:none;color:#999;font:italic small sans-serif;text-align:right; }
 #header #appname {font:bold xx-large Cantarell,sans-serif;color:#fff;}
 #footer {background:none;border:none;}
 #footer a {color:#00f;}
 
 .auth_navbar {background:#fff;}
+
+.publicidad {
+    background:#fff;
+    color:#666;
+    text-align:right;
+    padding:.5em;
+    border-radius:10px;
+}
 
 #panel {
     background: none;
@@ -34,13 +44,15 @@ body {
 #panel a:hover {}
 
 .feed_bloque {
-    width:120px;
+    width:100px;
     overflow:hide;
-    margin:1em;
-    text-align: justify;
-    border:0px dotted #acf;
+    margin:.5em;
+    border:1px solid #acf;
+    text-align: left;
+    /*
     -moz-border-radius:10px;
     -webkit-border-radius:10px;
+    */
     border-radius:10px;
     background:#fff;
 }
@@ -77,7 +89,8 @@ a.noticia_link:visited {
     color:#000;
     padding:0 .3em;
     overflow:hidden;
-    height:1em;
+    height:2em;
+    line-height:2em;
 }
 
 .hidden {display:none !important;}
@@ -118,41 +131,23 @@ a.noticia_link:visited {
 #nueva_categoria, #nuevo_feed {max-width:350px;margin:auto;}
 
 #search_results  {
-    margin-bottom:1em;
-    padding:0 1em;
-    width:100%;
+    margin:1em auto;
+    padding:1em;
+    width:auto;
     clear:both;
+    background:#fff;
+
 }
 .search_result .title {
     width:75%;
 }
 .search_result .meta {width:25%;}
 
-#search_results tr.odd,
-#search_results tr.even,
-#search_results tr.odd td,
-#search_results tr.even td {
+#search_results li {
     vertical-align: middle;
     padding:.5em;
+    list-style:none;
     }
-
-#search_results tr.odd,
-#search_results tr.odd td
-{
-    background: #fff !important;
-}
-
-#search_results thead th {
-    background:none;
-    border-bottom:1px solid #ccc;
-    color:#000;
-    }
-
-#search_results tr.even,
-#search_results tr.even td
-{
-    background: #eee;
-}
 
 .search_result  .title a {
     text-decoration:none;
@@ -178,8 +173,7 @@ a.noticia_link:visited {
 }
 
 #search_results_filter {
-    background:#cf9;
-    border:1px solid #fff;
+    
     border-radius:10px;
 }
 
@@ -193,8 +187,8 @@ tr.search_result {border-bottom:1px solid #ccc;}
 #filtro {
     text-align:center;
     margin:auto;
-    background:#9f9;
-    border:1px solid #0c0;
+    background:#eee;
+    border:1px solid #ccc;
     padding:.5em;
     border-radius:10px;
 }
