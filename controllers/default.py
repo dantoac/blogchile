@@ -163,24 +163,36 @@ def go():
     return dict(go=go,shorturl=shorturl,referer=referer)
 
 
+def busca():
+    '''
+    Función de búsqueda usando la api de Google para su motor personalizado.
+    '''
+    import urllib2
+    import urllib 
+    term = request.args
+    ua = "Mozilla/5.0 (compatible; Konqueror/3.5.8; Linux)"  
+    h = {"User-Agent": ua}  
+
+    uri = 'http://www.google.cl/cse?cx=partner-pub-9647318851151478%3A2839135910&ie=UTF-8&q=' + '+'.join(term)
+    #url = urllib.encode(uri)
+    r = urllib2.Request(uri, headers=h)  
+    res = urllib2.urlopen(r).read()
+
+    #html = TAG(res)
+    html = res[2850:len(res)-9]
+
+
+    return dict(www = XML(html))
+
+
+
+
 #@auth.requires(request.cid)
 def buscar():
     #session.flash = 'El algoritmo de búsqueda está en proceso de optimización hasta un próximo momento'
     #redirect(URL(c='default',f='respira'))
-    #response.files.append(URL('static','datatables/js/jquery.dataTables.min.js'))
-    #response.files.append(URL('static','datatables/css/demo_table.css'))
-    #response.files.append(URL('static','datatables/css/demo_page.css'))
-    #response.files.append(URL('static','datatables/css/demo_table_jui.css'))
-    #response.view = 'plantilla.html'
-    #response.title = 'En mantención'
 
-    #from html2text import *
-    #from gluon.html import markmin_serializer
     response.title = 'Buscar publicaciones en blogs chilenos.'
-    #response.files.append(URL('static','css/smartpaginator.css'))
-    #response.files.append(URL('static','js/smartpaginator.js'))
-    #import nltk.util
-
 
     ads_busqueda = XML('''
 <script type="text/javascript"><!--

@@ -42,7 +42,7 @@
     left_sidebar_enabled = globals().get('left_sidebar_enabled',False)
     right_sidebar_enabled = globals().get('right_sidebar_enabled',False)
     if left_sidebar_enabled and right_sidebar_enabled: width_content='63%'
-    elif left_sidebar_enabled != right_sidebar_enabled: width_content='740px'
+    elif left_sidebar_enabled != right_sidebar_enabled: width_content='80%' #width_content='740px'
     else: width_content='100%'
     if left_sidebar_enabled: left_sidebar_style = 'style="display: block;"'
     else: left_sidebar_style = 'style="display: none;"'
@@ -99,10 +99,23 @@
 
 
 
-          <div id="logo">{{=H1(A(SPAN('Blogs Chilenos',_id='appname'),_href=URL('default','index')))}} (ßeta)</div>
-            {{=LOAD(c='plugin_wiki',f='page.load',args=['sitemsge'],target='sitemsge')}}
-          <div style="clear: both;"></div>
+          <div id="logo">{{=H1(A(IMG(_src=URL(c='static',f='images/logo-72x79.png')),_href=URL('default','index')))}} (ßeta)</div>
 
+<div class='der publicidad'>
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-9647318851151478";
+/* ad001 */
+google_ad_slot = "7136788308";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div>
+
+
+          <div style="clear: both;"></div>
           {{end}}
 
         </div><!-- header  -->
@@ -113,24 +126,6 @@
           {{#------ superfish menu ------}}
 
           {{#=MENU(response.menu,_class='sf-menu')}}
-
-          <div id="gbuscar">
-<form action="http://www.google.cl/cse" id="cse-search-box" target="_blank">
-  <div>
-    <input type="hidden" name="cx" value="partner-pub-9647318851151478:2839135910" />
-    <input type="hidden" name="ie" value="UTF-8" />
-    <input type="text" name="q" size="55" />
-    <input type="submit" name="sa" value="Buscar" />
-  </div>
-</form>
-<script type="text/javascript" src="http://www.google.com/jsapi"></script>
-<script type="text/javascript">google.load("elements", "1", {packages: "transliteration"});</script>
-<script type="text/javascript" src="http://www.google.com/cse/t13n?form=cse-search-box&t13n_langs=en"></script>
-
-<script type="text/javascript" src="http://www.google.cl/coop/cse/brand?form=cse-search-box&amp;lang=es"></script>
-
-
-          </div>
 
       <small>Categorías:</small>
       {{=response.menubkn}}<g:plusone count="true"></g:plusone>
@@ -158,7 +153,7 @@
           {{if right_sidebar_enabled:}}
           <div id="right_sidebar" {{=XML(right_sidebar_style)}} >
             <div style="padding: 4px;">
-              {{block right_sidebar}}Content Right Sidebar{{end}}
+              {{block right_sidebar}}Conten tRight Sidebar{{end}}
             </div>
           </div>
           {{pass}}
