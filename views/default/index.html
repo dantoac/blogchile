@@ -24,7 +24,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 
 function reload_component() {
    // load data via ajax
-   web2py_component('{{=URL(c='default',f='feeds.load', args=request.args)}}','blogs');
+   web2py_component('{{=URL(c='default',f='feed.load', args=request.args)}}','blogs');
    // refresh even 1000ms without reloading page
    setTimeout(reload_component,300000);
 }
@@ -36,7 +36,7 @@ jQuery(document).ready(reload_component);
 
 
 <!-- google_ad_section_start -->
-{{=LOAD(c='default',f='feeds.load',args=request.args, ajax=True,target='blogs')}}
+{{=LOAD(c='default',f='feed.load',args=request.args, ajax=True,target='blogs')}}
 <!-- google_ad_section_end -->
 
 {{block left_sidebar}}asdf{{end}}

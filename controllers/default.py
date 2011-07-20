@@ -16,7 +16,6 @@ response.title = 'Blogs chilenos importantes'
 def index():
     #return redirect(URL(r = request, f = 'index'))
     return dict()
-    #return str('En Mantención.')
 
 def respira():
     return redirect(URL(r=request,f='index',args=request.args))
@@ -24,8 +23,8 @@ def respira():
 def votar():
     return locals()
 
-@auth.requires(request.cid)
-def feeds():
+#@auth.requires(request.cid)
+def feed():
     #redirect(URL('index'))
     from gluon.tools import prettydate
     import locale
@@ -278,7 +277,7 @@ def sitemap():
                 TAG.changefreq('always')
                 )))
             sm.append(str(TAG.url(
-                TAG.loc(prefix,URL(r=request,c='default',f='respira.rss',args=[cat.slug])),
+                TAG.loc(prefix,URL(r=request,c='default',f='feed.rss',args=[cat.slug])),
                 TAG.changefreq('always')
                 )))
         sm.append('</urlset>')
