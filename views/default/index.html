@@ -6,16 +6,14 @@
 
 <script>
 function reload_component() {
-   // load data via ajax
    web2py_component('{{=URL(c='default',f='feed.load', args=request.args)}}','blogs');
-   // refresh even 1000ms without reloading page
-   setTimeout(reload_component,300000);
+    setTimeout(reload_component,300000);
 }
 jQuery(document).ready(reload_component);
 </script>
 
 
-          <div id="gbuscar">
+          <div id="gbuscar" class="der">
 <form action="http://www.google.cl/cse" id="cse-search-box" target="_blank">
   <div>
     <input type="hidden" name="cx" value="partner-pub-9647318851151478:2839135910" />
@@ -33,7 +31,8 @@ jQuery(document).ready(reload_component);
 
           </div>
 
-{{=H4('Últimas publicaciones en Blogs de  :')}}
+<div id="filtro" class="izq">Filtrar: <input id="filtrando" name="filtrando"> <span id="filtrado">0</span> publicaciones(s).</div>
+
 <!-- google_ad_section_start -->
 {{=LOAD(c='default',f='feed.load',args=request.args, ajax=True,target='blogs')}}
 <!-- google_ad_section_end -->

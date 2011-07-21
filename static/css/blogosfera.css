@@ -11,6 +11,7 @@ body {
 
 #right_sidebar {width:20%;}
 
+#logo {width:auto;height:auto;}
 #header #logo {float:left;margin:0pt;background:none;color:#999;font:italic small sans-serif;text-align:right; }
 #header #appname {font:bold xx-large Cantarell,sans-serif;color:#fff;}
 #footer {background:none;border:none;}
@@ -181,16 +182,13 @@ tr.search_result {border-bottom:1px solid #ccc;}
 
 .search_result .meta {font:small sans-serif;background:transparent !important}
 
-#gbuscar {text-align:right;}
+#gbuscar {text-align:right;width:50%;}
 #cse-search-results iframe {width:100%;background:#fff;padding:1em;margin:auto;}
 
 #filtro {
-    text-align:center;
-    margin:auto;
-    background:#eee;
-    border:1px solid #ccc;
-    padding:.5em;
-    border-radius:10px;
+    text-align:left;
+    margin:0;
+    width:50%;
 }
 
 #blogs:first-child {font:bold 1.3em sans-serif;}
