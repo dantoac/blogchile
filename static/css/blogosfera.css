@@ -17,6 +17,9 @@ body {
 #footer {background:none;border:none;}
 #footer a {color:#00f;}
 
+#logo h1 {font:bold 16px cantarell, sans-serif;}
+#logo img {display:block;}
+
 .auth_navbar {background:#fff;}
 
 .publicidad {
