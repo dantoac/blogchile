@@ -18,8 +18,6 @@ jQuery("#filtrando").keyup(function () {
 
 jQuery(document).ready(filtro);
 </script>
-{{=H3('Últimos artículos:')}}
-<div id="filtro">Filtrar: <input id="filtrando" name="filtrando"> Filtrados: <span id="filtrado">0</span> artículo(s).</div>
 
 {{=P(DIV(box,_style='clear:both;'))}}
 <!-- google_ad_section_end -->
