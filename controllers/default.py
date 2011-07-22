@@ -293,7 +293,10 @@ def sitemap4():
 # URLs ANTIGUAS. Las funciones a continuación están sólo para compatibilidad retroactiva
 
 def respira():
-    return redirect(URL(c='default',f='index',args=request.args))
+    if request.extension == 'rss':
+        return redirect(URL(c='default',f='feed.rss', args=request.args))
+    else:
+        return redirect(URL(c='default',f='index',args=request.args))
 
 
 def buscar():
