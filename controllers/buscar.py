@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+
+response.meta.title = 'Buscando en Blogs Chilenos'
+response.meta.description = 'Buscando entre los artículo y publicaciones de la blogósfera chilena'
+
 def index():
     
     form = FORM(INPUT(_name='q'),INPUT(_type='submit', _value='Buscar'))
