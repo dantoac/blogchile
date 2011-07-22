@@ -12,7 +12,7 @@ def votar():
     return locals()
 
 
-@auth.requires(request.cid)
+#@auth.requires(request.cid)
 def feed():
     #redirect(URL('index'))
     from gluon.tools import prettydate
