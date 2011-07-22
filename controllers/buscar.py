@@ -8,7 +8,7 @@ def index():
     
     form = FORM(INPUT(_name='q'),INPUT(_type='submit', _value='Buscar'))
     if form.accepts(request.vars,session):
-        redirect(URL(f='index',vars={'q':request.post_vars.q}))    
+        redirect(URL(c='buscar',f='index',vars={'q':request.post_vars.q}))    
 
     return dict(form=form)
 
