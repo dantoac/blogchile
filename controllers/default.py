@@ -293,11 +293,11 @@ def sitemap4():
 # URLs ANTIGUAS. Las funciones a continuación están sólo para compatibilidad retroactiva
 
 def respira():
-    return redirect(URL(r=request,f='index',args=request.args))
+    return redirect(URL(c='default',f='index',args=request.args))
 
 
 def buscar():
     if request.args or request.vars:
-        return redirect(URL(r=request,c='buscar',f='index',vars={'q':request.args}))
+        return redirect(URL(c='buscar',f='index',vars={'q':request.args}))
     else:
         return redirect(URL(c='buscar',f='index'))
