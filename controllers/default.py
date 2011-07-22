@@ -2,31 +2,15 @@
 import locale
 locale.setlocale(locale.LC_TIME, 'es_CL.UTF8')
 
-response.title = 'Mejores Blogs Chilenos'
+response.title = 'Blogs Chilenos'
 
 def index():
     response.meta.description = 'Blogs de noticias, tecnología, opinión, deporte, diseño, ocio, música, política, arte y más en la blogósfera chilena'
-    response.files.append(URL('static', 'js/jquery.simplemodal.min.js'))
-
-    #form_buscar = FORM(INPUT(_name='q'),INPUT(_type='submit', _value='Buscar'))
-    #if form_buscar.accepts(request.vars,session):
-    #    redirect(URL(c='default',f='index',vars={'q':request.post_vars.q}))    
-
-    #return dict(buscar=form_buscar)
     return dict()
-
-def respira():
-    return redirect(URL(r=request,f='index',args=request.args))
 
 def votar():
     return locals()
 
-
-def buscar():
-    if request.args or request.vars:
-        return redirect(URL(r=request,c='buscar',f='index',vars={'q':request.args}))
-    else:
-        return redirect(URL(c='buscar',f='index'))
 
 @auth.requires(request.cid)
 def feed():
@@ -303,3 +287,17 @@ def sitemap4():
 
     sm.append('</urlset>')
     return sm
+
+
+
+# URLs ANTIGUAS. Las funciones a continuación están sólo para compatibilidad retroactiva
+
+def respira():
+    return redirect(URL(r=request,f='index',args=request.args))
+
+
+def buscar():
+    if request.args or request.vars:
+        return redirect(URL(r=request,c='buscar',f='index',vars={'q':request.args}))
+    else:
+        return redirect(URL(c='buscar',f='index'))

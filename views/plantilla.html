@@ -32,7 +32,7 @@
     {{response.files.append(URL('static','css/superfish.css'))}}
     {{response.files.append(URL('static','css/blogosfera.css'))}}
     {{response.files.append(URL('static','js/superfish.js'))}}
-
+    {{response.files.append(URL('static','js/jquery.simplemodal.min.js'))}}
     {{include 'web2py_ajax.html'}}
 
     {{
@@ -98,7 +98,7 @@
     {{if auth.is_logged_in():}}
     {{=A(SPAN(_class = 'icon cog'), 'Panel', _href = URL('gestion', 'agregar'), _class = 'pill button primary negative', cid = 'content')}}{{pass}}
     {{=A(SPAN(_class = 'icon home'), 'Portada ', _class = 'button left', _href = URL('default', 'index'))}}{{=A(SPAN(_class = 'icon rss'), 'RSS %s ' % catslug, _class = 'button middle ', _href = URL(f = 'feed.rss', args = request.args(0)))
-    }}{{=A(SPAN(_class='icon magnifier'), 'Buscar ', _class='button right', _href = URL(c='default',f='buscar'))}}
+    }}{{=A(SPAN(_class='icon magnifier'), 'Buscar ', _class='button right', _href = URL(c='buscar',f='index'))}}
     {{try:}}{{=auth.navbar(action=URL('default','user'))}}{{except:pass}}
 
     {{end}}
