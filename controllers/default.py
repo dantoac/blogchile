@@ -1,20 +1,18 @@
 # -*- coding: utf-8 -*-
-# this file is released under public domain and you can use without limitations
-
-#########################################################################
-## This is a samples controller
-## - index is the default action of any application
-## - user is required for authentication and authorization
-## - download is for downloading files uploaded in the db (does streaming)
-## - call exposes all registered services (none by default)
-#########################################################################
 import locale
 locale.setlocale(locale.LC_TIME, 'es_CL.UTF8')
 
-response.title = 'Blogs chilenos importantes'
+response.title = 'Mejores Blogs Chilenos'
 
 def index():
-    #return redirect(URL(r = request, f = 'index'))
+    response.meta.description = 'Blogs de noticias, tecnología, opinión, deporte, diseño, ocio, música, política, arte y más en la blogósfera chilena'
+    response.files.append(URL('static', 'js/jquery.simplemodal.min.js'))
+
+    #form_buscar = FORM(INPUT(_name='q'),INPUT(_type='submit', _value='Buscar'))
+    #if form_buscar.accepts(request.vars,session):
+    #    redirect(URL(c='default',f='index',vars={'q':request.post_vars.q}))    
+
+    #return dict(buscar=form_buscar)
     return dict()
 
 def respira():
@@ -23,13 +21,19 @@ def respira():
 def votar():
     return locals()
 
-#@auth.requires(request.cid)
+
+def buscar():
+    if request.args or request.vars:
+        return redirect(URL(r=request,c='buscar',f='index',vars={'q':request.args}))
+    else:
+        return redirect(URL(c='buscar',f='index'))
+
+@auth.requires(request.cid)
 def feed():
     #redirect(URL('index'))
     from gluon.tools import prettydate
     import locale
     locale.setlocale(locale.LC_ALL,locale='es_CL.UTF8')
-    response.files.append(URL('static', 'js/jquery.simplemodal.min.js'))
 
     try:
         catslug = request.args(0) or db.categoria[1].slug
@@ -59,14 +63,6 @@ def feed():
     lista_fidx = []
     # obteniendo los feeds categorizados bajo el slug solicitado desde la url
 
-    #### 1 a varias categorías por feed
-    #~ for feedincat in db((db.categoria.slug == catslug) & (db.feed_categoria.categoria == db.categoria.id)
-                #~ & (db.feed_categoria.feed == db.feed.id)
-                #~ & (db.feed_categoria.is_active == True)
-                #~ & (db.feed.is_active == True)
-                #~ & (db.categoria.is_active == True)
-                #~ ).select(db.feed.ALL):
-
     #### 1 categoría por feed
     for feedincat in db((db.categoria.slug == catslug) & (db.feed.categoria == db.categoria.id)
                 #& (db.feed_categoria.feed == db.feed.id)
@@ -79,7 +75,6 @@ def feed():
         feedbox = DIV(DIV(A(feedincat.title,_href=feedincat.source,_target='_blank'), _class = 'feed_titulo'), _class = 'feedbox feed_bloque  izq')
 
         for n in db(db.noticia.feed == feedincat.id).select(db.noticia.ALL, orderby =~ db.noticia.id, limitby=(0,3)):
-
 
             if n.updated != None:
                 actualizado = n.updated
@@ -97,8 +92,6 @@ def feed():
 
         box.append(feedbox)
 
-
-    #test='TTEESSTT'
     if request.extension == 'rss':
        rss = dict(title = request.application.upper(),
                   link = 'http://' + request.env.http_host + request.url,
@@ -161,84 +154,6 @@ def go():
 
     return dict(go=go,shorturl=shorturl,referer=referer)
 
-
-def busca():
-    '''
-    Función de búsqueda usando la api de Google para su motor personalizado.
-    '''
-    import urllib2
-    import urllib 
-    term = request.args
-    ua = "Mozilla/5.0 (compatible; Konqueror/3.5.8; Linux)"  
-    h = {"User-Agent": ua}  
-
-    uri = 'http://www.google.cl/cse?cx=partner-pub-9647318851151478%3A2839135910&ie=UTF-8&q=' + '+'.join(term)
-    #url = urllib.encode(uri)
-    r = urllib2.Request(uri, headers=h)  
-    res = urllib2.urlopen(r).read()
-
-    #html = TAG(res)
-    html = res[2850:len(res)-9]
-
-
-    return dict(www = XML(html))
-
-
-
-
-#@auth.requires(request.cid)
-def buscar():
-
-    #redirect(URL(c='default',f='respira'))
-
-    response.title = 'Buscar publicaciones en blogs chilenos.'
-
-    ads_busqueda = XML('''
-<script type="text/javascript"><!--
-google_ad_client = "ca-pub-9647318851151478";
-/* ads en resultado de búsqueda */
-google_ad_slot = "3282677144";
-google_ad_width = 468;
-google_ad_height = 60;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>
-''')
-
-    form = FORM('Buscar Publicación', INPUT(_name='buscando', requires=IS_LENGTH(minsize=6,error_message='Intenta especificar más tu búsqueda.')),INPUT(_type='submit'))
-    lista_resultados = ''
-    if form.accepts(request.post_vars):
-
-        buscado = XML(form.vars.buscando)
-        buscado = buscado.split()
-        try:
-            for patron in buscado:
-                #resultados = db((db.noticia.title.contains(patron)) | (db.noticia.description.contains(patron))
-                resultados = db((db.noticia.title.contains(patron))).select(db.noticia.id,db.noticia.title, db.noticia.created_on, db.noticia.slug,db.noticia.feed, orderby=~db.noticia.id, distinct=True)
-
-
-            #lista_resultados = TABLE(THEAD(TR(TH('Resultados'))), _id='search_results')
-            lista_resultados = UL( _id='search_results')
-            for n,resultado in enumerate(resultados):
-                n=n+1
-
-                title = A(resultado.title.capitalize(),_href=URL(f='go',args=[resultado.slug,resultado.id]),_target='new')
-
-                #body = nltk.util.clean_html(XML(resultado.description))+'(...)'
-                meta = 'Obtenido el %(fecha)s desde %(fuente)s' % dict(fuente=A(resultado.feed.title, _href=resultado.feed.source, _target='_blank'), fecha = str(resultado.created_on))
-                
-                #lista_resultados.append(TR(TD(XML('%(meta)s <br />%(title)s<br />%(ads)s' % dict(title=title,meta=meta,ads = ads_busqueda)),_class='title'),_class='search_result'))
-                lista_resultados.append(LI(SPAN(XML('%(meta)s <br />%(title)s<br />%(ads)s' % dict(title=title,meta=meta,ads = ads_busqueda)),_class='title'),_class='search_result'))
-
-            response.flash = 'Encontré %s resultado(s).' % n
-            #response.flash = 'Mostrando los últimos 100 artículos'
-        except Exception,e:
-            #response.flash = e
-            response.flash = 'No encontré artículos con esas palabras. Intenta usando el buscador de google que está más arriba.'
-            lista_resultados = XML(SPAN('Sin Resultados', _class='error'))
-    return dict(form=form,lista_resultados=lista_resultados)
 
 @auth.requires(request.cid)
 def misfeeds():

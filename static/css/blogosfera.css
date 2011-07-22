@@ -185,8 +185,6 @@ tr.search_result {border-bottom:1px solid #ccc;}
 
 .search_result .meta {font:small sans-serif;background:transparent !important}
 
-#gbuscar {text-align:right;width:50%;}
-#cse-search-results iframe {width:100%;background:#fff;padding:1em;margin:auto;}
 
 #filtro {
     text-align:left;
@@ -195,3 +193,25 @@ tr.search_result {border-bottom:1px solid #ccc;}
 }
 
 #blogs:first-child {font:bold 1.3em sans-serif;}
+#blogs {clear:both;}
+
+
+.cse, .gsc-control-cse, .gsc-control-cse-es {
+     visibility:visible !important;
+     background:none !important;
+     border:none !important;
+}
+
+.cse {clear:both;}
+
+.gsc-cursor-page {
+    background:#eee;
+    color:#00f;
+    border:1px solid #ccc;
+    display:inline;
+    padding:0 .3em;
+    margin:4px;
+}
+
+.gsc-search-box {display:block !important;}
+.gsc-wrapper {background:#fff;}
