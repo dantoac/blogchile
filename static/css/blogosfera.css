@@ -48,9 +48,9 @@ body {
 #panel a:hover {}
 
 .feed_bloque {
-    width:100px;
+    width:120px;
     overflow:hide;
-    margin:.5em;
+    margin:.8em;
     border:1px solid #acf;
     text-align: left;
     /*
