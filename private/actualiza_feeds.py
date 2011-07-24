@@ -10,7 +10,7 @@ NECESITA LA LIBERARÍA dateutil <http://niemeyer.net/python-dateutil>
 
 daniel@varpub.org
 '''
-#import time
+import time
 #from subprocess import Popen
 
 #session.forget()
@@ -100,11 +100,11 @@ feed_data = db((db.feed.categoria == db.categoria.id)
             #& (db.feed_categoria.is_active == True)
             & (db.feed.is_active == True)
             & (db.categoria.is_active == True)
-            ).select()
+            ).select(db.feed.id)
 try:
-    for data in feed_data:
-        fidx = data.feed.id
+    for feed in feed_data:
+        fidx = feed.id
         _u2d(fidx)
-    #time.sleep(300) #en segundos
+        time.sleep(3) #en segundos
 except Exception,e:
     print "excepcion: %s" % e

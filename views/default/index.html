@@ -13,7 +13,7 @@ jQuery(document).ready(reload_component);
 </script>
 
  {{=DIV('Filtrar:',INPUT(_name='filtrando',_id='filtrando'),_id='filtro', _class='izq')}}
-
+ {{=DIV(XML('<g:plusone count="true"></g:plusone>'), _class='der')}}
 <!-- google_ad_section_start -->
 {{=LOAD(c='default',f='feed.load',args=request.args, ajax=False,target='blogs')}}
 <!-- google_ad_section_end -->

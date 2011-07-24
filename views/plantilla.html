@@ -140,10 +140,9 @@ google_ad_height = 90;
 
           {{#------ superfish menu ------}}
 
-          {{#=MENU(response.menu,_class='sf-menu')}}
+          {{=MENU(response.menu,_class='sf-menu')}}
 
-      <small>Categorías:</small>
-      {{=response.menubkn}}<g:plusone count="true"></g:plusone>
+      {{#=response.menubkn}}
 
           <div style="clear: both;"></div>
           {{end}}
