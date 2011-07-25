@@ -70,7 +70,7 @@ body {
     background:#def;
 }
 */
-#wrapper {background:none;padding:2em 0;width:auto;max-width:900px;}
+#wrapper {background:none;padding:2em 0;width:auto;max-width:900px;overflow:hidden;}
 
 /* .bloque {background:#eee;border:1px solid none;}*/
 
