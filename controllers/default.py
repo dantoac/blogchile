@@ -6,11 +6,13 @@ response.title = 'Blogs Chilenos'
 
 def index():
     response.meta.description = 'Blogs de noticias, tecnología, opinión, deporte, diseño, ocio, música, política, arte y más en la blogósfera chilena'
+    response.meta.keywords = 'blogs, chile, publicaciones, personas'
+    if request.extension == 'rss':
+        return redirect('http://feeds.feedburner.com/blogosfera/dDKt')
     return dict()
 
 def votar():
     return locals()
-
 
 #@auth.requires(request.cid)
 def feed():
@@ -47,6 +49,19 @@ def feed():
     lista_fidx = []
     # obteniendo los feeds categorizados bajo el slug solicitado desde la url
 
+    google_ad = DIV(XML('''<script type="text/javascript"><!--
+google_ad_client = "ca-pub-9647318851151478";
+/* bloque-txt-120x240 */
+google_ad_slot = "0858517491";
+google_ad_width = 120;
+google_ad_height = 240;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>'''), _class='feed_bloque izq')
+
+
     #### 1 categoría por feed
     for feedincat in db((db.categoria.slug == catslug) & (db.feed.categoria == db.categoria.id)
                 #& (db.feed_categoria.feed == db.feed.id)
@@ -56,6 +71,8 @@ def feed():
                 ).select(db.feed.ALL):
 
         #lista_fidx.append(feedincat.id) <- desde aquí podŕia también actualizar u2d_cat()
+
+        # armando feed_bloque y la noticia de cada feed
         feedbox = DIV(DIV(A(feedincat.title,_href=feedincat.source,_target='_blank'), _class = 'feed_titulo'), _class = 'feedbox feed_bloque  izq')
 
         for n in db(db.noticia.feed == feedincat.id).select(db.noticia.ALL, orderby =~ db.noticia.id, limitby=(0,3)):
@@ -68,22 +85,28 @@ def feed():
             # armando la url que va en el rss
             localurl = 'http://' + request.env.http_host + URL(c = 'default', f = 'go.html', args = [n.slug,n.id], extension='html')
 
-            # armando el bloque para la visa en html
+            # armando el título y enlace a la publicación; armando los bloques de publicación
             feedbox.append(DIV(DIV(A(n.title.lower()+'...', _name = n.slug, _href = URL(r = request, f = 'go.html', args = [n.slug,n.id]), _class = 'noticia_link', _target='_blank', extension='html'), _class = 'noticia_contenido'), DIV(prettydate(actualizado, T), _class = 'noticia_meta'), _class = 'noticia'))
 
+            
             entradas.append(dict(title =unicode(n.title,'utf8'), link = localurl, description = unicode('%s (%s)' % (n.description, n.feed.title),'utf8'), created_on = request.now))
-
-
+        
         box.append(feedbox)
+        #box.append(google_ad)
 
     if request.extension == 'rss':
-       rss = dict(title = request.application.upper(),
-                  link = 'http://' + request.env.http_host + request.url,
-                  description = unicode(response.meta.description, 'utf8'),
-                  created_on = request.now,
-                  entries = entradas
-                  )
-       contenido = rss
+
+        feedburner = {'portada':'http://feeds.feedburner.com/blogosfera/dDKt'}
+
+
+
+        rss = dict(title = request.application.upper(),
+                   link = 'http://' + request.env.http_host + request.url,
+                   description = unicode(response.meta.description, 'utf8'),
+                   created_on = request.now,
+                   entries = entradas
+                   )
+        contenido = rss
     else:
 
        contenido = dict(box = box)
@@ -141,7 +164,7 @@ def go():
 
 @auth.requires(request.cid)
 def misfeeds():
-    fdata = db(db.feed.created_by == auth.user_id).select(db.feed.id,db.feed.title,db.feed.categoria,db.feed.is_active)
+    fdata = db(db.feed.created_by == auth.user_id).select(db.feed.id,db.feed.title,db.feed.categoria,db.feed.is_active,orderby=db.feed.id)
     ftable = TABLE(THEAD(TR(TH('Título'),TH('Categoría'),TH('Activado'))))
     for f in fdata:
         ftable.append(TR(TD(f.title),TD(f.categoria.title),TD(f.is_active),TH(A(SPAN(_class='icon pen'),'Editar',_href=URL(c='default',f='editarFeed.load',args=[f.id]),_class='negative button',cid='editmyfeed'))))
@@ -300,7 +323,13 @@ def respira():
 
 
 def buscar():
-    if request.args or request.vars:
-        return redirect(URL(c='buscar',f='index',vars={'q':request.args}))
+    if request.args:
+        return redirect(URL(c='default',f='buscar',vars={'q':request.args}))
     else:
-        return redirect(URL(c='buscar',f='index'))
+        form = FORM(INPUT(_name='q'),INPUT(_type='submit', _value='Buscar'))
+        if form.accepts(request.vars,session):
+            redirect(URL(c='default',f='buscar',vars={'q':request.post_vars.q}))    
+        return dict(form=form)
+
+
+

@@ -3,7 +3,7 @@
 
 response.meta.title = 'Buscando en Blogs Chilenos'
 response.meta.description = 'Buscando entre los artículo y publicaciones de la blogósfera chilena'
-
+"""
 def index():
     
     form = FORM(INPUT(_name='q'),INPUT(_type='submit', _value='Buscar'))
@@ -11,11 +11,20 @@ def index():
         redirect(URL(c='buscar',f='index',vars={'q':request.post_vars.q}))    
 
     return dict(form=form)
+"""
+
+def index():
+    if request.args:
+        terms = '+'.join(request.args)
+        return redirect(URL(r=request,c='default',f='buscar',vars={'q':terms}))
+    else:
+        return redirect(URL(r=request,c='default',f='buscar'))
 
 #@auth.requires(request.cid)
+# SIN USO
 def buscar():
 
-    redirect(URL(c='default',f='index'))
+    redirect(URL(c='buscar',f='index'))
 
     response.title = 'Buscar publicaciones en blogs chilenos.'
 
