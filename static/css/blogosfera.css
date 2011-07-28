@@ -22,6 +22,10 @@ body {
 #logo h1 {font:bold 16px cantarell, sans-serif;}
 #logo img {display:block;}
 
+#content {min-width:320px;}
+
+#filtro input {width:10em;}
+
 .auth_navbar {background:#fff;}
 
 .publicidad {
@@ -51,34 +55,37 @@ body {
 #panel a:hover {}
 
 .feed_bloque {
-    width:120px;
+    max-width:180px;
+    width:47%;
     overflow:hide;
-    margin:.8em;
-    border:1px solid #acf;
+    margin:0em;
     text-align: left;
     /*
     -moz-border-radius:10px;
     -webkit-border-radius:10px;
     */
     border-radius:10px;
-    background:#fff;
+    background:none;
 }
 
 /*
-.feed_bloque:hover {
-    outline:1px groove #acf;
+div.feed_bloque:hover {
+
     background:#def;
 }
 */
-#wrapper {background:none;padding:2em 0;width:auto;max-width:900px;overflow:hidden;}
+#wrapper {background:none;padding-top:3em;width:auto;max-width:900px;overflow:hidden;}
 
 /* .bloque {background:#eee;border:1px solid none;}*/
 
 a.noticia_link {
     text-decoration:none;
-    padding:0 1em;
+    padding:0 .5em;
     color:#000;
     font:7.5pt sans-serif;
+    height:40px;
+    display:block;
+    overflow:hidden;
     /* font-variant:small-caps; */
 }
 
@@ -94,12 +101,10 @@ a.noticia_link:visited {
     clear:both;
     text-align:center;
     text-transform:uppercase;
-    color:#000;
-    padding:0 .3em;
+    color:#000;;
     overflow:hidden;
     height:1.5em;
     line-height:1.5em;
-
 }
 
 .feed_titulo a {
@@ -112,28 +117,29 @@ a.noticia_link:visited {
 .noticia_meta {
     font:italic .8em sans-serif;
     text-align:right;
-    /*background:#def;*/
     color:#090;
     text-decoration:underline;
     padding:0 1em;
 }
-.noticia {}
+.noticia {margin:.3em;}
 .noticia_descripcion {}
 
 #sitemsge {padding:0 1em;line-height:1em;font:italic small sans-serif;background:none;color:#666;float:right;}
 
 .noticia_contenido {
-    padding:0 .3em;
-    background:#fff;
-    border-top:1px solid #cdf;
-    line-height:7.5pt;
-    height:80px;
-    overflow:hidden;
+    background: #fff;
+    border: 1px solid #acf;
+    line-height: 7.5pt;
+    /*height: 60px;*/
+    overflow: hidden;
+    border-radius:10px;
+padding:4px
 }
 
 #statusbar {
     background:none;
     border:0;
+    margin:0;
 }
 
 .boton_categoria_activa {
@@ -200,7 +206,6 @@ tr.search_result {border-bottom:1px solid #ccc;}
 #filtro {
     text-align:left;
     margin:0;
-    width:50%;
 }
 
 #blogs:first-child {font:bold 1.3em sans-serif;}
@@ -230,3 +235,4 @@ tr.search_result {border-bottom:1px solid #ccc;}
 .sf-menu, .sf-menu li { background:#def;}
 .sf-menu li:hover, .sf-menu li.sfHover, .sf-menu a:hover { background:#cdf !important;}
 .sf-menu a {border-left:1px solid #acf;padding:0.5em;}
+

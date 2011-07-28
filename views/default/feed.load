@@ -1,10 +1,29 @@
+<div style="height:60px;line-height:60px;">
+{{=DIV(B('Filtrar:'),INPUT(_name='filtrando',_id='filtrando'),SPAN('Ø',_id='filtrado'),"blog",_id='filtro',_class='izq')}}        
+
+<div class="der">
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-9647318851151478";
+/* ads en resultado de búsqueda */
+google_ad_slot = "3282677144";
+google_ad_width = 468;
+google_ad_height = 60;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div><!-- ad -->
+
+
+</div>
 <!-- google_ad_section_start -->
 <script>
 function filtro(){
 jQuery("#filtrando").keyup(function () {
     var filter = jQuery(this).val(), count = 0;
 
-    jQuery(".box .feedbox .noticia").each(function () {
+    jQuery(".box .feedbox .noticia, .feed_titulo").each(function () {
         if (jQuery(this).text().search(new RegExp(filter, "i")) < 0) {
             jQuery(this).addClass("hidden");
         } else {
