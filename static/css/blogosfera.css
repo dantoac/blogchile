@@ -26,7 +26,7 @@ body {
 
 #filtro input {width:10em;}
 
-.auth_navbar {background:#fff;}
+.auth_navbar {background:#eee;position:fixed;top:0;right:0;}
 
 .publicidad {
     background:#fff;
@@ -210,6 +210,9 @@ tr.search_result {border-bottom:1px solid #ccc;}
 
 #blogs:first-child {font:bold 1.3em sans-serif;}
 #blogs {clear:both;}
+
+#box {background:#fff;}
+#box p {padding:1em;}
 
 
 .cse, .gsc-control-cse, .gsc-control-cse-es {
