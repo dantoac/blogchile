@@ -130,12 +130,11 @@ def elimina_tildes(s):
     normalizado = ''.join((c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn'))
     return str(normalizado)
 
-
-def go():
+def blog():
     if request.extension!='html':
         request.extension = 'html'
 
-    response.files.append(URL('static','css/go.css'))
+    response.files.append(URL('static','css/blog.css'))
     #response.files.append(URL('static','js/jquery.iframe.js'))
 
     slugnoticia = request.args(0) #para mostrar la noticia en la url; SEO
@@ -156,17 +155,18 @@ def go():
         response.flash = 'El enlace se ha perdido por algún motivo. Te dirigiremos a una búsqueda privada al respecto.'
 
     if request.env.http_referer!=None:
-        goback = A(SPAN(_class = 'icon leftarrow'), 'Volver', _class = 'button', _style = 'margin-bottom:1em;float:left;',
+        goback = A(SPAN(_class = 'icon leftarrow'), 'Volver', _class = 'button izq',
                    _href = request.env.http_referer)
     else:
-        goback = A(SPAN(_class = 'icon home'), 'Blogosfera.cl', _class = 'positive primary button', _style = 'margin-bottom:1em;float:left;',
+        goback = A(SPAN(_class = 'icon home'), 'Blogosfera.cl', _class = 'positive primary button izq',
                    _href = 'http://blogosfera.cl')
 
-    #cerrarmarco = A(SPAN(_class = 'icon cross'), 'Ir a la Fuente', _class = 'negative button', _style = 'margin-bottom:1em;float:right;', _href = shorturl)
+    cerrarmarco = A(SPAN(_class = 'icon cross'), 'Ir al Blog', _class = 'negative button der', _href = shorturl, _title='Cerrarás este marco y visitarás el artículo en el blog de su fuente original')
 
-    referer = DIV(goback)
+    referer = goback
+    #referer = DIV(goback, class='izq')
     
-    go = DIV(IFRAME(_src = shorturl, _style = 'height:inherit;width:inherit;border:0;'), _id = 'godiv', _style = 'display:block;height:100%;width:100%;')
+    go = DIV(IFRAME(_src = shorturl, _style = 'height:90%;width:inherit;border:0;'), _id = 'godiv', _style = 'display:block;height:100%;width:100%;')
     """
     go = DIV(SCRIPT('$("<iframe/>").src("%s").appendTo("body");' % shorturl),SCRIPT('''$("iframe").src("%s", function(iframe, 10000) {
 alert("That took " + duration + " ms.");
@@ -180,7 +180,7 @@ alert("That took " + duration + " ms.");
 
     #response.flash = shorturl
 
-    return dict(go=go,shorturl=shorturl,referer=referer)
+    return dict(go=go,shorturl=shorturl,referer=referer,cerrarmarco=cerrarmarco)
 
 
 @auth.requires(request.cid)
@@ -318,9 +318,7 @@ def sitemap3():
 
 def sitemap4():
     sm = [str('<?xml version="1.0" encoding="UTF-8" ?> <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')]
-
     prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
-
     data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(30000,40000))
     for noti in data:
         sm.append(str(TAG.url(
@@ -328,10 +326,13 @@ def sitemap4():
             TAG.lastmod(noti.created_on.date()),
             TAG.changefreq('always')
             )))
-
     sm.append('</urlset>')
     return sm
 
+
+def smpaginas():
+    
+    return sm
 
 
 # URLs ANTIGUAS. Las funciones a continuación están sólo para compatibilidad retroactiva
@@ -346,16 +347,15 @@ def respira():
 def buscar():
     if request.env.http_referer == request.url:
         response.flash = 'Puedes buscar directamente usando: buscar?q=termino+de+busqueda'
-        if request.args:
-        
+        if request.args:        
             return redirect(URL(c='default',f='buscar',vars={'q':request.args}))
-    else:
-        
-            
+    else:                    
         form = FORM(INPUT(_name='q'),INPUT(_type='submit', _value='Buscar'))
         if form.accepts(request.vars,session):
             redirect(URL(c='default',f='buscar',vars={'q':request.post_vars.q}))    
         return dict(form=form)
 
+def go():
+    return redirect(URL(r=request,c='default',f='blog',args=request.args))
 
 
