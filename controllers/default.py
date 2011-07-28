@@ -136,7 +136,7 @@ def go():
         request.extension = 'html'
 
     response.files.append(URL('static','css/go.css'))
-    response.files.append(URL('static','js/jquery.iframe.js'))
+    #response.files.append(URL('static','js/jquery.iframe.js'))
 
     slugnoticia = request.args(0) #para mostrar la noticia en la url; SEO
     nid = request.args(1)
@@ -165,19 +165,20 @@ def go():
     #cerrarmarco = A(SPAN(_class = 'icon cross'), 'Ir a la Fuente', _class = 'negative button', _style = 'margin-bottom:1em;float:right;', _href = shorturl)
 
     referer = DIV(goback)
-    #go = DIV(IFRAME(_src = shorturl, _style = 'height:inherit;width:inherit;border:0;'), _id = 'godiv', _style = 'display:block;height:100%;width:100%;')
-
+    
+    go = DIV(IFRAME(_src = shorturl, _style = 'height:inherit;width:inherit;border:0;'), _id = 'godiv', _style = 'display:block;height:100%;width:100%;')
+    """
     go = DIV(SCRIPT('$("<iframe/>").src("%s").appendTo("body");' % shorturl),SCRIPT('''$("iframe").src("%s", function(iframe, 10000) {
 alert("That took " + duration + " ms.");
 }, {
   timeout: function() { alert("oops! timed out."); },
   timeoutDuration: 10000
 });''' % shorturl))
-
+    """
 
     #go = DIV(jqiframe, _id = 'godiv')
 
-    response.flash = shorturl
+    #response.flash = shorturl
 
     return dict(go=go,shorturl=shorturl,referer=referer)
 
