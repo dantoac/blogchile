@@ -49,7 +49,7 @@ def feed():
     # obteniendo la petición de categoría desde la url, sino setea por defecto la primera conocida en db
 
     feed_ids = entradas = []
-    box = DIV(_class = 'box')
+    box = DIV(_id = 'box')
 
     #entradas = DIV()
     rss = {}
