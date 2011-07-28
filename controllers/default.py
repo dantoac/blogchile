@@ -5,10 +5,17 @@ locale.setlocale(locale.LC_TIME, 'es_CL.UTF8')
 response.title = 'Blogs Chilenos'
 
 def index():
-    response.meta.description = 'Blogs de noticias, tecnología, opinión, deporte, diseño, ocio, música, política, arte y más en la blogósfera chilena'
+    response.meta.description = 'Blogs de Chile, noticias, tecnología, opinión, deporte, diseño, ocio, música, política, arte y más en la blogósfera chilena'
     response.meta.keywords = 'blogs, chile, publicaciones, personas'
+
     if request.extension == 'rss':
         return redirect('http://feeds.feedburner.com/blogosfera/dDKt')
+
+    if request.args:
+        descrip = db(db.categoria.slug == request.args(0)).select(db.categoria.description)[0].description
+        if descrip != None:
+            response.flash = descrip
+
     return dict()
 
 def votar():
@@ -86,7 +93,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
             localurl = 'http://' + request.env.http_host + URL(c = 'default', f = 'go.html', args = [n.slug,n.id], extension='html')
 
             # armando el título y enlace a la publicación; armando los bloques de publicación
-            feedbox.append(DIV(DIV(A(n.title.lower()+'...', _name = n.slug, _href = URL(r = request, f = 'go.html', args = [n.slug,n.id]), _class = 'noticia_link', _target='_blank', extension='html'), _class = 'noticia_contenido'), DIV(prettydate(actualizado, T), _class = 'noticia_meta'), _class = 'noticia'))
+            feedbox.append(DIV(DIV(A(n.title.lower()+'...', _name = n.slug, _href = URL(r = request, f = 'go.html', args = [n.slug,n.id]), _class = 'noticia_link', _target='_blank', extension='html'),DIV(prettydate(actualizado, T), _class = 'noticia_meta'), _class = 'noticia_contenido'), _class = 'noticia'))
 
             
             entradas.append(dict(title =unicode(n.title,'utf8'), link = localurl, description = unicode('%s (%s)' % (n.description, n.feed.title),'utf8'), created_on = request.now))
@@ -129,6 +136,7 @@ def go():
         request.extension = 'html'
 
     response.files.append(URL('static','css/go.css'))
+    response.files.append(URL('static','js/jquery.iframe.js'))
 
     slugnoticia = request.args(0) #para mostrar la noticia en la url; SEO
     nid = request.args(1)
@@ -157,7 +165,19 @@ def go():
     #cerrarmarco = A(SPAN(_class = 'icon cross'), 'Ir a la Fuente', _class = 'negative button', _style = 'margin-bottom:1em;float:right;', _href = shorturl)
 
     referer = DIV(goback)
-    go = DIV(IFRAME(_src = shorturl, _style = 'height:inherit;width:inherit;border:0;'), _id = 'godiv', _style = 'display:block;height:100%;width:100%;')
+    #go = DIV(IFRAME(_src = shorturl, _style = 'height:inherit;width:inherit;border:0;'), _id = 'godiv', _style = 'display:block;height:100%;width:100%;')
+
+    go = DIV(SCRIPT('$("<iframe/>").src("%s").appendTo("body");' % shorturl),SCRIPT('''$("iframe").src("%s", function(iframe, 10000) {
+alert("That took " + duration + " ms.");
+}, {
+  timeout: function() { alert("oops! timed out."); },
+  timeoutDuration: 10000
+});''' % shorturl))
+
+
+    #go = DIV(jqiframe, _id = 'godiv')
+
+    response.flash = shorturl
 
     return dict(go=go,shorturl=shorturl,referer=referer)
 
@@ -323,9 +343,14 @@ def respira():
 
 
 def buscar():
-    if request.args:
-        return redirect(URL(c='default',f='buscar',vars={'q':request.args}))
+    if request.env.http_referer == request.url:
+        response.flash = 'Puedes buscar directamente usando: buscar?q=termino+de+busqueda'
+        if request.args:
+        
+            return redirect(URL(c='default',f='buscar',vars={'q':request.args}))
     else:
+        
+            
         form = FORM(INPUT(_name='q'),INPUT(_type='submit', _value='Buscar'))
         if form.accepts(request.vars,session):
             redirect(URL(c='default',f='buscar',vars={'q':request.post_vars.q}))    

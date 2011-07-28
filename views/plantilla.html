@@ -101,7 +101,10 @@
     {{if auth.is_logged_in():}}
     {{=A(SPAN(_class = 'icon cog'), 'Panel', _href = URL('gestion', 'agregar'), _class = 'pill button primary negative', cid = 'content')}}{{pass}}
     {{=A(SPAN(_class = 'icon home'), 'Portada ', _class = 'button left', _href = URL('default', 'index'))}}{{=A(SPAN(_class = 'icon rss'), 'RSS %s ' % catslug, _class = 'button middle ', _href = URL(f = 'feed.rss', args = request.args(0)))
-    }}{{=A(SPAN(_class='icon magnifier'), 'Buscar ', _class='button right', _href = URL(c='default',f='buscar'))}}
+    }}{{=A(SPAN(_class='icon magnifier'), 'Buscar ', _class='button right', _href = URL(c='default',f='buscar'))}}{{=A(SPAN(_class=''),'¿Que es un Blog?', _href=URL(c='plugin_wiki',f='page.load',args='que-es-un-blog'), cid='content', _class='button')}}
+    
+    <div id="modal"></div>
+
     {{try:}}{{=auth.navbar(action=URL('default','user'))}}{{except:pass}}
 
     {{end}}
@@ -130,6 +133,12 @@ google_ad_height = 90;
 </script>
 <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
+</div>
+<div class="der">
+  <a href="https://twitter.com/blogchile" class="twitter-follow-button" data-width="300px" data-lang="es" data-align="right">@blogosferachile</a>   
+    <script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>
+  <div class="g-plusone" width="80" height="20" href="http://{{=request.env.http_host+request.url}}"></div>
+
 </div>
 
 
@@ -169,9 +178,9 @@ google_ad_height = 90;
 
           {{if right_sidebar_enabled:}}
           <div id="right_sidebar" {{=XML(right_sidebar_style)}} >
-            <div style="padding: 4px;">
+	    <div style="padding: 4px;">
               {{block right_sidebar}}Conten tRight Sidebar{{end}}
-            </div>
+	    </div>
           </div>
           {{pass}}
 
@@ -183,19 +192,26 @@ google_ad_height = 90;
         <div id="footer">
           {{block footer}}
           <!-- {{=A('Sitemap', _href=URL(c='default',f='sitemap'),_class='button')}} -->
-
+	  
 
           <div style="clear: both;"></div>
+	  Blog Chile
+	  <em>Los créditos a los artículos recolectados son de cada fuente.</em> |
+          {{#=A('Política de Privacidad', _onclick='jQuery("#privacidad").modal({overlayClose: true});')}} |
 
-          {{end}}<em>Los créditos a los artículos recolectados son de cada fuente.</em> |
-          {{=A('Política de Privacidad', _onclick='jQuery("#privacidad").modal({overlayClose: true});')}} |
 
+	  {{=A('Política de Privacidad', _href=URL(c='plugin_wiki',f='page.load',args='politica-de-privacidad'), cid='content')}} |
           {{=A('Sitemap', _href=URL(c='default',f='sitemap',extension='html'))}}
 
 
+	  
+
+          {{#=LOAD(c='plugin_wiki',f='page.load',args='politica-de-privacidad', target='privacidad', _style='display:none;',ajax=False)}}
 
 
-          {{=LOAD(c='plugin_wiki',f='page.load',args='politica-de-privacidad', target='privacidad', _style='display:none;',ajax=True)}}
+          {{end}}
+
+	  
         </div>
       </div>
     </div>

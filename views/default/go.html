@@ -1,15 +1,7 @@
-{{block header}}
-<style>
-html, body, #godiv, #container, #wrapper, #page, #content {height:100%;margin:0;padding:0em;overflow:hidden;}
-#statusbar {display:none;}
-</style>
-{{end}}
-
-
-{{block panel}}
+{{block statusbar}}
 {{=referer}}<g:plusone count="true"></g:plusone>
 {{end}}
-
+{{block panel}}{{end}}
 {{extend 'plantilla.html'}}
 
-{{=go}}
+{{=XML(go)}}

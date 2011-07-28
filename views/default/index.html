@@ -1,7 +1,6 @@
 {{left_sidebar_enabled=False}}
 {{right_sidebar_enabled=True}}
 
-
 {{extend 'plantilla.html'}}
 
 <script>
@@ -12,16 +11,17 @@ function reload_component() {
 jQuery(document).ready(reload_component);
 </script>
 
- {{=DIV('Filtrar:',INPUT(_name='filtrando',_id='filtrando'),_id='filtro', _class='izq')}}
- {{=DIV(XML('<g:plusone count="true"></g:plusone>'), _class='der')}}
-<!-- google_ad_section_start -->
+
+<div style="clear: both;"></div>
+
 {{=LOAD(c='default',f='feed.load',args=request.args, ajax=False,target='blogs')}}
-<!-- google_ad_section_end -->
 
 {{block left_sidebar}}asdf{{end}}
 {{block right_sidebar}}
+ 
+<div class="publicidad">
+<div id="fb-root"></div><script src="http://connect.facebook.net/es_CL/all.js#xfbml=1"></script><fb:like-box href="http://www.facebook.com/pages/Blog-Chile/177683725631223" width="160" show_faces="true" border_color="white" stream="false" header="false"></fb:like-box>
 
-<div class='publicidad'>
 <script type="text/javascript"><!--
 google_ad_client = "ca-pub-9647318851151478";
 /* t/g ancho lateral */
