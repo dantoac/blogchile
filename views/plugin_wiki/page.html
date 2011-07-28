@@ -1,4 +1,4 @@
-{{extend 'layout.html'}}
+{{extend 'plantilla.html'}}
 {{if page:}}
 {{if page.slug.startswith('meta-'):}}{{=CODE(page.body)}}{{else:}}{{=plugin_wiki.render(page.body)}}{{pass}}
 {{if plugin_wiki_editor:}}
