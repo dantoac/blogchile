@@ -49,7 +49,7 @@ def feed():
     # obteniendo la petición de categoría desde la url, sino setea por defecto la primera conocida en db
 
     feed_ids = entradas = []
-    box = DIV(_id = 'box')
+    blogs = DIV()
 
     #entradas = DIV()
     rss = {}
@@ -98,7 +98,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
             
             entradas.append(dict(title =unicode(n.title,'utf8'), link = localurl, description = unicode('%s (%s)' % (n.description, n.feed.title),'utf8'), created_on = request.now))
         
-        box.append(feedbox)
+        blogs.append(feedbox)
         #box.append(google_ad)
 
     if request.extension == 'rss':
@@ -116,7 +116,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
         contenido = rss
     else:
 
-       contenido = dict(box = box)
+       contenido = dict(blogs = blogs)
 
     return response.render(contenido)
 
