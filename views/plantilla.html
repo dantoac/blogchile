@@ -98,13 +98,14 @@
 
     {{pass}}
 
-    {{if auth.is_logged_in():}}
-    {{=A(SPAN(_class = 'icon cog'), 'Panel', _href = URL('gestion', 'agregar'), _class = 'pill button primary negative', cid = 'content')}}{{pass}}
     {{=A(SPAN(_class = 'icon home'), 'Portada ', _class = 'button left', _href = URL('default', 'index'))}}{{=A(SPAN(_class = 'icon rss'), 'RSS %s ' % catslug, _class = 'button middle ', _href = URL(f = 'feed.rss', args = request.args(0)))
-    }}{{=A(SPAN(_class='icon magnifier'), 'Buscar ', _class='button right', _href = URL(c='default',f='buscar'))}}{{=A(SPAN(_class=''),'Que es un Blog?', _href=URL(c='plugin_wiki',f='page.load',args='que-es-un-blog'), cid='box', _class='button')}}
-    
-    {{try:}}{{=auth.navbar(action=URL('default','user'))}}{{except:pass}}
+    }}{{=A(SPAN(_class='icon magnifier'), 'Buscar ', _class='button middle', _href = URL(c='default',f='buscar'))}}{{=A(SPAN(_class='icon check'),'Que es un Blog?', _href=URL(c='plugin_wiki',f='page.load',args='que-es-un-blog'), cid='box', _class='button right')}}
+    {{if auth.is_logged_in():}}
+    {{=A(SPAN(_class = 'icon cog'), 'Panel', _href = URL('gestion', 'agregar'), _class = 'pill button primary positive', cid = 'content')}}{{pass}}
 
+    <!--
+    {{try:}}{{=auth.navbar(action=URL('default','user'))}}{{except:pass}}
+    -->
     {{end}}
     </div>
     <div id="flash" class="flash">{{=response.flash or ''}}</div>
