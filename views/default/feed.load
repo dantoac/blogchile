@@ -19,5 +19,5 @@ jQuery("#filtrando").keyup(function () {
 jQuery(document).ready(filtro);
 </script>
 
-{{=P(DIV(box,_style='clear:both;'))}}
+{{=DIV(blogs,_style='clear:both;')}}
 <!-- google_ad_section_end -->
