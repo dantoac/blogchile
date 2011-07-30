@@ -155,13 +155,13 @@ def blog():
         response.flash = 'El enlace se ha perdido por algún motivo. Te dirigiremos a una búsqueda privada al respecto.'
 
     if request.env.http_referer!=None:
-        goback = A(SPAN(_class = 'icon leftarrow'), 'Volver', _class = 'button izq',
+        goback = A(SPAN(_class = 'icon leftarrow'), 'Regresar', _title='Volver a la página anterior', _class = 'button izq',
                    _href = request.env.http_referer)
     else:
         goback = A(SPAN(_class = 'icon home'), 'Blogosfera.cl', _class = 'positive primary button izq',
-                   _href = 'http://blogosfera.cl')
+                   _href = 'http://blogosfera.cl/')
 
-    cerrarmarco = A(SPAN(_class = 'icon cross'), 'Ir al Blog', _class = 'negative button der', _href = shorturl, _title='Cerrarás este marco y visitarás el artículo en el blog de su fuente original')
+    cerrarmarco = A(SPAN(_class = 'icon cross'), 'Ir al Blog', _class = 'negative button der', _href = shorturl, _title='Cerrar este marco y visitar el artículo en el blog de su fuente original')
 
     referer = goback
     #referer = DIV(goback, class='izq')

@@ -1,7 +1,7 @@
 @charset "UTF-8";
 a, a:link, a:visited {text-decoration:none;}
 body {
-    background: #9cf url('/blogosfera/static/images/bgnubes.png') repeat-x center top fixed;
+    background: #6cf url('/blogosfera/static/images/bgnubes.png') repeat-x center top fixed;
     color:#445;
     height:100%;
 }
@@ -17,7 +17,7 @@ body {
 #footer {background:none;border:none;}
 #footer a {color:#00f;}
 
-#header {width:900px;}
+#header {min-width:900px;}
 
 #logo h1 {font:bold 16px cantarell, sans-serif;}
 #logo img {display:block;}
@@ -35,6 +35,11 @@ body {
     padding:.5em;
     border-radius:10px;
     overflow:hidden;
+}
+
+
+#right_sidebar .publicidad {
+    max-width:200px;
 }
 
 #panel {
@@ -81,10 +86,9 @@ div.feed_bloque:hover {
 
 a.noticia_link {
     text-decoration:none;
-    padding:0 .5em;
     color:#000;
-    font:.8em sans-serif;
-    height:40px;
+    font:.85em sans-serif;
+    height:60px;
     display:block;
     overflow:hidden;
     /* font-variant:small-caps; */
@@ -98,14 +102,12 @@ a.noticia_link:visited {
 
 
 .feed_titulo {
-    font:bold 7.5pt sans-serif;
+    font:bold 12px sans-serif;
     clear:both;
     text-align:center;
-    text-transform:uppercase;
+    text-transform:capitalize;
     color:#000;;
     overflow:hidden;
-    height:1.5em;
-    line-height:1.5em;
 }
 
 .feed_titulo a {
@@ -116,9 +118,9 @@ a.noticia_link:visited {
 .hidden {display:none !important;}
 
 .noticia_meta {
-    font:italic .8em sans-serif;
+    font:italic 10px sans-serif;
     text-align:right;
-    color:#090;
+    color:#f00;
     text-decoration:underline;
     padding:0 1em;
 }
@@ -130,7 +132,6 @@ a.noticia_link:visited {
 .noticia_contenido {
     background: #fff;
     border: 1px solid #acf;
-    line-height: 7.5pt;
     /*height: 60px;*/
     overflow: hidden;
     border-radius:10px;
@@ -235,7 +236,7 @@ tr.search_result {border-bottom:1px solid #ccc;}
 .gsc-search-box {display:block !important;}
 .gsc-wrapper {background:#fff;}
 
-.sf-menu, .sf-menu li { background:#def;}
-.sf-menu li:hover, .sf-menu li.sfHover, .sf-menu a:hover { background:#cdf !important;}
-.sf-menu a {border-left:1px solid #acf;padding:0.5em;}
+.sf-menu, .sf-menu li { background:#fcc;color:#f00;font:bold 1em sans-serif;}
+.sf-menu li:hover, .sf-menu li.sfHover, .sf-menu li a:hover, .sf-menu li a:active { background:#f00 !important;color:#fff !important;}
+.sf-menu a:link, .sf-menu a:visited {border-left:1px solid #fff;padding:0.3em;color:#f00 !important;}
 

@@ -4,6 +4,6 @@ html, body, #godiv, #container, #wrapper, #page, #content {width:100%;height:100
 
 #wrapper {width:100% !important;max-width:100% !important;background:transparent !important;padding:0 !important;}
 
-#statusbar {background:#000 !important;padding:5px;}
+#statusbar {padding:5px;}
 #statusbar a {margin-right:1em;}
 #godiv {background:#fff !important;overflow:hidden;}
