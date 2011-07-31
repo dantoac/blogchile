@@ -2,19 +2,36 @@
 import locale
 locale.setlocale(locale.LC_TIME, 'es_CL.UTF8')
 
-response.title = 'Blogs Chilenos'
+response.title = 'Blog Chile'
 
 def index():
+    del response.headers['Cache-Control']
+    del response.headers['Pragma']
+    del response.headers['Expires']
+    response.headers['Cache-Control'] = 'max-age=300'
+
+    if request.args(0):
+        catslug = request.args(0)
+        response.title = "Blog Chile: %s" % catslug.capitalize().replace('-',' ')
+        response.meta.keywords = catslug.replace('-',' ')
+        response.meta.description = "Blog de %s en Chile, Blogósfera Chilena, Blogs Chilenos," % catslug.capitalize().replace('-',' ')
+    
     response.meta.description = 'Blogs de Chile, noticias, tecnología, opinión, deporte, diseño, ocio, música, política, arte y más en la blogósfera chilena'
-    response.meta.keywords = 'blogs, chile, publicaciones, personas'
+    response.meta.keywords = 'blogs chile, turismo chile, blogs chilenos'
 
     if request.extension == 'rss':
         return redirect('http://feeds.feedburner.com/blogosfera/dDKt')
 
+    # muestra un response.flash con la descripción de cada categoría, si es que la hay (en db.feed)
     if request.args:
         descrip = db(db.categoria.slug == request.args(0)).select(db.categoria.description)[0].description
         if descrip != None:
             response.flash = descrip
+
+    # aviso temporal de WIP. chk según sessión de conexión en el sitio
+    if session.avisado == False:
+        response.flash = XML('El Sitio está temporalmente bajo algunos ajustes extraordinarios; disculpa si te ocasionan alguna molestia: %s ' % session.avisado)        
+        session.avisado = True
 
     return dict()
 
@@ -34,15 +51,7 @@ def feed():
         #redirect(URL(c='default',f='user'))
         response.flash = e
         catslug = ''
-    response.title = "Blogs Chilenos. Blogósfera %s" % catslug.capitalize().replace('-',' ')
-    response.meta.keywords = catslug.replace('-',' ')
-    response.meta.description = "Los mejores blogs de %s en la blogósfera chilena; últimos artículos" % catslug.capitalize().replace('-',' ')
-    """
-    del response.headers['Cache-Control']
-    del response.headers['Pragma']
-    del response.headers['Expires']
-    response.headers['Cache-Control'] = 'max-age=60'
-    """
+    
     # obteniendo el id, nombre y slug de las categorías registradas
 
 
@@ -82,7 +91,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
         # armando feed_bloque y la noticia de cada feed
         feedbox = DIV(DIV(A(feedincat.title,_href=feedincat.source,_target='_blank'), _class = 'feed_titulo'), _class = 'feedbox feed_bloque  izq')
 
-        for n in db(db.noticia.feed == feedincat.id).select(db.noticia.ALL, orderby =~ db.noticia.id, limitby=(0,3)):
+        for n in db(db.noticia.feed == feedincat.id).select(db.noticia.ALL, orderby =~ db.noticia.id, limitby=(0,4)):
 
             if n.updated != None:
                 actualizado = n.updated
@@ -247,7 +256,7 @@ def sitemap():
             categorias = DIV(H2(A(cat.title.capitalize(),_href=URL(r=request,c='default',f='respira.',args=[cat.slug]))))
             noticias = UL()
 
-            data = db((db.feed.categoria == cat.id)& (db.noticia.feed == db.feed.id)).select(db.noticia.id, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(0,3))
+            data = db((db.feed.categoria == cat.id)& (db.noticia.feed == db.feed.id)).select(db.noticia.id, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(0,4))
             for noti in data:
                 noticias.append(LI(A(noti.title, _href=URL(c='default',f='go',args=[noti.slug,noti.id]))))
             categorias.append(noticias)
