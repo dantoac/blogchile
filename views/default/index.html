@@ -33,13 +33,15 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
   {{=DIV(B('Filtrar:'),INPUT(_name='filtrando',_id='filtrando'),SPAN('Ø',_id='filtrado')," posts",_id='filtro',_class='izq')}}        
 
 </div>
-
+{{try:}}
 {{=LOAD(c='widget',f='indicadoreseconomicos.load',ajax=True)}}
 
 {{=LOAD(c='widget',f='pronosticotiempo.load',ajax=True,target='tiempo')}}
-
+{{except:pass}}
 <div id="box">
+{{try:}}
   {{=LOAD(c='default',f='feed.load',args=request.args, ajax=False,target='blogs')}}
+{{except:response.flash = XML('En Mantención')}}
 </div>
 {{block left_sidebar}}asdf{{end}}
 {{block right_sidebar}}
