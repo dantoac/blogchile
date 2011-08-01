@@ -32,13 +32,13 @@ def index():
     if session.avisado == False:
         response.flash = XML('El Sitio está temporalmente bajo algunos ajustes extraordinarios; disculpa si te ocasionan alguna molestia: %s ' % session.avisado)        
         session.avisado = True
-
+    
     return dict()
 
 def votar():
     return locals()
 
-@auth.requires(request.cid)
+#@auth.requires(request.cid)
 def feed():
     #redirect(URL('index'))
     from gluon.tools import prettydate
@@ -125,7 +125,25 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
                    )
         contenido = rss
     else:
-        response.view = 'default/feed.load'
+        #response.view = 'default/feed.load'
+        response.js = '''function filtro(){
+jQuery("#filtrando").keyup(function () {
+    var filter = jQuery(this).val(), count = 0;
+
+    jQuery(".feedbox .noticia, .feed_titulo").each(function () {
+        if (jQuery(this).text().search(new RegExp(filter, "i")) < 0) {
+            jQuery(this).addClass("hidden");
+        } else {
+            jQuery(this).removeClass("hidden");
+            count++;
+        }
+    });
+    jQuery("#filtrado").text(count);
+});
+}
+
+jQuery(document).ready(filtro);
+'''
         contenido = dict(blogs = blogs)
       
     return response.render(contenido)
@@ -164,7 +182,7 @@ def blog():
 
     if 'http://lmddgtfy' in shorturl:
         response.flash = 'El enlace se ha perdido por algún motivo. Te dirigiremos a una búsqueda privada al respecto.'
-
+        
     if request.env.http_referer!=None:
         goback = A(SPAN(_class = 'icon leftarrow'), 'Regresar', _title='Volver a la página anterior', _class = 'button izq',
                    _href = request.env.http_referer)
@@ -284,7 +302,7 @@ def sitemap1():
 
     prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
 
-    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(0,10000))
+    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(0,100))
     for noti in data:
         sm.append(str(TAG.url(
             TAG.loc(prefix,URL(c='default',f='go',args=[noti.slug,noti.id],extension='')),
@@ -300,7 +318,7 @@ def sitemap2():
 
     prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
 
-    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(10000,20000))
+    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(100,200))
     for noti in data:
         sm.append(str(TAG.url(
             TAG.loc(prefix,URL(c='default',f='go',args=[noti.slug,noti.id],extension='')),
@@ -316,7 +334,7 @@ def sitemap3():
 
     prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
 
-    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(20000,30000))
+    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(200,300))
     for noti in data:
         sm.append(str(TAG.url(
             TAG.loc(prefix,URL(c='default',f='go',args=[noti.slug,noti.id],extension='')),
@@ -330,7 +348,7 @@ def sitemap3():
 def sitemap4():
     sm = [str('<?xml version="1.0" encoding="UTF-8" ?> <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')]
     prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
-    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(30000,40000))
+    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(300,400))
     for noti in data:
         sm.append(str(TAG.url(
             TAG.loc(prefix,URL(c='default',f='go',args=[noti.slug,noti.id],extension='')),
@@ -344,7 +362,7 @@ def sitemap4():
 def sitemap5():
     sm = [str('<?xml version="1.0" encoding="UTF-8" ?> <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')]
     prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
-    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(40000,50000))
+    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(400,500))
     for noti in data:
         sm.append(str(TAG.url(
             TAG.loc(prefix,URL(c='default',f='go',args=[noti.slug,noti.id],extension='')),
