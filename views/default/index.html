@@ -40,7 +40,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 {{except:pass}}
 <div id="box">
 {{try:}}
-  {{=LOAD(c='default',f='feed.load',args=request.args, ajax=False,target='blogs')}}
+  {{=LOAD(c='default',f='feed.load',args=request.args, ajax=True, target='blogs')}}
 {{except:response.flash = XML('En Mantención')}}
 </div>
 {{block left_sidebar}}asdf{{end}}

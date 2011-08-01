@@ -38,7 +38,7 @@ def index():
 def votar():
     return locals()
 
-#@auth.requires(request.cid)
+@auth.requires(request.cid)
 def feed():
     #redirect(URL('index'))
     from gluon.tools import prettydate
@@ -109,7 +109,7 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
         
         blogs.append(feedbox)
         #box.append(google_ad)
-
+    #'''
     if request.extension == 'rss':
 
         feedburner = {'portada':'http://feeds.feedburner.com/blogosfera/dDKt'}
@@ -125,11 +125,12 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
                    )
         contenido = rss
     else:
-
-       contenido = dict(blogs = blogs)
-
+        response.view = 'default/feed.load'
+        contenido = dict(blogs = blogs)
+      
     return response.render(contenido)
-
+    #'''
+    #return dict(blogs=blogs)
 
 def elimina_tildes(s):
     """

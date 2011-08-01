@@ -110,16 +110,9 @@ def obtienedatos(urllugar,ubicacion):
 def pronosticotiempo():
     key = '9e6119ed3a211314113107'
 
-    '''
-    conce = str(XML('http://free.worldweatheronline.com/feed/weather.ashx?q=concepcion,chile&format=xml&num_of_days=5&key=%s' % key))
-    chillan = str(XML('http://free.worldweatheronline.com/feed/weather.ashx?q=chillan,chile&format=xml&num_of_days=5&key=%s' % key))
-    losangeles = str(XML('http://free.worldweatheronline.com/feed/weather.ashx?q=los+angeles,chile&format=xml&num_of_days=5&key=%s' % key))
-    lebu = str(XML('http://free.worldweatheronline.com/feed/weather.ashx?q=lebu,chile&format=xml&num_of_days=5&key=%s' % key))
-
-    lugares = [conce, chillan, losangeles, lebu]
-    '''
-
     lugares = ['arica','iquique','antofagasta','copiapó','la serena','valparaíso','viña del mar','santiago','rancagua','talca','chillán','concepción','temuco','valdivia','puerto montt','coyhaique','punta arenas','robinson crusoe','hanga roa']
+
+    lugares.sort()
        
     tiempo = ''
     for lugar in lugares:
