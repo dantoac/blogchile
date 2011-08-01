@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
 import locale
 locale.setlocale(locale.LC_TIME, 'es_CL.UTF8')
-
-response.title = 'Blog Chile'
+#response.title = 'Blog Chile'
 
 def index():
     del response.headers['Cache-Control']
     del response.headers['Pragma']
     del response.headers['Expires']
-    response.headers['Cache-Control'] = 'max-age=300'
+    response.headers['Cache-Control'] = 'max-age=600'
+    response.files.append(URL('static','js/jquery.cycle.all.min.js'))
 
     if request.args(0):
         catslug = request.args(0)
         response.title = "Blog Chile: %s" % catslug.capitalize().replace('-',' ')
         response.meta.keywords = catslug.replace('-',' ')
         response.meta.description = "Blog de %s en Chile, Blogósfera Chilena, Blogs Chilenos," % catslug.capitalize().replace('-',' ')
-    
-    response.meta.description = 'Blogs de Chile, noticias, tecnología, opinión, deporte, diseño, ocio, música, política, arte y más en la blogósfera chilena'
-    response.meta.keywords = 'blogs chile, turismo chile, blogs chilenos'
+    else:
+        response.meta.description = 'Blogs de Chile, noticias, tecnología, opinión, deporte, diseño, ocio, música, política, arte y más en la blogósfera chilena'
+        response.meta.keywords = 'blogs chile, turismo chile, blogs chilenos'
 
     if request.extension == 'rss':
         return redirect('http://feeds.feedburner.com/blogosfera/dDKt')
@@ -65,7 +65,7 @@ def feed():
     lista_fidx = []
     # obteniendo los feeds categorizados bajo el slug solicitado desde la url
 
-    google_ad = DIV(XML('''<script type="text/javascript"><!--
+    Google_ad = DIV(XML('''<script type="text/javascript"><!--
 google_ad_client = "ca-pub-9647318851151478";
 /* bloque-txt-120x240 */
 google_ad_slot = "0858517491";
@@ -118,7 +118,8 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 
         rss = dict(title = request.application.upper(),
                    link = 'http://' + request.env.http_host + request.url,
-                   description = unicode(response.meta.description, 'utf8'),
+                   #description = unicode(response.meta.description, 'utf8'),
+                   description = '',
                    created_on = request.now,
                    entries = entradas
                    )
@@ -282,7 +283,7 @@ def sitemap1():
 
     prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
 
-    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(0,10000))
+    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(0,20000))
     for noti in data:
         sm.append(str(TAG.url(
             TAG.loc(prefix,URL(c='default',f='go',args=[noti.slug,noti.id],extension='')),
@@ -298,7 +299,7 @@ def sitemap2():
 
     prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
 
-    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(10000,20000))
+    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(20000,40000))
     for noti in data:
         sm.append(str(TAG.url(
             TAG.loc(prefix,URL(c='default',f='go',args=[noti.slug,noti.id],extension='')),
@@ -314,7 +315,7 @@ def sitemap3():
 
     prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
 
-    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(20000,30000))
+    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(40000,60000))
     for noti in data:
         sm.append(str(TAG.url(
             TAG.loc(prefix,URL(c='default',f='go',args=[noti.slug,noti.id],extension='')),
@@ -328,7 +329,7 @@ def sitemap3():
 def sitemap4():
     sm = [str('<?xml version="1.0" encoding="UTF-8" ?> <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')]
     prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
-    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(30000,40000))
+    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(60000,80000))
     for noti in data:
         sm.append(str(TAG.url(
             TAG.loc(prefix,URL(c='default',f='go',args=[noti.slug,noti.id],extension='')),
@@ -366,5 +367,3 @@ def buscar():
 
 def go():
     return redirect(URL(r=request,c='default',f='blog',args=request.args))
-
-

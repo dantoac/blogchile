@@ -10,11 +10,12 @@ def core():
 def personal():
 
     return locals()
+
 @auth.requires(request.cid)
 def agregar():
     msg = ''
     nuevo_feed = LOAD(f = 'agregarFeed.load', ajax = True, ajax_trap = True,target='nuevo_feed')
-    response.flash = '<img src="%s" /> Espera errores. Mientras estemos en Beta los feeds y/o categorias "podrian" ser succionados por el vortex maligno y perderse en el limbo... disculpa ;3' % URL(r=request,c='static',f='images',args=['warn.png'])
+    response.flash = XML('<img src="%s" /> Espera errores. Mientras estemos en Beta los feeds y/o categorias "podrian" ser succionados por el vortex maligno y perderse en el limbo... disculpa ;3' % URL(r=request,c='static',f='images',args=['warn.png']))
     #if auth.has_membership('user_1'):
     #    nueva_categoria = LOAD(c = 'gestion', f = 'agregarCategoria.load', ajax = True,target='nueva_categoria')
     #else:
@@ -31,7 +32,7 @@ def agregar():
 
 @auth.requires_login()
 def agregarFeed():
-    msg = 'Recuerda que el feed debe ser de un blog chileno (da lo mismo donde esté alojado el sitio, por si preguntas :P)'
+    msg = XML('Recuerda que el feed debe ser de un blog chileno (da lo mismo donde esté alojado el sitio, por si preguntas :P)')
     form = SQLFORM(db.feed, formstyle = 'divs', submit_button = 'agregar feed')
     if form.accepts(request, session):
         response.flash = 'has registrado un nuevo feed.'
@@ -42,7 +43,7 @@ def agregarFeed():
 @auth.requires(request.cid)
 def agregarCategoria():
     nueva_categoria = SQLFORM(db.categoria, formstyle = 'divs', submit_button = 'agregar categoría')
-    msgcat = 'Considera que editaremos los nombres de las categorías que sean redundantes, ofensivas o perjudiquen la navegación en el sitio.'
+    msgcat = XML('Considera que editaremos los nombres de las categorías que sean redundantes, ofensivas o perjudiquen la navegación en el sitio.')
 
     if nueva_categoria.accepts(request, session):
         response.flash = 'ha registrado una nueva categoría.'

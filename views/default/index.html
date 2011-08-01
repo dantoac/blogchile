@@ -30,10 +30,13 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
   </div><!-- ad -->
 
-  {{=DIV(B('Filtrar:'),INPUT(_name='filtrando',_id='filtrando'),SPAN('Ø',_id='filtrado')," blogs",_id='filtro',_class='izq')}}        
+  {{=DIV(B('Filtrar:'),INPUT(_name='filtrando',_id='filtrando'),SPAN('Ø',_id='filtrado')," posts",_id='filtro',_class='izq')}}        
 
 </div>
 
+{{=LOAD(c='widget',f='indicadoreseconomicos.load',ajax=True)}}
+
+{{=LOAD(c='widget',f='pronosticotiempo.load',ajax=True,target='tiempo')}}
 
 <div id="box">
   {{=LOAD(c='default',f='feed.load',args=request.args, ajax=False,target='blogs')}}
@@ -42,7 +45,6 @@ src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 {{block right_sidebar}}
  
 <div class="publicidad">
-<div id="fb-root"></div><script src="http://connect.facebook.net/es_CL/all.js#xfbml=1"></script><fb:like-box href="http://www.facebook.com/pages/Blog-Chile/177683725631223" width="160" show_faces="true" border_color="white" stream="false" header="false"></fb:like-box>
 
 <script type="text/javascript"><!--
 google_ad_client = "ca-pub-9647318851151478";
@@ -56,6 +58,7 @@ google_ad_height = 600;
 src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
 </script>
 
+<div id="fb-root"></div><script src="http://connect.facebook.net/es_CL/all.js#xfbml=1"></script><fb:like-box href="http://www.facebook.com/pages/Blog-Chile/177683725631223" width="160" show_faces="true" border_color="white" stream="false" header="false"></fb:like-box>
 
 
 </div>
