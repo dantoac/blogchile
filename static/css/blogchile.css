@@ -91,6 +91,7 @@ a.noticia_link {
     height:60px;
     display:block;
     overflow:hidden;
+    line-height:1em;
     /* font-variant:small-caps; */
 }
 
@@ -244,7 +245,7 @@ tr.search_result {border-bottom:1px solid #ccc;}
 
 #tiempo  {
     clear:both;
-
+    display:none;
     width:100%;
 }
 

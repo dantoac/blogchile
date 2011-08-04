@@ -47,28 +47,28 @@ def _u2d(fidx):
         # revisando si el artículo obtenido ya estaba en la db
         edata = db((db.noticia.feed == fidx) & (db.noticia.title == XML(e.title))).select(db.noticia.id)
 
-        #xurl = fetch("http://xurl.cl/api.php?url=%s" % XML(e.link))
-
-
-        xurl_api = choice(xurl_service)
-
-        #xurl = urllib2.urlopen("http://go.gnu.cl/api.php?url=%s" % XML(e.link)).read()
-        xurl = urllib2.urlopen("%(api)s=%(longurl)s" % dict(api=xurl_api,longurl=e.link)).read()
-
-        
-        #print e.link
-        print 'xurl = %s' % xurl
-
         if limite == maxfeeds:
             break
 
-        try:
-            actualizado=e.updated
-        except:
-            actualizado=request.now
 
         #si no encuentra nada, inserta en la db, sino no hace nada
         if len(edata) == 0:
+            xurl_api = choice(xurl_service)
+
+        #xurl = urllib2.urlopen("http://go.gnu.cl/api.php?url=%s" % XML(e.link)).read()
+            
+            try:
+                xurl = urllib2.urlopen("%(api)s=%(longurl)s" % dict(api=xurl_api,longurl=e.link)).read()
+            except:
+                xurl = urllib2.urlopen("%(api)s=%(longurl)s" % dict(api=xurl_api,longurl=e.link)).read()
+
+            print db.feed[fidx].title
+            print 'xurl = %s' % xurl
+
+            try:
+                actualizado=e.updated
+            except:
+                actualizado=request.now
 
             #ddg="http://lmddgtfy.com/?q=%(term)s+%(sitio)s" % dict(term=XML(e.title),sitio=XML(db.feed[fidx].title))
             #ddg = "http://lmddgtfy.com/?q=%(term)s+%(sitio)s" % dict(term=e.slug.replace('-',' '),sitio=XML(e.feed.title))
@@ -80,9 +80,9 @@ def _u2d(fidx):
             db.noticia.insert(title = XML(e.title), link = e.link, description = XML(DESCRIPTION),
                               updated = actualizado, created_on=request.now, feed = fidx, shorturl=xurl)#, slug = slug)
             db.commit()
-            #time.sleep(3)
+
         limite += 1
-        print db.feed[fidx].title
+        
 
 
 #while True:
@@ -101,10 +101,10 @@ feed_data = db((db.feed.categoria == db.categoria.id)
             & (db.feed.is_active == True)
             & (db.categoria.is_active == True)
             ).select(db.feed.id)
-try:
-    for feed in feed_data:
-        fidx = feed.id
-        _u2d(fidx)
-        time.sleep(3) #en segundos
-except Exception,e:
-    print "excepcion: %s" % e
+#try:
+for feed in feed_data:
+    fidx = feed.id
+    _u2d(fidx)
+        #time.sleep(3) #en segundos
+#except Exception,e:
+#    print "excepcion: %s" % e

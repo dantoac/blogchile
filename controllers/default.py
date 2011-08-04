@@ -7,7 +7,8 @@ def index():
     del response.headers['Cache-Control']
     del response.headers['Pragma']
     del response.headers['Expires']
-    response.headers['Cache-Control'] = 'max-age=600'
+    response.headers['Cache-Control'] = 'max-age=300'
+
     response.files.append(URL('static','js/jquery.cycle.all.min.js'))
 
     if request.args(0):
@@ -29,127 +30,88 @@ def index():
             response.flash = descrip
 
     # aviso temporal de WIP. chk según sessión de conexión en el sitio
+    """
     if session.avisado == False:
         response.flash = XML('El Sitio está temporalmente bajo algunos ajustes extraordinarios; disculpa si te ocasionan alguna molestia: %s ' % session.avisado)        
         session.avisado = True
-    
+    """
+
     return dict()
 
 def votar():
     return locals()
 
+def hora():
+    return request.now
+
+def test():
+    return dict(msg=XML('blablabla'))
+
 #@auth.requires(request.cid)
 def feed():
-    #redirect(URL('index'))
     from gluon.tools import prettydate
-    import locale
-    locale.setlocale(locale.LC_ALL,locale='es_CL.UTF8')
-
-    try:
-        catslug = request.args(0) or db.categoria[1].slug
-    except Exception,e:
-        #redirect(URL(c='default',f='user'))
-        response.flash = e
-        catslug = ''
+    #import locale
+    #locale.setlocale(locale.LC_ALL,locale='es_CL.UTF8')
     
-    # obteniendo el id, nombre y slug de las categorías registradas
+    """
+    """
 
+    
+    if request.args:
+        catslug_data = db(db.categoria.slug == request.args(0)).select(db.categoria.slug)
+        for cat in catslug_data:
+            catslug = cat.slug
+    else:
+        catslug = 'noticias'
+    
 
-    # obteniendo la petición de categoría desde la url, sino setea por defecto la primera conocida en db
+    publicaciones = DIV()
 
-    feed_ids = entradas = []
-    blogs = DIV()
-
-    #entradas = DIV()
-    rss = {}
-    lista_fidx = []
     # obteniendo los feeds categorizados bajo el slug solicitado desde la url
 
-    Google_ad = DIV(XML('''<script type="text/javascript"><!--
-google_ad_client = "ca-pub-9647318851151478";
-/* bloque-txt-120x240 */
-google_ad_slot = "0858517491";
-google_ad_width = 120;
-google_ad_height = 240;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>'''), _class='feed_bloque izq')
-
-
     #### 1 categoría por feed
+    """
     for feedincat in db((db.categoria.slug == catslug) & (db.feed.categoria == db.categoria.id)
                 #& (db.feed_categoria.feed == db.feed.id)
                 #& (db.feed_categoria.is_active == True)
                 & (db.feed.is_active == True)
                 & (db.categoria.is_active == True)
                 ).select(db.feed.ALL):
+    """
+    
+    feedincat_data = db((db.categoria.slug == catslug) 
+                        & (db.feed.categoria == db.categoria.id) 
+                        & (db.feed.is_active == True) 
+                        & (db.categoria.is_active == True)
+                        ).select(db.feed.id,db.feed.title,db.feed.source)
 
-        #lista_fidx.append(feedincat.id) <- desde aquí podŕia también actualizar u2d_cat()
+    
+    for feedincat in feedincat_data:
 
         # armando feed_bloque y la noticia de cada feed
         feedbox = DIV(DIV(A(feedincat.title,_href=feedincat.source,_target='_blank'), _class = 'feed_titulo'), _class = 'feedbox feed_bloque  izq')
-
+        
         for n in db(db.noticia.feed == feedincat.id).select(db.noticia.ALL, orderby =~ db.noticia.id, limitby=(0,4)):
 
             if n.updated != None:
                 actualizado = n.updated
             else:
                 actualizado = n.created_on
-
-            # armando la url que va en el rss
-            localurl = 'http://' + request.env.http_host + URL(c = 'default', f = 'go.html', args = [n.slug,n.id], extension='html')
-
-            # armando el título y enlace a la publicación; armando los bloques de publicación
-            feedbox.append(DIV(DIV(A(n.title.lower()+'...', _name = n.slug, _href = URL(r = request, f = 'go.html', args = [n.slug,n.id]), _class = 'noticia_link', _target='_blank', extension='html'),DIV(prettydate(actualizado, T), _class = 'noticia_meta'), _class = 'noticia_contenido'), _class = 'noticia'))
-
-            
-            entradas.append(dict(title =unicode(n.title,'utf8'), link = localurl, description = unicode('%s (%s)' % (n.description, n.feed.title),'utf8'), created_on = request.now))
         
-        blogs.append(feedbox)
-        #box.append(google_ad)
-    #'''
-    if request.extension == 'rss':
+            # armando la url que va en el rss
+            #localurl = 'http://' + request.env.http_host + URL(c = 'default', f = 'blog.html', args = [n.slug,n.id], extension='html')
+        
+            # armando el título y enlace a la publicación; armando los bloques de publicación
+            feedbox.append(DIV(DIV(A(n.title.lower()+'...', _name = n.slug, _href = URL(r = request, f = 'blog', args = [catslug,n.slug,n.id], extension=False), _class = 'noticia_link', _target='_blank', extension='html'),DIV(prettydate(actualizado, T), _class = 'noticia_meta'), _class = 'noticia_contenido'), _class = 'noticia'))
 
-        feedburner = {'portada':'http://feeds.feedburner.com/blogosfera/dDKt'}
+         
+            #entradas.append(dict(title =unicode(n.title,'utf8'), link = localurl, description = unicode('%s (%s)' % (n.description, n.feed.title),'utf8'), created_on = request.now))
+            
+        
+        publicaciones.append(feedbox)
 
-
-
-        rss = dict(title = request.application.upper(),
-                   link = 'http://' + request.env.http_host + request.url,
-                   #description = unicode(response.meta.description, 'utf8'),
-                   description = '',
-                   created_on = request.now,
-                   entries = entradas
-                   )
-        contenido = rss
-    else:
-        #response.view = 'default/feed.load'
-        response.js = '''function filtro(){
-jQuery("#filtrando").keyup(function () {
-    var filter = jQuery(this).val(), count = 0;
-
-    jQuery(".feedbox .noticia, .feed_titulo").each(function () {
-        if (jQuery(this).text().search(new RegExp(filter, "i")) < 0) {
-            jQuery(this).addClass("hidden");
-        } else {
-            jQuery(this).removeClass("hidden");
-            count++;
-        }
-    });
-    jQuery("#filtrado").text(count);
-});
-}
-
-jQuery(document).ready(filtro);
-'''
-        contenido = dict(blogs = blogs)
-      
-    return response.render(contenido)
-    #'''
-    #return dict(blogs=blogs)
-
+    return dict(blogs=publicaciones)
+    
 def elimina_tildes(s):
     """
     Esta función sirve para eliminar las tildes del string que
@@ -166,13 +128,16 @@ def blog():
     response.files.append(URL('static','css/blog.css'))
     #response.files.append(URL('static','js/jquery.iframe.js'))
 
-    slugnoticia = request.args(0) #para mostrar la noticia en la url; SEO
-    nid = request.args(1)
+    catslug = request.args(0)
+    slugnoticia = request.args(1) #para mostrar la noticia en la url; SEO
+    #nid = request.args(2)
+    nid = request.args[len(request.args)-1]
 
     #titulo = db.noticia[nid].title
     titulo = slugnoticia.capitalize().replace('-',' ')
 
-    categoria = db.noticia[nid].feed.categoria.title
+    #categoria = db.noticia[nid].feed.categoria.title
+    categoria = catslug
 
     response.title='%s: %s' % (categoria.capitalize(),titulo.capitalize())
     response.meta.description = '%s %s' % (response.title,db.noticia[nid].feed.title)
@@ -253,6 +218,11 @@ def user():
     return dict(form = auth())
 
 def sitemap():
+    del response.headers['Cache-Control']
+    del response.headers['Pragma']
+    del response.headers['Expires']
+    response.headers['Cache-Control'] = 'max-age=600'
+    
     if request.extension == 'xml':
         sm = [str('<?xml version="1.0" encoding="UTF-8" ?> <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')]
         prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
@@ -381,21 +351,21 @@ def smpaginas():
 
 def respira():
     if request.extension == 'rss':
-        return redirect(URL(c='default',f='feed.rss', args=request.args))
+        return redirect(URL(c='default',f='feed.rss', args=request.args),301)
     else:
-        return redirect(URL(c='default',f='index',args=request.args))
+        return redirect(URL(c='default',f='index',args=request.args),301)
 
 
 def buscar():
     if request.env.http_referer == request.url:
         response.flash = 'Puedes buscar directamente usando: buscar?q=termino+de+busqueda'
         if request.args:        
-            return redirect(URL(c='default',f='buscar',vars={'q':request.args}))
+            return redirect(URL(c='default',f='buscar',vars={'q':request.args}),301)
     else:                    
         form = FORM(INPUT(_name='q'),INPUT(_type='submit', _value='Buscar'))
         if form.accepts(request.vars,session):
-            redirect(URL(c='default',f='buscar',vars={'q':request.post_vars.q}))    
+            redirect(URL(c='default',f='buscar',vars={'q':request.post_vars.q}),301)    
         return dict(form=form)
 
 def go():
-    return redirect(URL(r=request,c='default',f='blog',args=request.args))
+    return redirect(URL(r=request,c='default',f='blog',args=request.args),301)

@@ -162,3 +162,5 @@ tabla('votos_disponibles',
       Field('votos_disponibles','integer',default=3)
       )
 '''
+
+response.generic_patterns = ['*'] 

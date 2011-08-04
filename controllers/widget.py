@@ -125,7 +125,7 @@ def pronosticotiempo():
         except Exception,e:
             tiempo = DIV('%s' % e, _class='error')
 
-    response.js = 'jQuery(document).ready(function(){jQuery("#tiempo").cycle({fx:"scrollHorz",timeout:"3000",continuous:0,speed:9000});});'
+    #response.js = 'jQuery(document).ready(function(){jQuery("#tiempo").cycle({fx:"scrollHorz",timeout:"3000",continuous:0,speed:9000});});'
     #response.js = 'jQuery("#tiempo").cycle({fx:"scrollHorz",timeout:"3000",continuous:0,speed:9000});'
 
     return dict(message=XML(tiempo))
