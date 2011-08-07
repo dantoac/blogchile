@@ -10,11 +10,23 @@ def indicadoreseconomicos():
         pag = urllib2.urlopen(uri).read()
 
         html = TAG(pag)
-
+        try:
         #eurocalculado = float(html.element('dolar')[0].replace(',','.')) / float(html.element('euro')[0].replace(',','.'))
-        eurocalculado = locale.atof(html.element('dolar')[0]) / locale.atof(html.element('euro')[0])
-        dolarcalculado = locale.atof(html.element('dolar')[0])
-        ufcalculado = locale.atof(html.element('uf')[0])
+            eurocalculado = locale.atof(html.element('dolar')[0]) / locale.atof(html.element('euro')[0])
+        except:
+            eurocalculado = 'Ø'
+        
+        try:
+            dolarcalculado = locale.atof(html.element('dolar')[0])
+        except:
+            dolarcalculado = 'Ø'
+
+        try:
+            ufcalculado = locale.atof(html.element('uf')[0])
+        except:
+            ufcalculado = 'Ø'
+            
+            
 
         html_indicadores = DIV(B('UF: $%(uf)s | Dólar: $%(dolar)s | Euro: $%(euro)s' % dict(uf=str(ufcalculado)[:8],dolar=str(dolarcalculado)[:6],euro=str(eurocalculado)[:6])), _class='der', _id='indicadoreseconomicos')
 
@@ -117,11 +129,14 @@ def pronosticotiempo():
     tiempo = ''
     for lugar in lugares:
         try:
-            #tiempo += obtienedatos(lugar)
-            url = XML('http://free.worldweatheronline.com/feed/weather.ashx?q=%(lugar)s,chile&format=xml&num_of_days=5&key=%(key)s' % dict(key=key,lugar=lugar))
-            url2 = URL(scheme='http',host='free.worldweatheronline.com',a='feed',f='weather.ashx',vars={'q':lugar,'format':'xml','num_of_days':'5','key':key})
 
-            tiempo += obtienedatos(url,lugar)
+            url = XML('http://free.worldweatheronline.com/feed/weather.ashx?q=%(lugar)s,chile&format=xml&num_of_days=5&key=%(key)s' % dict(key=key,lugar=lugar))
+            #url2 = URL(scheme='http',host='free.worldweatheronline.com',a='feed',f='weather.ashx',vars={'q':lugar,'format':'xml','num_of_days':'5','key':key})
+            
+            try:
+                tiempo += obtienedatos(url,lugar)
+            except:
+                tiempo = '[droides trabajando, disculpe la molestia]'
         except Exception,e:
             tiempo = DIV('%s' % e, _class='error')
 
@@ -129,3 +144,40 @@ def pronosticotiempo():
     #response.js = 'jQuery("#tiempo").cycle({fx:"scrollHorz",timeout:"3000",continuous:0,speed:9000});'
 
     return dict(message=XML(tiempo))
+
+
+def identishare():
+    identishare =  XML('''
+<div id="identishare" style="vertical-align: bottom;"></div>
+<script type="text/javascript" src="http://www.tildehash.com/identishare.php" defer="defer"></script>
+<noscript>
+<iframe height="61" width="61" scrolling="no" frameborder="0" src="http://www.tildehash.com/identishare.php?noscript" border="0" marginheight="0" marginwidth="0" allowtransparency="true"></iframe>
+</noscript>
+''')
+
+    return dict(identishare=identishare)
+
+def dent():
+    dent = XML('''
+<div class="identica" style="background-color: white;border: 1px solid #ddd;display:inline;">
+<a href="javascript:(function(){var%20d=document,w=window,e=w.getSelection,k=d.getSelection,x=d.selection,s=(e?e():(k)?k():(x?x.createRange().text:0)),f='http://identi.ca/index.php?action=bookmarklet',l=d.location,e=encodeURIComponent,g=f+'&status_textarea='+l.href;function%20a(){if(!w.open(g,'t','toolbar=0,resizable=0,scrollbars=1,status=1,width=320,height=200')){l.href=g;}}a();})()"><img src="http://www.nuxified.org/images/identica.png" /></a>
+</div>
+''')
+    return dict(dent=dent)
+
+def identica_badge():
+    badge = XML('''
+<script type="text/javascript" src="http://identi.ca/js/identica-badge.js">
+    {
+       "user":"blogchile",
+       "server":"identi.ca",
+       "headerText":"@identica",
+       "width" : "170px"
+    }
+    </script>
+''')
+    return dict(badge = badge)
+
+def twitterfollow():
+    twitterfollow = XML('<a href="https://twitter.com/blogchile" class="twitter-follow-button" data-width="300px" data-lang="es" data-align="right">@blogosferachile</a><script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>')
+    return dict(twitterfollow=twitterfollow)

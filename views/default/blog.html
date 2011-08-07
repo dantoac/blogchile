@@ -1,10 +1,15 @@
 {{block header}}{{end}}
+<script type="text/javascript">var switchTo5x=true;</script><script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script><script type="text/javascript">stLight.options({publisher:'6991dfd4-d4bb-4e99-83b7-a0072a16e014'});</script>
 {{block statusbar}}
 
+{{#=A(IMG(_src=URL('static','images/statusbar.png')), _href='http://'+request.env.http_host)}}
 {{=referer}}
+
+{{=LOAD(c='widget',f='dent.load',ajax=True,target='dent')}}
 <a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="blogchile" data-lang="es">Tweetear esto</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
 <g:plusone count="false"></g:plusone>
-<!-- <div id="fb-root" style='display:inline;'></div><script src="http://connect.facebook.net/es_CL/all.js#xfbml=1"></script><fb:like href="http://www.facebook.com/pages/Blog-Chile/177683725631223" send="true" width="auto" show_faces="false" action="recommend" colorscheme="light" font=""></fb:like> -->
+<span  class='st_sharethis' displayText='Compártelo'></span>
+
 {{=cerrarmarco}}
 {{end}}
 {{block panel}}{{end}}

@@ -1,15 +1,17 @@
 @charset "UTF-8";
 a, a:link, a:visited {text-decoration:none;}
 body {
-    background: #def;
+    background: #def url(../images/bgnubes.png) repeat-x;
     color:#000;
     height:100%;
 }
 
+
+
 .izq {float:left; text-align:left;}
 .der {float:right; text-align: right;}
 
-#right_sidebar {width:20%;}
+#right_sidebar {width:20%;background:#fff;}
 
 #logo {width:auto;height:auto;}
 #header #logo {float:left;margin:0pt;background:none;color:#999;font:italic small sans-serif;text-align:right; }
@@ -17,7 +19,7 @@ body {
 #footer {background:none;border:none;}
 #footer a {color:#00f;}
 
-#header {min-width:900px;}
+#header {min-width:900px;overflow-x:hidden;}
 
 #logo h1 {font:bold 16px cantarell, sans-serif;}
 #logo img {display:block;}
@@ -35,6 +37,7 @@ body {
     padding:.5em;
     border-radius:10px;
     overflow:hidden;
+    display:none;
 }
 
 
@@ -103,12 +106,14 @@ a.noticia_link:visited {
 
 
 .feed_titulo {
-    font:bold 12px sans-serif;
+    font:bold 1em sans-serif;
     clear:both;
     text-align:center;
     text-transform:capitalize;
     color:#000;;
     overflow:hidden;
+    line-height:1em;
+    height:1em;
 }
 
 .feed_titulo a {
@@ -259,3 +264,5 @@ tr.search_result {border-bottom:1px solid #ccc;}
 .pronostico span.dia {background:#ccf;color:#00f;font-weight:bold;}
 
 .pronostico .icono {width:22px;height:22px;vertical-align:middle;}
+
+#dent {display:inline-block;}

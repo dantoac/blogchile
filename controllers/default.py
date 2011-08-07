@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import locale
-locale.setlocale(locale.LC_TIME, 'es_CL.UTF8')
+#locale.setlocale(locale.LC_TYPE, 'es_CL.UTF8')
 #response.title = 'Blog Chile'
 
 def index():
@@ -48,7 +48,7 @@ def test():
     return dict(msg=XML('blablabla'))
 
 #@auth.requires(request.cid)
-def feed():
+def publicaciones():
     from gluon.tools import prettydate
     #import locale
     #locale.setlocale(locale.LC_ALL,locale='es_CL.UTF8')

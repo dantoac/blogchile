@@ -8,7 +8,7 @@
 
 <script type="text/javascript">
 function actualiza_feeds() {
-   web2py_component('{{=URL(c='default',f='feed.load', args=request.args)}}','blogs');
+   web2py_component('{{=URL(c='default',f='publicaciones.load', args=request.args)}}','blogs');
     setTimeout(actualiza_feeds,300000);
 }
 jQuery(document).ready(actualiza_feeds);
@@ -17,26 +17,9 @@ jQuery(document).ready(actualiza_feeds);
 <div style="clear: both;"></div>
 {{=LOAD(c='widget',f='pronosticotiempo.load', ajax=False, target='tiempo', content=SPAN('Cargando pronóstico del tiempo...'))}}
 
-<div style="height:60px;line-height:60px;">
+<div style="height:60px;line-height:60px;display:none;"></div>
 
-<div class="der" style="height:inherit;">
-<script type="text/javascript"><!--
-google_ad_client = "ca-pub-9647318851151478";
-/* ads en resultado de búsqueda */
-google_ad_slot = "3282677144";
-google_ad_width = 468;
-google_ad_height = 60;
-//-->
-</script>
-
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>
-  </div><!-- ad -->
-
-  {{=DIV(B('Filtrar:'),INPUT(_name='filtrando',_id='filtrando'),SPAN('Ø',_id='filtrado')," posts",_id='filtro',_class='izq')}}        
-
-</div>
+{{=DIV(B('Filtrar:'),INPUT(_name='filtrando',_id='filtrando'),SPAN('Ø',_id='filtrado')," posts",_id='filtro',_class='izq')}}
 
 {{try:}}
 {{=LOAD(c='widget',f='indicadoreseconomicos.load', ajax=False, content=SPAN('Cargando índices económicos...',_class='info msg'))}}
@@ -65,28 +48,18 @@ jQuery(document).ready(filtro);
 
 <div id="box">
 
-  {{=LOAD(c='default',f='feed.load',args=request.args, ajax=False, content='Cargando publicaciones...', target='blogs')}}
+  {{=LOAD(c='default',f='publicaciones.load',args=request.args, ajax=False, content='Cargando publicaciones...', target='blogs')}}
 
 </div>
 {{block left_sidebar}}asdf{{end}}
 
 {{block right_sidebar}}
 
-<div class="publicidad">
+ 
+
 <div id="fb-root"></div><script src="http://connect.facebook.net/es_CL/all.js#xfbml=1"></script><fb:like-box href="http://www.facebook.com/pages/Blog-Chile/177683725631223" width="160" show_faces="true" border_color="white" stream="false" header="false"></fb:like-box>
 
- <script type="text/javascript"><!--
-google_ad_client = "ca-pub-9647318851151478";
-/* lateral-chile */
-google_ad_slot = "1126720608";
-google_ad_width = 160;
-google_ad_height = 600;
-//-->
-</script>
-<script type="text/javascript"
-src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>
+{{#=LOAD(c='widget',f='identica_badge.load',ajax=False)}}
 
-</div>
 
 {{end}}

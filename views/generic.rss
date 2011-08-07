@@ -11,8 +11,8 @@ try:
    from gluon.serializers import rss   
    response.write(rss(response._vars), escape=False)
    response.headers['Content-Type'] = 'application/rss+xml'
-except (TypeError, ValueError):
-	raise HTTP(405, 'RSS serialization error')
+except Exception,e:
+	raise HTTP(405, 'RSS serialization error: %s' % e)
 except ImportError:
 	raise HTTP(405, 'RSS not available')
 except:
