@@ -97,8 +97,15 @@
 
     {{pass}}
 
-    {{=A(SPAN(_class = 'icon home'), 'Portada ', _class = 'button left', _href = URL('default', 'index'))}}{{=A(SPAN(_class = 'icon rss'), 'RSS %s ' % catslug, _class = 'button middle ', _href = URL(f = 'feed.rss', args = request.args(0)))
-    }}{{=A(SPAN(_class='icon magnifier'), 'Buscar ', _class='button middle', _href = URL(c='default',f='buscar'))}}{{=A(SPAN(_class='icon check'),'Que es un Blog?', _href=URL(c='plugin_wiki',f='page.load',args='que-es-un-blog'), cid='box', _class='button right')}}
+
+    {{if not session.mobile or False:}}
+    {{=A(SPAN(_class=''),'Versión Móvil', _href=URL(c='m',f='index'), _class='pill button')}}
+    {{pass}}
+
+
+    {{=A(SPAN(_class = 'icon home'), 'Portada ', _class = 'button left pill', _href = URL('default', 'index'))}}{{=#A(SPAN(_class = 'icon rss'), 'RSS %s ' % catslug, _class = 'button middle pill', _href = URL(f = 'feed.rss', args = request.args(0)))
+    }}{{#=A(SPAN(_class='icon magnifier'), 'Buscar ', _class='button middle pill', _href = URL(c='default',f='buscar'))}}{{=A(SPAN(_class='icon check'),'Que es un Blog?', _href=URL(c='plugin_wiki',f='page.load',args='que-es-un-blog'), cid='box', _class='pill button right')}}
+
     {{if auth.is_logged_in():}}
     {{=A(SPAN(_class = 'icon cog'), 'Panel', _href = URL('gestion', 'agregar'), _class = 'pill button primary positive', cid = 'content')}}{{pass}}
 
@@ -121,16 +128,6 @@
           <div id="logo">{{=H1(A(IMG(_src=URL(c='static',f='images/logo.png')),'Blogs Chilenos',_href=URL('default','index')))}} (ßeta)</div>
 
 <div class='der publicidad'>
-<script type="text/javascript"><!--
-google_ad_client = "ca-pub-9647318851151478";
-/* ad001 */
-google_ad_slot = "7136788308";
-google_ad_width = 728;
-google_ad_height = 90;
-//-->
-</script>
-<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
-</script>
 </div>
 <div class="der">
 {{=LOAD(c='widget',f='twitterfollow.load',ajax=True,content='cargando...')}}
@@ -198,7 +195,6 @@ google_ad_height = 90;
 	  Blog Chile
 	  <em>Los créditos a los artículos recolectados son de cada fuente.</em> |
           {{#=A('Política de Privacidad', _onclick='jQuery("#privacidad").modal({overlayClose: true});')}} |
-
 
 	  {{=A('Política de Privacidad', _href=URL(c='plugin_wiki',f='page.load',args='politica-de-privacidad'), cid='box')}} |
           {{=A('Sitemap', _href=URL(c='default',f='sitemap',extension='html'))}}

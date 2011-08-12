@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
+@auth.requires(request.cid)
 def indicadoreseconomicos():
     import urllib2
     import locale
 
-    locale.setlocale(locale.LC_NUMERIC, 'es_CL.UTF8')
+
+    locale.setlocale(locale.LC_ALL, 'es_CL.UTF8')
     uri = 'http://www.averigualo.cl/feed/indicadores.xml'
     
     try:
@@ -35,6 +37,7 @@ def indicadoreseconomicos():
     except Exception,e:
         html_indicadores = DIV('error: No pude obtener los indicadores económicos. %s' % e, _class='error')
     return dict(indicadores=XML(html_indicadores))
+
 
 def obtienedatos(urllugar,ubicacion):
     import urllib2
@@ -119,6 +122,7 @@ def obtienedatos(urllugar,ubicacion):
     
     return XML(msg)
 
+#@auth.requires(request.cid)
 def pronosticotiempo():
     key = '9e6119ed3a211314113107'
 
@@ -145,7 +149,7 @@ def pronosticotiempo():
 
     return dict(message=XML(tiempo))
 
-
+@auth.requires(request.cid)
 def identishare():
     identishare =  XML('''
 <div id="identishare" style="vertical-align: bottom;"></div>
@@ -157,6 +161,7 @@ def identishare():
 
     return dict(identishare=identishare)
 
+@auth.requires(request.cid)
 def dent():
     dent = XML('''
 <div class="identica" style="background-color: white;border: 1px solid #ddd;display:inline;">
@@ -165,6 +170,7 @@ def dent():
 ''')
     return dict(dent=dent)
 
+@auth.requires(request.cid)
 def identica_badge():
     badge = XML('''
 <script type="text/javascript" src="http://identi.ca/js/identica-badge.js">
@@ -178,6 +184,12 @@ def identica_badge():
 ''')
     return dict(badge = badge)
 
+@auth.requires(request.cid)
 def twitterfollow():
     twitterfollow = XML('<a href="https://twitter.com/blogchile" class="twitter-follow-button" data-width="300px" data-lang="es" data-align="right">@blogosferachile</a><script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>')
     return dict(twitterfollow=twitterfollow)
+
+@auth.requires(request.cid)
+def twittearesto():
+    twittearesto = XML('<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="blogchile" data-lang="es">Tweetear esto</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>')
+    return dict(twittearesto=twittearesto)

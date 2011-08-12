@@ -20,7 +20,7 @@ else:                                         # else use a normal relational dat
     '''
     acciones_readonly = ['feed']
     if request.controller != 'noticias':
-        db = DAL(['sqlite://readonly.sqlite', 'postgres://danto:password@24d9a3a7/danto_planet'])
+        db = DAL(['sqlite://readonly.sqlite', 'postgres://danto:password@pass/danto_planet'])
     else:
         db = DAL(['sqlite://storage2.sqlite'])
     '''
@@ -54,9 +54,9 @@ auth.define_tables()                           # creates all needed tables
 auth.settings.mailer = mail                    # for user email verification
 auth.settings.registration_requires_verification = True
 auth.settings.registration_requires_approval = False
-auth.messages.verify_email = T('Te has registrado en http://blogosfera.cl. Haz clic en el siguiente enlace para verificar tu email: http://' + request.env.http_host + URL('default', 'user', args = ['verify_email']) + '/%(key)s')
+auth.messages.verify_email = T('Te has registrado en http://blogchile.cl. Haz clic en el siguiente enlace para verificar tu email: http://' + request.env.http_host + URL('default', 'user', args = ['verify_email']) + '/%(key)s')
 auth.settings.reset_password_requires_verification = True
-auth.messages.reset_password = T('En http://blogosfera.cl hemos recibido una solicitud de cambio de contraseña. Haz clic en el siguiente enlace para reiniciar tu constraseña: http://' + request.env.http_host + URL('default', 'user', args = ['reset_password']) + '/%(key)s')
+auth.messages.reset_password = T('En http://blogchile.cl hemos recibido una solicitud de cambio de contraseña. Haz clic en el siguiente enlace para reiniciar tu constraseña: http://' + request.env.http_host + URL('default', 'user', args = ['reset_password']) + '/%(key)s')
 
 
 auth.messages.label_first_name = 'Nombre'
@@ -163,4 +163,4 @@ tabla('votos_disponibles',
       )
 '''
 
-response.generic_patterns = ['*'] 
+#response.generic_patterns = ['*'] 

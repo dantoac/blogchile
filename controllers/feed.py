@@ -4,9 +4,29 @@ locale.setlocale(locale.LC_TIME, 'es_CL.UTF8')
 
 url_prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
 
-def index():
+response.generic_patterns = ['rss'] 
 
-    
+f = {'portada':'',
+         'tecnología':'',
+         'opinion':'',
+         'mujer':'',
+         'arte':'',
+         'deporte':'',
+         'eventos':'',
+         'noticias':'',
+         'ocio':'',
+         'turismo':'',
+         'videojuegos':'',
+         'animales':'',
+         'economía':'',
+         }
+
+
+
+
+
+
+def index():
 
     if request.args:
         catslug = request.args(0)
@@ -25,7 +45,8 @@ def index():
     entradas = {'title':'',
                 'link':'',
                 'description':'',
-                'created_on':''
+                'created_on':'',
+                'pub_date':'',
                 }
 
     e = []
@@ -40,7 +61,8 @@ def index():
         entradas = dict(title=unicode(str(pub.title),'utf8'),
                         link =A(pub.slug,_href=url_prefix + URL(c='default',f='blog',args=[pub.slug,pub.id], extension=False)),
                         description = unicode(str(pub.description),'utf8'),
-                        created_on = pub.updated
+                        created_on = pub.updated,
+                        pub_date = request.now
                         )
 
         e.append(entradas)
@@ -52,4 +74,5 @@ def index():
                 )
 
     return feed
+    
 

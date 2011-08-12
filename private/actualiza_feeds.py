@@ -23,47 +23,28 @@ xurl_service = ['http://go.gnu.cl/api.php?url',
 
 def _u2d(fidx):
     import gluon.contrib.feedparser as feedparser
-    #from datetime import datetime
-    #from google.tools import fetch
     import urllib2
     from random import choice
     feed = feedparser.parse(db.feed[fidx].link)
     maxfeeds = 3
     limite = 0
     for e in feed.entries:
-        #title = XML(e.title)
-        #link = e.link
-        #try:
-        #    description = XML(e.description)
-        #except:
-        #    description = 'error desde la fuente'
-        #feed = fidx
-        #created_on = request.now
-        #try:
-        #updated = e.updated
-        #except:
-        #    pass
-
         # revisando si el artículo obtenido ya estaba en la db
         edata = db((db.noticia.feed == fidx) & (db.noticia.title == XML(e.title))).select(db.noticia.id)
 
         if limite == maxfeeds:
             break
-
-
+        print(db.feed[fidx].title)
         #si no encuentra nada, inserta en la db, sino no hace nada
         if len(edata) == 0:
             xurl_api = choice(xurl_service)
-
-        #xurl = urllib2.urlopen("http://go.gnu.cl/api.php?url=%s" % XML(e.link)).read()
-            
+           
             try:
                 xurl = urllib2.urlopen("%(api)s=%(longurl)s" % dict(api=xurl_api,longurl=e.link)).read()
             except:
                 xurl = urllib2.urlopen("%(api)s=%(longurl)s" % dict(api=xurl_api,longurl=e.link)).read()
 
-            print db.feed[fidx].title
-            print 'xurl = %s' % xurl
+            print('%s: %s' % (db.feed[fidx].title,xurl))
 
             try:
                 actualizado=e.updated

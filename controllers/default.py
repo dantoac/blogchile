@@ -4,24 +4,25 @@ import locale
 #response.title = 'Blog Chile'
 
 def index():
-    del response.headers['Cache-Control']
-    del response.headers['Pragma']
-    del response.headers['Expires']
-    response.headers['Cache-Control'] = 'max-age=300'
-
-    response.files.append(URL('static','js/jquery.cycle.all.min.js'))
+    if session.mobile:
+        response.view = 'default/index.mobi'
+        response.files.append(URL('static','css/blogchilemobile.css'))
+    else:
+    
+        response.files.append(URL('static','js/jquery.cycle.all.min.js'))
 
     if request.args(0):
         catslug = request.args(0)
-        response.title = "Blog Chile: %s" % catslug.capitalize().replace('-',' ')
+        response.title = 'Blog Chile: %s' % catslug.capitalize().replace('-',' ')
         response.meta.keywords = catslug.replace('-',' ')
         response.meta.description = "Blog de %s en Chile, Blogósfera Chilena, Blogs Chilenos," % catslug.capitalize().replace('-',' ')
     else:
-        response.meta.description = 'Blogs de Chile, noticias, tecnología, opinión, deporte, diseño, ocio, música, política, arte y más en la blogósfera chilena'
+        response.title = 'Blog Chile: Portada'
+        response.meta.description = 'Blogs de Chile: Últimas publicaciones de noticias, tecnología, opinión, deporte, diseño, ocio, música, política, arte y más en la blogósfera chilena'
         response.meta.keywords = 'blogs chile, turismo chile, blogs chilenos'
 
-    if request.extension == 'rss':
-        return redirect('http://feeds.feedburner.com/blogosfera/dDKt')
+    #if request.extension == 'rss':
+    #    return redirect('http://feeds.feedburner.com/blogosfera/dDKt')
 
     # muestra un response.flash con la descripción de cada categoría, si es que la hay (en db.feed)
     if request.args:
@@ -44,17 +45,20 @@ def votar():
 def hora():
     return request.now
 
-def test():
-    return dict(msg=XML('blablabla'))
-
-#@auth.requires(request.cid)
+@auth.requires(request.cid)
 def publicaciones():
+    """
+    del response.headers['Cache-Control']
+    del response.headers['Pragma']
+    del response.headers['Expires']
+    response.headers['Cache-Control'] = 'max-age=3600'
+    """
     from gluon.tools import prettydate
     #import locale
     #locale.setlocale(locale.LC_ALL,locale='es_CL.UTF8')
     
-    """
-    """
+
+
 
     
     if request.args:
@@ -102,7 +106,7 @@ def publicaciones():
             #localurl = 'http://' + request.env.http_host + URL(c = 'default', f = 'blog.html', args = [n.slug,n.id], extension='html')
         
             # armando el título y enlace a la publicación; armando los bloques de publicación
-            feedbox.append(DIV(DIV(A(n.title.lower()+'...', _name = n.slug, _href = URL(r = request, f = 'blog', args = [catslug,n.slug,n.id], extension=False), _class = 'noticia_link', _target='_blank', extension='html'),DIV(prettydate(actualizado, T), _class = 'noticia_meta'), _class = 'noticia_contenido'), _class = 'noticia'))
+            feedbox.append(DIV(DIV(A(n.title.lower()+'...', _name = n.slug, _href = URL(r = request, f = 'blog', args = [catslug,n.slug,n.id], extension=False), _class = 'noticia_link', _target='_blank',extension='html'),DIV(prettydate(actualizado, T), _class = 'noticia_meta'), _class = 'noticia_contenido'), _class = 'noticia'))
 
          
             #entradas.append(dict(title =unicode(n.title,'utf8'), link = localurl, description = unicode('%s (%s)' % (n.description, n.feed.title),'utf8'), created_on = request.now))
@@ -110,7 +114,7 @@ def publicaciones():
         
         publicaciones.append(feedbox)
 
-    return dict(blogs=publicaciones)
+    return dict(publicaciones=publicaciones)
     
 def elimina_tildes(s):
     """
@@ -149,32 +153,26 @@ def blog():
         response.flash = 'El enlace se ha perdido por algún motivo. Te dirigiremos a una búsqueda privada al respecto.'
         
     if request.env.http_referer!=None:
-        goback = A(SPAN(_class = 'icon leftarrow'), 'Regresar', _title='Volver a la página anterior', _class = 'button izq',
+        goback = A(SPAN(_class = 'icon leftarrow'), 'Regresar', _title='Volver a la página anterior', _class = 'pill button izq',
                    _href = request.env.http_referer)
     else:
-        goback = A(SPAN(_class = 'icon home'), 'Blogosfera.cl', _class = 'positive primary button izq',
-                   _href = 'http://blogosfera.cl/')
+        goback = A(SPAN(_class = 'icon home'), 'Blogchile.cl', _class = 'positive primary button izq',
+                   _href = 'http://blogchile.cl/')
 
-    cerrarmarco = A(SPAN(_class = 'icon cross'), 'Ir al Blog', _class = 'negative button der', _href = shorturl, _title='Cerrar este marco y visitar el artículo en el blog de su fuente original')
+    cerrarmarco = A(SPAN(_class = 'icon rightarrow'), 'Ir al Blog', _class = 'pill negative button der', _href = shorturl, _title='Cerrar este marco y visitar el artículo en el blog de su fuente original')
 
     referer = goback
     #referer = DIV(goback, class='izq')
     
-    go = DIV(IFRAME(_src = shorturl, _style = 'height:90%;width:inherit;border:0;'), _id = 'godiv', _style = 'display:block;height:100%;width:100%;')
-    """
-    go = DIV(SCRIPT('$("<iframe/>").src("%s").appendTo("body");' % shorturl),SCRIPT('''$("iframe").src("%s", function(iframe, 10000) {
-alert("That took " + duration + " ms.");
-}, {
-  timeout: function() { alert("oops! timed out."); },
-  timeoutDuration: 10000
-});''' % shorturl))
-    """
+    #go = DIV(IFRAME(_src = shorturl, _style = 'height:90%;width:inherit;border:0;'), _id = 'godiv', _style = 'display:block;height:100%;width:100%;')
+    blog = IFRAME(_src = shorturl, _id='blogiframe', _style='width:inherit;border:0;')
+    
 
     #go = DIV(jqiframe, _id = 'godiv')
 
     #response.flash = shorturl
 
-    return dict(go=go,shorturl=shorturl,referer=referer,cerrarmarco=cerrarmarco)
+    return dict(blog=blog,shorturl=shorturl,referer=referer,cerrarmarco=cerrarmarco)
 
 
 @auth.requires(request.cid)
@@ -275,7 +273,7 @@ def sitemap1():
     data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(0,100))
     for noti in data:
         sm.append(str(TAG.url(
-            TAG.loc(prefix,URL(c='default',f='go',args=[noti.slug,noti.id],extension='')),
+            TAG.loc(prefix,URL(c='default',f='blog',args=[noti.slug,noti.id],extension='')),
             TAG.lastmod(noti.created_on.date()),
             TAG.changefreq('always')
             )))
@@ -291,7 +289,7 @@ def sitemap2():
     data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(100,200))
     for noti in data:
         sm.append(str(TAG.url(
-            TAG.loc(prefix,URL(c='default',f='go',args=[noti.slug,noti.id],extension='')),
+            TAG.loc(prefix,URL(c='default',f='blog',args=[noti.slug,noti.id],extension='')),
             TAG.lastmod(noti.created_on.date()),
             TAG.changefreq('always')
             )))
@@ -307,7 +305,7 @@ def sitemap3():
     data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(200,300))
     for noti in data:
         sm.append(str(TAG.url(
-            TAG.loc(prefix,URL(c='default',f='go',args=[noti.slug,noti.id],extension='')),
+            TAG.loc(prefix,URL(c='default',f='blog',args=[noti.slug,noti.id],extension='')),
             TAG.lastmod(noti.created_on.date()),
             TAG.changefreq('always')
             )))
@@ -321,7 +319,7 @@ def sitemap4():
     data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(300,400))
     for noti in data:
         sm.append(str(TAG.url(
-            TAG.loc(prefix,URL(c='default',f='go',args=[noti.slug,noti.id],extension='')),
+            TAG.loc(prefix,URL(c='default',f='blog',args=[noti.slug,noti.id],extension='')),
             TAG.lastmod(noti.created_on.date()),
             TAG.changefreq('always')
             )))
@@ -335,20 +333,17 @@ def sitemap5():
     data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(400,500))
     for noti in data:
         sm.append(str(TAG.url(
-            TAG.loc(prefix,URL(c='default',f='go',args=[noti.slug,noti.id],extension='')),
+            TAG.loc(prefix,URL(c='default',f='blog',args=[noti.slug,noti.id],extension='')),
             TAG.lastmod(noti.created_on.date()),
             TAG.changefreq('always')
             )))
     sm.append('</urlset>')
     return sm
 
-def smpaginas():
-    
-    return sm
-
-
+ 
+####################################################################################
 # URLs ANTIGUAS. Las funciones a continuación están sólo para compatibilidad retroactiva
-
+####################################################################################
 def respira():
     if request.extension == 'rss':
         return redirect(URL(c='default',f='feed.rss', args=request.args),301)

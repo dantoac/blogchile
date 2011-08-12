@@ -1,19 +1,34 @@
 {{block header}}{{end}}
-<script type="text/javascript">var switchTo5x=true;</script><script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script><script type="text/javascript">stLight.options({publisher:'6991dfd4-d4bb-4e99-83b7-a0072a16e014'});</script>
+<!-- <script type="text/javascript">var switchTo5x=true;</script><script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script><script type="text/javascript">stLight.options({publisher:'6991dfd4-d4bb-4e99-83b7-a0072a16e014'});</script>
+-->
+<script type="text/javascript">
+function ResizeIFrame() {
+        var buffer = 40; //scroll bar buffer
+        var height = document.documentElement.clientHeight -
+            pageY(document.getElementById('blogiframe')) + buffer;
+        height = (height < 0) ? 0 : height;
+        $('iframe#blogiframe').css('height', height + 'px');
+    }
+
+    function pageY(elem) {
+        return elem.offsetParent ? (elem.offsetTop + pageY(elem.offsetParent)) :
+            elem.offsetTop;
+    }
+
+    window.onload = window.onresize = ResizeIFrame;
+</script>
 {{block statusbar}}
 
-{{#=A(IMG(_src=URL('static','images/statusbar.png')), _href='http://'+request.env.http_host)}}
+{{=A(IMG(_src=URL('static','images/statusbar.png'),_class='izq'), _href='http://'+request.env.http_host)}}
 {{=referer}}
-
-{{=LOAD(c='widget',f='dent.load',ajax=True,target='dent')}}
-<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="blogchile" data-lang="es">Tweetear esto</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-<g:plusone count="false"></g:plusone>
-<span  class='st_sharethis' displayText='Compártelo'></span>
-
+{{=LOAD(c='widget',f='dent.load',ajax=True,target='dent',_class='izq',content='@blogchile en identi.ca')}}
+{{=LOAD(c='widget',f='twittearesto.load',ajax=True,target='twittearesto',_class='izq',content='@blogchile en twitter')}}
+<g:plusone count="false" _class='izq'></g:plusone>
 {{=cerrarmarco}}
 {{end}}
 {{block panel}}{{end}}
 {{block footer}}{{end}}
+
 {{extend 'plantilla.html'}}
 
-{{=XML(go)}}
+{{=XML(blog)}}

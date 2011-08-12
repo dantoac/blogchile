@@ -30,6 +30,7 @@ body {
 
 .auth_navbar {background:#eee;position:fixed;top:0;right:0;}
 
+/*
 .publicidad {
     background:#fff;
     color:#666;
@@ -44,6 +45,7 @@ body {
 #right_sidebar .publicidad {
     max-width:200px;
 }
+*/
 
 #panel {
     background: none;
@@ -56,11 +58,9 @@ body {
     z-index: 9999;
 }
 
-#panel a:link, #panel a:visited {
+/*#panel a:link, #panel a:visited {}*/
 
-}
-
-#panel a:hover {}
+/*#panel a:hover {}*/
 
 .feed_bloque {
     max-width:180px;
@@ -265,4 +265,3 @@ tr.search_result {border-bottom:1px solid #ccc;}
 
 .pronostico .icono {width:22px;height:22px;vertical-align:middle;}
 
-#dent {display:inline-block;}
