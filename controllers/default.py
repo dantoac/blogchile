@@ -175,30 +175,6 @@ def blog():
     return dict(blog=blog,shorturl=shorturl,referer=referer,cerrarmarco=cerrarmarco)
 
 
-@auth.requires(request.cid)
-def misfeeds():
-    fdata = db(db.feed.created_by == auth.user_id).select(db.feed.id,db.feed.title,db.feed.categoria,db.feed.is_active,orderby=db.feed.id)
-    ftable = TABLE(THEAD(TR(TH('Título'),TH('Categoría'),TH('Activado'))))
-    for f in fdata:
-        ftable.append(TR(TD(f.title),TD(f.categoria.title),TD(f.is_active),TH(A(SPAN(_class='icon pen'),'Editar',_href=URL(c='default',f='editarFeed.load',args=[f.id]),_class='negative button',cid='editmyfeed'))))
-
-    return dict(ftable=ftable)
-
-@auth.requires(request.cid)
-def editarFeed():
-    db.feed.is_active.readable=True
-    db.feed.is_active.writable=True
-    form = ''
-    if request.args(0):
-        if db.feed[int(request.args(0))].created_by == auth.user_id:
-            form = SQLFORM(db.feed,request.args(0),deletable=True)
-            if form.accepts(request.vars,session):
-                response.flash = 'El Feed ha sido editado exitosamente'
-
-        else:
-            response.flash = 'El feed que referencias no es válido'
-    return dict(form=form)
-
 def user():
     """
     exposes:

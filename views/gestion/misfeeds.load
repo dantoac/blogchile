@@ -1,0 +1,3 @@
+{{=H2('Mis Feeds')}}
+<div id="editarfeed"></div>
+{{=misfeeds}}
