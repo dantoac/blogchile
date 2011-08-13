@@ -28,13 +28,15 @@ def _u2d(fidx):
     feed = feedparser.parse(db.feed[fidx].link)
     maxfeeds = 3
     limite = 0
+
+    print(db.feed[fidx].title)
     for e in feed.entries:
         # revisando si el artículo obtenido ya estaba en la db
         edata = db((db.noticia.feed == fidx) & (db.noticia.title == XML(e.title))).select(db.noticia.id)
 
         if limite == maxfeeds:
             break
-        print(db.feed[fidx].title)
+        
         #si no encuentra nada, inserta en la db, sino no hace nada
         if len(edata) == 0:
             xurl_api = choice(xurl_service)
@@ -44,7 +46,7 @@ def _u2d(fidx):
             except:
                 xurl = urllib2.urlopen("%(api)s=%(longurl)s" % dict(api=xurl_api,longurl=e.link)).read()
 
-            print('%s: %s' % (db.feed[fidx].title,xurl))
+            print('%s: %s' % (db.feed[fidx].title, xurl))
 
             try:
                 actualizado=e.updated
