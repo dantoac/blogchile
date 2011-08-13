@@ -1,2 +1,2 @@
-{{=LOAD(c='widget',f='hora.load',ajax=True)}}
+{{#=LOAD(c='widget',f='hora.load',ajax=True)}}
 {{=publicaciones}}
