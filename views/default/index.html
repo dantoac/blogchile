@@ -9,7 +9,7 @@
 <script type="text/javascript">
 function actualiza_feeds() {
    web2py_component('{{=URL(c='default',f='publicaciones.load', args=request.args)}}','blogs');
-setTimeout(actualiza_feeds,600000);
+setTimeout(actualiza_feeds,300000);
 }
 jQuery(document).ready(actualiza_feeds);
 </script>

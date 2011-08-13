@@ -1,1 +1,2 @@
+{{=LOAD(c='widget',f='hora.load',ajax=True)}}
 {{=publicaciones}}

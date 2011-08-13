@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+
+@auth.requires(request.cid)
+def hora():
+    hora = str(request.now.now())[:-7]
+    return dict(hora=hora)
+
 @auth.requires(request.cid)
 def indicadoreseconomicos():
     import urllib2
