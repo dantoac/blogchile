@@ -1,14 +1,31 @@
 # -*- coding: utf-8 -*-
 import locale
-#locale.setlocale(locale.LC_TYPE, 'es_CL.UTF8')
-#response.title = 'Blog Chile'
+locale.setlocale(locale.LC_ALL, 'es_CL.UTF8')
 
 def index():
+
+    # redirecciona a feedburner (los rss se generan en c=feed)
+    if request.extension == 'rss':
+        if request.args(0) == None:
+            cat = ''
+        else:
+            cat = request.args(0)
+        return redirect('http://feeds.feedburner.com/blogchile%s' % cat)
+
+    # verificamos si pasó por c=default f=mobile y activó el bit de sesión
     if session.mobile:
         response.view = 'default/index.mobi'
         response.files.append(URL('static','css/blogchilemobile.css'))
     else:
-    
+
+        ''' si no hay bit de sesión mobile, establece el caché del browserl
+        esto es por que sino el caché impediría cambiar al modo mobile (bug de flojo)'''
+
+        del response.headers['Cache-Control']
+        del response.headers['Pragma']
+        del response.headers['Expires']
+        response.headers['Cache-Control'] = 'max-age=57600'
+
         response.files.append(URL('static','js/jquery.cycle.all.min.js'))
 
     if request.args(0):
@@ -16,6 +33,8 @@ def index():
         response.title = 'Blog Chile: %s' % catslug.capitalize().replace('-',' ')
         response.meta.keywords = catslug.replace('-',' ')
         response.meta.description = "Blog de %s en Chile, Blogósfera Chilena, Blogs Chilenos," % catslug.capitalize().replace('-',' ')
+        if catslug in ['medio-ambiente','animales']:
+            return redirect(URL(r=request,f='index',args='naturaleza'),301)
     else:
         response.title = 'Blog Chile: Portada'
         response.meta.description = 'Blogs de Chile: Últimas publicaciones de noticias, tecnología, opinión, deporte, diseño, ocio, música, política, arte y más en la blogósfera chilena'
@@ -41,9 +60,6 @@ def index():
 
 def votar():
     return locals()
-
-def hora():
-    return request.now
 
 @auth.requires(request.cid)
 def publicaciones():

@@ -103,7 +103,7 @@
     {{pass}}
 
 
-    {{=A(SPAN(_class = 'icon home'), 'Portada ', _class = 'button left pill', _href = URL('default', 'index'))}}{{#=A(SPAN(_class = 'icon rss'), 'RSS %s ' % catslug, _class = 'button middle pill', _href = URL(f = 'feed.rss', args = request.args(0)))
+    {{=A(SPAN(_class = 'icon home'), 'Portada ', _class = 'button left pill', _href = URL('default', 'index'))}}{{=A(SPAN(_class = 'icon rss'), 'RSS %s ' % catslug, _class = 'button middle pill', _href = URL(r=request,f='index.rss', args = request.args(0)))
     }}{{=A(SPAN(_class='icon magnifier'), 'Buscar ', _class='button middle pill', _href = URL(c='default',f='buscar'))}}{{=A(SPAN(_class='icon check'),'Que es un Blog?', _href=URL(c='plugin_wiki',f='page.load',args='que-es-un-blog'), cid='box', _class='pill button right')}}
 
     {{if auth.is_logged_in():}}

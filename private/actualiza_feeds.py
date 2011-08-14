@@ -46,7 +46,7 @@ def _u2d(fidx):
             except:
                 xurl = urllib2.urlopen("%(api)s=%(longurl)s" % dict(api=xurl_api,longurl=e.link)).read()
 
-            print('%s: %s' % (db.feed[fidx].title, xurl))
+            print('\t%s' % xurl)
 
             try:
                 actualizado=e.updated
