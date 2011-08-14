@@ -6,3 +6,4 @@ Disallow: /admin
 Disallow: */default/user
 Disallow: /examples
 Disallow: /feed/*
+Disallow: */bc/*

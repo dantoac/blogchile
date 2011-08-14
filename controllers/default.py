@@ -191,6 +191,10 @@ def blog():
     return dict(blog=blog,shorturl=shorturl,referer=referer,cerrarmarco=cerrarmarco)
 
 
+
+
+
+
 def user():
     """
     exposes:
@@ -356,3 +360,9 @@ def buscar():
 
 def go():
     return redirect(URL(r=request,c='default',f='blog',args=request.args),301)
+
+def feed():
+    if request.extension == 'rss':
+        return redirect(URL(r=request,c='default',f='index.rss',args=request.args(0)),301)
+    else:
+        return redirect(URL(r=request,c='default',f='index',args=request.args(0)),301)

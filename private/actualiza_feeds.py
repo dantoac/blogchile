@@ -29,7 +29,7 @@ def _u2d(fidx):
     maxfeeds = 3
     limite = 0
 
-    print(db.feed[fidx].title)
+    print('%s: %s' % (request.now,db.feed[fidx].title))
     for e in feed.entries:
         # revisando si el artículo obtenido ya estaba en la db
         edata = db((db.noticia.feed == fidx) & (db.noticia.title == XML(e.title))).select(db.noticia.id)
