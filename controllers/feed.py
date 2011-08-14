@@ -59,7 +59,7 @@ def index():
         entradas['created_on'] = pub.created_on
         """
         entradas = dict(title=unicode(str(pub.title),'utf8'),
-                        link =A(pub.slug,_href=url_prefix + URL(c='default',f='blog',args=[pub.slug,pub.id], extension=False)),
+                        link = URL(c='default',f='blog',args=[pub.slug,pub.id], extension=False),
                         description = unicode(str(pub.description),'utf8'),
                         created_on = pub.updated,
                         pub_date = request.now
