@@ -2,7 +2,8 @@
 import locale
 locale.setlocale(locale.LC_TIME, 'es_CL.UTF8')
 
-url_prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
+#url_prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
+url_prefix = 'http://blogchile.cl'
 
 response.generic_patterns = ['rss'] 
 
@@ -59,7 +60,7 @@ def index():
         entradas['created_on'] = pub.created_on
         """
         entradas = dict(title=unicode(str(pub.title),'utf8'),
-                        link = URL(c='default',f='blog',args=[pub.slug,pub.id], extension=False),
+                        link = url_prefix+URL(c='default',f='blog',args=[pub.slug,pub.id], extension=False),
                         description = unicode(str(pub.description),'utf8'),
                         created_on = pub.updated,
                         pub_date = request.now
