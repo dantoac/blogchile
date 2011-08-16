@@ -26,7 +26,7 @@ def _u2d(fidx):
     import urllib2
     from random import choice
     feed = feedparser.parse(db.feed[fidx].link)
-    maxfeeds = 3
+    maxfeeds = 4
     limite = 0
 
     print('%s: %s' % (request.now,db.feed[fidx].title))
