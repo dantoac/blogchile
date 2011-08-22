@@ -13,6 +13,9 @@ daniel@varpub.org
 import time
 #from subprocess import Popen
 
+import os
+os.environ['TZ']='America/Santiago'
+
 #session.forget()
 
 xurl_service = ['http://go.gnu.cl/api.php?url',
@@ -29,7 +32,7 @@ def _u2d(fidx):
     maxfeeds = 4
     limite = 0
 
-    print('%s: %s' % (request.now,db.feed[fidx].title))
+    print('%s: %s' % (request.now.now(),db.feed[fidx].title))
     for e in feed.entries:
         # revisando si el artículo obtenido ya estaba en la db
         edata = db((db.noticia.feed == fidx) & (db.noticia.title == XML(e.title))).select(db.noticia.id)
@@ -51,7 +54,7 @@ def _u2d(fidx):
             try:
                 actualizado=e.updated
             except:
-                actualizado=request.now
+                actualizado=request.now.now()
 
             #ddg="http://lmddgtfy.com/?q=%(term)s+%(sitio)s" % dict(term=XML(e.title),sitio=XML(db.feed[fidx].title))
             #ddg = "http://lmddgtfy.com/?q=%(term)s+%(sitio)s" % dict(term=e.slug.replace('-',' '),sitio=XML(e.feed.title))
@@ -61,7 +64,7 @@ def _u2d(fidx):
                 DESCRIPTION = e.link
         
             db.noticia.insert(title = XML(e.title), link = e.link, description = XML(DESCRIPTION),
-                              updated = actualizado, created_on=request.now, feed = fidx, shorturl=xurl)#, slug = slug)
+                              updated = actualizado, created_on=request.now.now(), feed = fidx, shorturl=xurl)#, slug = slug)
             db.commit()
 
         limite += 1
