@@ -20,15 +20,14 @@ jQuery(document).ready(actualiza_feeds);
 
 <div style="height:60px;line-height:60px;display:none;"></div>
 
-{{=DIV(B('Filtrar:'),INPUT(_name='filtrando',_id='filtrando'),SPAN('Ø',_id='filtrado')," posts",_id='filtro',_class='izq')}}
-
 {{try:}}
 {{=LOAD(c='widget',f='indicadoreseconomicos.load', ajax=False, target='indicadoreseconomicos',content=SPAN('Cargando índices económicos...',_class='info msg'),_class='der')}}
 {{except:pass}}
 
 <div id="box">
 
-  {{=LOAD(c='default',f='publicaciones.load',args=request.args, ajax=False, content='Cargando publicaciones...', target='blogs')}}
+{{=DIV(B('Filtrar:'),INPUT(_name='filtrando',_id='filtrando'),SPAN('Ø',_id='filtrado')," posts",_id='filtro')}}
+{{=LOAD(c='default',f='publicaciones.load',args=request.args, ajax=False, content='Cargando publicaciones...', target='blogs')}}
 
 </div>
 
