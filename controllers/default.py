@@ -4,6 +4,13 @@ locale.setlocale(locale.LC_ALL, 'es_CL.UTF8')
 
 def index():
 
+
+    del response.headers['Cache-Control']
+    del response.headers['Pragma']
+    del response.headers['Expires']
+    response.headers['Cache-Control'] = 'max-age=300'
+
+
     # redirecciona a feedburner (los rss se generan en c=feed)
     if request.extension == 'rss':
         if request.args(0) == None:
@@ -20,11 +27,6 @@ def index():
 
         ''' si no hay bit de sesión mobile, establece el caché del browserl
         esto es por que sino el caché impediría cambiar al modo mobile (bug de flojo)'''
-
-        del response.headers['Cache-Control']
-        del response.headers['Pragma']
-        del response.headers['Expires']
-        response.headers['Cache-Control'] = 'max-age=57600'
 
         response.files.append(URL('static','js/jquery.cycle.all.min.js'))
 
@@ -63,20 +65,11 @@ def votar():
 
 @auth.requires(request.cid)
 def publicaciones():
-    """
-    del response.headers['Cache-Control']
-    del response.headers['Pragma']
-    del response.headers['Expires']
-    response.headers['Cache-Control'] = 'max-age=3600'
-    """
+
     from gluon.tools import prettydate
     #import locale
     #locale.setlocale(locale.LC_ALL,locale='es_CL.UTF8')
-    
-
-
-
-    
+        
     if request.args:
         catslug_data = db(db.categoria.slug == request.args(0)).select(db.categoria.slug)
         for cat in catslug_data:
@@ -129,6 +122,25 @@ def publicaciones():
             
         
         publicaciones.append(feedbox)
+
+    response.js = XML('''function filtro(){
+jQuery("#filtrando").keyup(function () {
+    var filter = jQuery(this).val(), count = 0;
+
+    jQuery(".feedbox .noticia, .feed_titulo").each(function () {
+        if (jQuery(this).text().search(new RegExp(filter, "i")) < 0) {
+            jQuery(this).addClass("hidden");
+        } else {
+            jQuery(this).removeClass("hidden");
+            count++;
+        }
+    });
+    jQuery("#filtrado").text(count);
+});
+}
+
+jQuery(document).ready(filtro);
+''')
 
     return dict(publicaciones=publicaciones)
     
@@ -215,7 +227,7 @@ def sitemap():
     del response.headers['Cache-Control']
     del response.headers['Pragma']
     del response.headers['Expires']
-    response.headers['Cache-Control'] = 'max-age=600'
+    response.headers['Cache-Control'] = 'max-age=300'
     
     if request.extension == 'xml':
         sm = [str('<?xml version="1.0" encoding="UTF-8" ?> <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')]

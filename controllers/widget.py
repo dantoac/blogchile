@@ -2,7 +2,7 @@
 
 @auth.requires(request.cid)
 def hora():
-    hora = str(request.now.now())[:-7]
+    hora = XML(EM(str(request.now.now())[:-10]))
     return dict(hora=hora)
 
 @auth.requires(request.cid)
@@ -13,7 +13,9 @@ def indicadoreseconomicos():
 
     locale.setlocale(locale.LC_ALL, 'es_CL.UTF8')
     uri = 'http://www.averigualo.cl/feed/indicadores.xml'
-    
+
+
+    '''    
     try:
         pag = urllib2.urlopen(uri).read()
 
@@ -33,7 +35,38 @@ def indicadoreseconomicos():
             ufcalculado = locale.atof(html.element('uf')[0])
         except:
             ufcalculado = 'Ø'
-            
+            '''
+    try:
+        pag = urllib2.urlopen(uri).read()
+
+        pag = pag.decode('iso8859-1').encode('utf-8')
+
+        html = TAG(pag)
+        try:
+    
+            eurocalculado = locale.atof(html.element('euro')[0])
+        except Exception,e:
+            eurocalculado = '-'
+        
+        try:
+            dolarcalculado = locale.atof(html.element('dolar')[0])
+        except Exception,e:
+            dolarcalculado = '-'
+
+        
+        try:
+            #utmcalculado = locale.atof(html.element('utm')[0])
+            utmcalculado = html.element('utm')[0]
+        except Exception,e:
+            utmcalculado = '-'
+                                       
+
+        try:
+            #ufcalculado = locale.atof(html.element('uf')[0])
+            ufcalculado = html.element('uf')[0]
+        except Exception,e:
+            ufcalculado = '-'
+                     
             
 
         html_indicadores = DIV(B('UF: $%(uf)s | Dólar: $%(dolar)s | Euro: $%(euro)s' % dict(uf=str(ufcalculado)[:8],dolar=str(dolarcalculado)[:6],euro=str(eurocalculado)[:6])), _class='der', _id='indicadoreseconomicos')

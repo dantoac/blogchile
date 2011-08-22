@@ -66,24 +66,17 @@ def _u2d(fidx):
 
         limite += 1
         
-
-
-#while True:
-    ### para varias categorías por feed
-    #~ feed_data = db((db.feed_categoria.categoria == db.categoria.id)# & (db.categoria.slug == catslug)
-                   #~ & (db.feed_categoria.feed == db.feed.id)
-                   #~ & (db.feed_categoria.is_active == True)
-                   #~ & (db.feed.is_active == True)
-                   #~ & (db.categoria.is_active == True)
-                   #~ ).select()
-
-    # para 1 categoría por feed
+"""
 feed_data = db((db.feed.categoria == db.categoria.id)
             #& (db.feed_categoria.feed == db.feed.id)
             #& (db.feed_categoria.is_active == True)
             & (db.feed.is_active == True)
             & (db.categoria.is_active == True)
             ).select(db.feed.id)
+"""
+
+feed_data = db((db.feed.id>0) & (db.feed.is_active==True)).select(db.feed.id)
+
 #try:
 for feed in feed_data:
     fidx = feed.id
