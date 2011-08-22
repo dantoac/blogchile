@@ -2,7 +2,7 @@
 
 @auth.requires(request.cid)
 def hora():
-    hora = XML(EM(str(request.now.now())[:-10]))
+    hora = str(request.now.now())[:-10]
     return dict(hora=hora)
 
 @auth.requires(request.cid)
@@ -14,28 +14,12 @@ def indicadoreseconomicos():
     locale.setlocale(locale.LC_ALL, 'es_CL.UTF8')
     uri = 'http://www.averigualo.cl/feed/indicadores.xml'
 
-
-    '''    
-    try:
-        pag = urllib2.urlopen(uri).read()
-
-        html = TAG(pag)
-        try:
-        #eurocalculado = float(html.element('dolar')[0].replace(',','.')) / float(html.element('euro')[0].replace(',','.'))
-            eurocalculado = locale.atof(html.element('dolar')[0]) / locale.atof(html.element('euro')[0])
-        except:
-            eurocalculado = 'Ø'
-        
-        try:
-            dolarcalculado = locale.atof(html.element('dolar')[0])
-        except:
-            dolarcalculado = 'Ø'
-
-        try:
-            ufcalculado = locale.atof(html.element('uf')[0])
-        except:
-            ufcalculado = 'Ø'
-            '''
+#
+    import re
+    locale.setlocale(locale.LC_ALL, 'es_CL.UTF8')
+    #uri = 'http://www.averigualo.cl/feed/indicadores.xml'
+    uri = 'http://indicador.eof.cl/xml'
+    
     try:
         pag = urllib2.urlopen(uri).read()
 
@@ -44,32 +28,88 @@ def indicadoreseconomicos():
         html = TAG(pag)
         try:
     
-            eurocalculado = locale.atof(html.element('euro')[0])
+            eurocalculado = locale.atof(html.element('indicador',_nombre='Euro')[0])
         except Exception,e:
             eurocalculado = '-'
         
         try:
-            dolarcalculado = locale.atof(html.element('dolar')[0])
+            #dolarcalculado = locale.atof(html.element('indicador',_nombre='Dólar Observado')[0])
+            dolarcalculado = locale.atof(html.element('indicador',_nombre=re.compile('Observado'))[0])
         except Exception,e:
             dolarcalculado = '-'
 
         
         try:
             #utmcalculado = locale.atof(html.element('utm')[0])
-            utmcalculado = html.element('utm')[0]
+            utmcalculado = html.element('indicador',_nombre='UTM (Agosto)')[0]
         except Exception,e:
             utmcalculado = '-'
                                        
 
         try:
             #ufcalculado = locale.atof(html.element('uf')[0])
-            ufcalculado = html.element('uf')[0]
+            ufcalculado = html.element('indicador',_nombre='UF')[0]
         except Exception,e:
             ufcalculado = '-'
+            
+            
+        """
+        html_indicadores = XML(DIV(B(
+                    'Dólar: $%(dolar)s | Euro: $%(euro)s | UF$%(uf)s | UTM$%(utm)s' % dict(
+                        uf=str(ufcalculado)[:8],
+                        dolar=str(dolarcalculado)[:6],
+                        euro=str(eurocalculado)[:6],
+                        utm=str(utmcalculado)
+                        )
+                    ), _id='indicadoreseconomicos'))
+        """
+
+        html_indicadores = TABLE(THEAD(TR(TH('Dólar'),TH('Euro'),TH('UF'),TH('UTM'))))
+        html_indicadores.append(TR(TD('%s' % str(dolarcalculado)[:6]),
+                                   TD('%s' % str(eurocalculado)[:6]),
+                                   TD('%s' % str(ufcalculado)[:8]),
+                                   TD('%s' % str(utmcalculado))
+                                   )
+                                )
+
+
+        html_indicadores = XML(html_indicadores)
+#
+
+    # try:
+    #     pag = urllib2.urlopen(uri).read()
+
+    #     pag = pag.decode('iso8859-1').encode('utf-8')
+
+    #     html = TAG(pag)
+    #     try:
+    
+    #         eurocalculado = locale.atof(html.element('euro')[0])
+    #     except Exception,e:
+    #         eurocalculado = '-'
+        
+    #     try:
+    #         dolarcalculado = locale.atof(html.element('dolar')[0])
+    #     except Exception,e:
+    #         dolarcalculado = '-'
+
+        
+    #     try:
+    #         #utmcalculado = locale.atof(html.element('utm')[0])
+    #         utmcalculado = html.element('utm')[0]
+    #     except Exception,e:
+    #         utmcalculado = '-'
+                                       
+
+    #     try:
+    #         #ufcalculado = locale.atof(html.element('uf')[0])
+    #         ufcalculado = html.element('uf')[0]
+    #     except Exception,e:
+    #         ufcalculado = '-'
                      
             
 
-        html_indicadores = DIV(B('UF: $%(uf)s | Dólar: $%(dolar)s | Euro: $%(euro)s' % dict(uf=str(ufcalculado)[:8],dolar=str(dolarcalculado)[:6],euro=str(eurocalculado)[:6])), _class='der', _id='indicadoreseconomicos')
+    #     html_indicadores = DIV(B('UF: $%(uf)s | Dólar: $%(dolar)s | Euro: $%(euro)s' % dict(uf=str(ufcalculado)[:8],dolar=str(dolarcalculado)[:6],euro=str(eurocalculado)[:6])), _class='der', _id='indicadoreseconomicos')
 
         #html_indicadores = XML(IMG(_src=URL(c='static',f='images/indicadoreseconomicos.png'),_class='izq'))+H2('Indicadores Económicos')+html_indicadores
 
@@ -174,8 +214,7 @@ def pronosticotiempo():
         try:
 
             url = XML('http://free.worldweatheronline.com/feed/weather.ashx?q=%(lugar)s,chile&format=xml&num_of_days=5&key=%(key)s' % dict(key=key,lugar=lugar))
-            #url2 = URL(scheme='http',host='free.worldweatheronline.com',a='feed',f='weather.ashx',vars={'q':lugar,'format':'xml','num_of_days':'5','key':key})
-            
+                      
             try:
                 tiempo += obtienedatos(url,lugar)
             except:
@@ -183,7 +222,8 @@ def pronosticotiempo():
         except Exception,e:
             tiempo = DIV('%s' % e, _class='error')
 
-    #response.js = 'jQuery(document).ready(function(){jQuery("#tiempo").cycle({fx:"scrollHorz",timeout:"3000",continuous:0,speed:9000});});'
+    #response.js = 'jQuery(document).ready(jQuery("#tiempo").css("display","block"), function(){jQuery("#tiempo").cycle({fx:"turnDown"});});'
+    #response.js = 'jQuery(document).ready(function(){jQuery("#tiempo").css("display","block"),jQuery("#tiempo").cycle({fx:"scrollHorz",timeout:"3000",continuous:0,speed:9000});});'
     #response.js = 'jQuery("#tiempo").cycle({fx:"scrollHorz",timeout:"3000",continuous:0,speed:9000});'
 
     return dict(message=XML(tiempo))

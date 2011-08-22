@@ -1,1 +1,1 @@
-Actualizado: {{=hora}}
+<span style='display:block;text-align:center;font:x-small sans-serif;'>Actualizado: {{=hora}}</span>

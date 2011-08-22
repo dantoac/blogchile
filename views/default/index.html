@@ -1,12 +1,13 @@
 {{left_sidebar_enabled = False}}
-{{right_sidebar_enabled = True}}
+{{right_sidebar_enabled = False}}
 
 {{extend 'plantilla.html'}}
 
 {{### Css de tiempo es display:none; el siguiente js muestra y anima el widget tiempo sólo luego que ya esté cargado; esto es necesario cuando ajax=False}}
-{{=SCRIPT('jQuery(document).ready(function(){jQuery("#tiempo").css("display","block"),jQuery("#tiempo").cycle({fx:"scrollHorz",timeout:"3000",continuous:0,speed:9000});});')}}
+{{=SCRIPT('jQuery(document).ready(function(){jQuery("#tiempo").css("display","inline-block"),jQuery("#tiempo").cycle({fx:"turnDown"});})')}}
 
 <script type="text/javascript">
+
 function actualiza_feeds() {
    web2py_component('{{=URL(c='default',f='publicaciones.load', args=request.args)}}','blogs');
 setTimeout(actualiza_feeds,300000);
@@ -22,7 +23,7 @@ jQuery(document).ready(actualiza_feeds);
 {{=DIV(B('Filtrar:'),INPUT(_name='filtrando',_id='filtrando'),SPAN('Ø',_id='filtrado')," posts",_id='filtro',_class='izq')}}
 
 {{try:}}
-{{=LOAD(c='widget',f='indicadoreseconomicos.load', ajax=False, content=SPAN('Cargando índices económicos...',_class='info msg'))}}
+{{=LOAD(c='widget',f='indicadoreseconomicos.load', ajax=False, target='indicadoreseconomicos',content=SPAN('Cargando índices económicos...',_class='info msg'),_class='der')}}
 {{except:pass}}
 
 <div id="box">

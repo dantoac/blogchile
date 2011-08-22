@@ -83,7 +83,7 @@ div.feed_bloque:hover {
     background:#def;
 }
 */
-#wrapper {background:none;padding-top:3em;width:auto;max-width:900px;overflow:hidden;}
+#wrapper {background:none;padding-top:3em;width:auto;max-width:1280px;overflow:hidden;}
 
 /* .bloque {background:#eee;border:1px solid none;}*/
 
@@ -213,7 +213,7 @@ tr.search_result {border-bottom:1px solid #ccc;}
 
 #filtro {
     text-align:left;
-    margin:0;
+    margin-rigth:1em;
 }
 
 /*#blogs:first-child {font:bold 1.3em sans-serif;}*/
@@ -249,9 +249,10 @@ tr.search_result {border-bottom:1px solid #ccc;}
 #indicadoreseconomicos {font:1em monospace;}
 
 #tiempo  {
-    clear:both;
     display:none;
     width:100%;
+    max-width:620px !important;
+    overflow:hidden;
 }
 
 .pronostico {
