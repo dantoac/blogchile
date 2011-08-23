@@ -278,7 +278,7 @@ def sitemap1():
 
     prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
 
-    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(0,100))
+    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, orderby=~db.noticia.id, limitby=(0,200))
     for noti in data:
         sm.append(str(TAG.url(
             TAG.loc(prefix,URL(c='default',f='blog',args=[noti.slug,noti.id],extension='')),
@@ -294,7 +294,7 @@ def sitemap2():
 
     prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
 
-    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(100,200))
+    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(200,400))
     for noti in data:
         sm.append(str(TAG.url(
             TAG.loc(prefix,URL(c='default',f='blog',args=[noti.slug,noti.id],extension='')),
@@ -310,7 +310,7 @@ def sitemap3():
 
     prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
 
-    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(200,300))
+    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(400,600))
     for noti in data:
         sm.append(str(TAG.url(
             TAG.loc(prefix,URL(c='default',f='blog',args=[noti.slug,noti.id],extension='')),
@@ -324,7 +324,7 @@ def sitemap3():
 def sitemap4():
     sm = [str('<?xml version="1.0" encoding="UTF-8" ?> <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')]
     prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
-    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(300,400))
+    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(600,800))
     for noti in data:
         sm.append(str(TAG.url(
             TAG.loc(prefix,URL(c='default',f='blog',args=[noti.slug,noti.id],extension='')),
@@ -338,7 +338,7 @@ def sitemap4():
 def sitemap5():
     sm = [str('<?xml version="1.0" encoding="UTF-8" ?> <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')]
     prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
-    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(400,500))
+    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(800,1000))
     for noti in data:
         sm.append(str(TAG.url(
             TAG.loc(prefix,URL(c='default',f='blog',args=[noti.slug,noti.id],extension='')),
