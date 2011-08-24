@@ -26,7 +26,7 @@ jQuery(document).ready(actualiza_feeds);
 
 <div id="box">
 
-{{=DIV(B('Filtrar:'),INPUT(_name='filtrando',_id='filtrando'),SPAN('Ø',_id='filtrado')," posts",_id='filtro')}}
+{{=DIV(B('Filtrar:'),INPUT(_name='filtrando',_id='filtrando'),SPAN('Ø',_id='filtrado')," posts",_id='filtro', _class='ui-widget')}}
 {{=LOAD(c='default',f='publicaciones.load',args=request.args, ajax=False, content='Cargando publicaciones...', target='blogs')}}
 
 </div>

@@ -102,7 +102,7 @@ def publicaciones():
     for feedincat in feedincat_data:
 
         # armando feed_bloque y la noticia de cada feed
-        feedbox = DIV(DIV(A(feedincat.title,_href=feedincat.source,_target='_blank'), _class = 'feed_titulo'), _class = 'feedbox feed_bloque  izq')
+        feedbox = DIV(DIV(A(feedincat.title,_href=feedincat.source,_target='_blank',_class='ui-widget-header-a'), _class = 'feed_titulo ui-widget-header ui-corner-all'), _class = 'feedbox feed_bloque  izq ui-widget ui-corner-all')
         
         for n in db(db.noticia.feed == feedincat.id).select(db.noticia.ALL, orderby =~ db.noticia.id, limitby=(0,4)):
 
@@ -115,7 +115,7 @@ def publicaciones():
             #localurl = 'http://' + request.env.http_host + URL(c = 'default', f = 'blog.html', args = [n.slug,n.id], extension='html')
         
             # armando el título y enlace a la publicación; armando los bloques de publicación
-            feedbox.append(DIV(DIV(A(n.title.lower()+'...', _name = n.slug, _href = URL(r = request, f = 'blog', args = [catslug,n.slug,n.id], extension=False), _class = 'noticia_link', _target='_blank',extension='html'),DIV(prettydate(actualizado, T), _class = 'noticia_meta'), _class = 'noticia_contenido'), _class = 'noticia'))
+            feedbox.append(DIV(DIV(A(n.title.lower()+'...', _name = n.slug, _href = URL(r = request, f = 'blog', args = [catslug,n.slug,n.id], extension=False), _class = 'noticia_link ui-widget-content-a', _target='_blank',extension='html'),DIV(prettydate(actualizado, T), _class = 'noticia_meta'), _class = 'noticia_contenido ui-widget-content ui-corner-all'), _class = 'noticia ui-widget ui-corner-all'))
 
          
             #entradas.append(dict(title =unicode(n.title,'utf8'), link = localurl, description = unicode('%s (%s)' % (n.description, n.feed.title),'utf8'), created_on = request.now))
