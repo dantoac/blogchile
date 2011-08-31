@@ -105,13 +105,14 @@ a.noticia_link:visited {
 .feed_titulo {
     /*font:bold 1em sans-serif;*/
     text-transform:capitalize;
-    /*line-height:1em;
-    height:1em;*/
+    /*line-height:1em;*/
+    height:1.5em;
     clear:both;
     text-align:center;
     color:#000;;
     overflow:hidden;
     margin:0 .2em;
+    word-spacing:-6px;
 }
 
 .feed_titulo a {
