@@ -20,7 +20,7 @@ else:                                         # else use a normal relational dat
     '''
     acciones_readonly = ['feed']
     if request.controller != 'noticias':
-        db = DAL(['sqlite://readonly.sqlite', 'postgres://danto:password@24d9a3a7/danto_planet'])
+        db = DAL(['sqlite://readonly.sqlite', 'postgres://danto:password@pass/danto_planet'])
     else:
         db = DAL(['sqlite://storage2.sqlite'])
     '''
@@ -54,9 +54,9 @@ auth.define_tables()                           # creates all needed tables
 auth.settings.mailer = mail                    # for user email verification
 auth.settings.registration_requires_verification = True
 auth.settings.registration_requires_approval = False
-auth.messages.verify_email = T('Te has registrado en http://blogosfera.cl. Haz clic en el siguiente enlace para verificar tu email: http://' + request.env.http_host + URL('default', 'user', args = ['verify_email']) + '/%(key)s')
+auth.messages.verify_email = T('Te has registrado en http://blogchile.cl. Haz clic en el siguiente enlace para verificar tu email: http://' + request.env.http_host + URL('default', 'user', args = ['verify_email']) + '/%(key)s')
 auth.settings.reset_password_requires_verification = True
-auth.messages.reset_password = T('En http://blogosfera.cl hemos recibido una solicitud de cambio de contraseña. Haz clic en el siguiente enlace para reiniciar tu constraseña: http://' + request.env.http_host + URL('default', 'user', args = ['reset_password']) + '/%(key)s')
+auth.messages.reset_password = T('En http://blogchile.cl hemos recibido una solicitud de cambio de contraseña. Haz clic en el siguiente enlace para reiniciar tu constraseña: http://' + request.env.http_host + URL('default', 'user', args = ['reset_password']) + '/%(key)s')
 
 
 auth.messages.label_first_name = 'Nombre'
@@ -64,7 +64,7 @@ auth.messages.label_last_name = 'Apellido'
 
 
 ## restricciones para auth
-#auth.settings.actions_disabled.append('register')
+auth.settings.actions_disabled.append('register')
 
 #########################################################################
 ## If you need to use OpenID, Facebook, MySpace, Twitter, Linkedin, etc.
@@ -103,6 +103,7 @@ tabla('categoria',
     #Field('super', 'reference categoria', comment = 'SIN EFECTO todavía. Permitirá la jerarquización de categorías.'),
     #Field('freq', 'integer', requires = IS_INT_IN_RANGE(300, 604801, error_message = 'conozco desde 300 hasta 604800 '), label = T('Frecuencia de actualización'), comment = 'SIN USO AÚN'),
 #    Field('actualizado', 'datetime', default = request.now, writable = False, readable = False),
+    Field('description', 'text', label = T('Descripción'),comment=T('(opcional)')),
     auth.signature,
     format = '%(title)s',
     )
@@ -115,8 +116,8 @@ db.categoria.is_active.readable = False
 
 tabla('feed',
     Field('categoria', 'reference categoria', comment = T('*requerido')),
-    Field('title', label = T('Sitio'), comment = T('*requerido (sugerencia: "misitio.tld")')),
-    #Field('description', 'text', label = T('Descripción'),comment=T('(opcional)')),
+    Field('title', label = T('Nombre del Sitio'), comment = T('*requerido (sugerencia: "misitio.tld")')),
+    Field('source', label = T('URL al Sitio'), comment = T('URL completa a la portada del sitio, ejemplo: http://www.sitio.tld')),
     Field('link', requires = IS_URL(), label = T('URL feed'), comment = T('*requerido')),
     auth.signature,
     format = '%(title)s',
@@ -161,3 +162,5 @@ tabla('votos_disponibles',
       Field('votos_disponibles','integer',default=3)
       )
 '''
+
+#response.generic_patterns = ['*'] 

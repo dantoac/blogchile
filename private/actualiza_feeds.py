@@ -21,7 +21,8 @@ os.environ['TZ']='America/Santiago'
 xurl_service = ['http://go.gnu.cl/api.php?url',
             #'http://xurl.cl/api.php?url',
             #'http://to.ly/api.php?longurl',
-            'http://tinyurl.com/api-create.php?url']
+            'http://tinyurl.com/api-create.php?url',
+            'http://is.gd/create.php?format=simple&url']
 
 
 def _u2d(fidx):

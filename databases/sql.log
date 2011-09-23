@@ -933,3 +933,16 @@ success!
 timestamp: 2011-07-17T20:55:50.080168
 ALTER TABLE feed DROP COLUMN url;
 success!
+timestamp: 2011-09-23T13:19:17.782519
+CREATE TABLE auth_cas(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER REFERENCES auth_user(id) ON DELETE CASCADE,
+    created_on TIMESTAMP,
+    url CHAR(512),
+    uuid CHAR(512)
+);
+success!
+timestamp: 2011-09-23T13:19:17.899805
+ALTER TABLE categoria ADD description TEXT;
+timestamp: 2011-09-23T13:19:18.040025
+ALTER TABLE feed ADD source CHAR(512);

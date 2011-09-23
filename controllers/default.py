@@ -45,12 +45,14 @@ def index():
     #if request.extension == 'rss':
     #    return redirect('http://feeds.feedburner.com/blogosfera/dDKt')
 
-    # muestra un response.flash con la descripción de cada categoría, si es que la hay (en db.feed)
-    if request.args:
-        descrip = db(db.categoria.slug == request.args(0)).select(db.categoria.description)[0].description
-        if descrip != None:
-            response.flash = descrip
-
+    try:
+        # muestra un response.flash con la descripción de cada categoría, si es que la hay (en db.feed)
+        if request.args:
+            descrip = db(db.categoria.slug == request.args(0)).select(db.categoria.description)[0].description
+            if descrip != None:
+                response.flash = descrip
+    except:
+        pass
     # aviso temporal de WIP. chk según sessión de conexión en el sitio
     """
     if session.avisado == False:
@@ -63,7 +65,6 @@ def index():
 def votar():
     return locals()
 
-@auth.requires(request.cid)
 def publicaciones():
 
     from gluon.tools import prettydate
@@ -172,7 +173,7 @@ def blog():
     categoria = catslug
 
     response.title='%s: %s' % (categoria.capitalize(),titulo.capitalize())
-    response.meta.description = '%s %s' % (response.title,db.noticia[nid].feed.title)
+    #response.meta.description = '%s %s' % (response.title,db.noticia[nid].feed.title)
 
     shorturl = db.noticia[nid].shorturl
     #titulo = db.noticia[nid].title

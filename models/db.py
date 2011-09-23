@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+#'sqlite://storage2.sqlite' -*- coding: utf-8 -*-
 # this file is released under public domain and you can use without limitations
 if 0:
     from gluon.sql import *
@@ -163,4 +163,4 @@ tabla('votos_disponibles',
       )
 '''
 
-#response.generic_patterns = ['*'] 
+#response.generic_patterns = ['*']

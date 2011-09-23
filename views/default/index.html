@@ -21,13 +21,13 @@ jQuery(document).ready(actualiza_feeds);
 <div style="height:60px;line-height:60px;display:none;"></div>
 
 {{try:}}
-{{=LOAD(c='widget',f='indicadoreseconomicos.load', ajax=False, target='indicadoreseconomicos',content=SPAN('Cargando índices económicos...',_class='info msg'),_class='der')}}
+{{=LOAD(c='widget',f='indicadoreseconomicos.load', ajax=True, target='indicadoreseconomicos',content=SPAN('Cargando índices económicos...',_class='info msg'),_class='der')}}
 {{except:pass}}
 
 <div id="box">
 
 {{=DIV(B('Filtrar:'),INPUT(_name='filtrando',_id='filtrando'),SPAN('Ø',_id='filtrado')," posts",_id='filtro', _class='ui-widget')}}
-{{=LOAD(c='default',f='publicaciones.load',args=request.args, ajax=False, content='Cargando publicaciones...', target='blogs')}}
+{{=LOAD(c='default',f='publicaciones.load',args=request.args, ajax=True, content='Cargando publicaciones...', target='blogs')}}
 
 </div>
 
