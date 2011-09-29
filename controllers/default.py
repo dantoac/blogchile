@@ -165,12 +165,13 @@ def blog():
     catslug = request.args(0)
     slugnoticia = request.args(1) #para mostrar la noticia en la url; SEO
     #nid = request.args(2)
-    nid = request.args[len(request.args)-1]
+    nid = int(request.args[len(request.args)-1])
+
 
     #titulo = db.noticia[nid].title
     #print(type(nid))
     
-    #titulo = slugnoticia.replace('-',' ')
+    titulo = slugnoticia.replace('-',' ')
 
     categoria = catslug
 
