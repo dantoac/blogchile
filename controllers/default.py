@@ -4,7 +4,6 @@ locale.setlocale(locale.LC_ALL, 'es_CL.UTF8')
 
 def index():
 
-
     del response.headers['Cache-Control']
     del response.headers['Pragma']
     del response.headers['Expires']
@@ -66,84 +65,86 @@ def votar():
     return locals()
 
 def publicaciones():
+    if request.ajax:
+        from gluon.tools import prettydate
+        #import locale
+        #locale.setlocale(locale.LC_ALL,locale='es_CL.UTF8')
 
-    from gluon.tools import prettydate
-    #import locale
-    #locale.setlocale(locale.LC_ALL,locale='es_CL.UTF8')
-        
-    if request.args:
-        catslug_data = db(db.categoria.slug == request.args(0)).select(db.categoria.slug)
-        for cat in catslug_data:
-            catslug = cat.slug
-    else:
-        catslug = 'noticias'
-    
+        if request.args:
+            catslug_data = db(db.categoria.slug == request.args(0)).select(db.categoria.slug)
+            for cat in catslug_data:
+                catslug = cat.slug
+        else:
+            catslug = 'noticias'
 
-    publicaciones = DIV()
 
-    # obteniendo los feeds categorizados bajo el slug solicitado desde la url
+        publicaciones = DIV()
 
-    #### 1 categoría por feed
-    """
-    for feedincat in db((db.categoria.slug == catslug) & (db.feed.categoria == db.categoria.id)
-                #& (db.feed_categoria.feed == db.feed.id)
-                #& (db.feed_categoria.is_active == True)
-                & (db.feed.is_active == True)
-                & (db.categoria.is_active == True)
-                ).select(db.feed.ALL):
-    """
-    
-    feedincat_data = db((db.categoria.slug == catslug) 
-                        & (db.feed.categoria == db.categoria.id) 
-                        & (db.feed.is_active == True) 
-                        & (db.categoria.is_active == True)
-                        ).select(db.feed.id,db.feed.title,db.feed.source)
+        # obteniendo los feeds categorizados bajo el slug solicitado desde la url
 
-    
-    for feedincat in feedincat_data:
+        #### 1 categoría por feed
+        """
+        for feedincat in db((db.categoria.slug == catslug) & (db.feed.categoria == db.categoria.id)
+                    #& (db.feed_categoria.feed == db.feed.id)
+                    #& (db.feed_categoria.is_active == True)
+                    & (db.feed.is_active == True)
+                    & (db.categoria.is_active == True)
+                    ).select(db.feed.ALL):
+        """
 
-        # armando feed_bloque y la noticia de cada feed
-        feedbox = DIV(DIV(A(feedincat.title,_href=feedincat.source,_target='_blank',_class='ui-widget-header-a'), _class = 'feed_titulo ui-widget-header ui-corner-all'), _class = 'feedbox feed_bloque  izq ui-widget ui-corner-all')
-        
-        for n in db(db.noticia.feed == feedincat.id).select(db.noticia.ALL, orderby =~ db.noticia.id, limitby=(0,4)):
+        feedincat_data = db((db.categoria.slug == catslug) 
+                            & (db.feed.categoria == db.categoria.id) 
+                            & (db.feed.is_active == True) 
+                            & (db.categoria.is_active == True)
+                            ).select(db.feed.id,db.feed.title,db.feed.source)
 
-            if n.updated != None:
-                actualizado = n.updated
-            else:
-                actualizado = n.created_on
-        
-            # armando la url que va en el rss
-            #localurl = 'http://' + request.env.http_host + URL(c = 'default', f = 'blog.html', args = [n.slug,n.id], extension='html')
-        
-            # armando el título y enlace a la publicación; armando los bloques de publicación
-            feedbox.append(DIV(DIV(A(n.title.lower()+'...', _name = n.slug, _href = URL(r = request, f = 'blog', args = [catslug,n.slug,n.id], extension=False), _class = 'noticia_link ui-widget-content-a', _target='_blank',extension='html'),DIV(prettydate(actualizado, T), _class = 'noticia_meta'), _class = 'noticia_contenido ui-widget-content ui-corner-all'), _class = 'noticia ui-widget ui-corner-all'))
 
-         
-            #entradas.append(dict(title =unicode(n.title,'utf8'), link = localurl, description = unicode('%s (%s)' % (n.description, n.feed.title),'utf8'), created_on = request.now))
-            
-        
-        publicaciones.append(feedbox)
+        for feedincat in feedincat_data:
 
-    response.js = XML('''function filtro(){
-jQuery("#filtrando").keyup(function () {
-    var filter = jQuery(this).val(), count = 0;
+            # armando feed_bloque y la noticia de cada feed
+            feedbox = DIV(DIV(A(feedincat.title,_href=feedincat.source,_target='_blank',_class='ui-widget-header-a'), _class = 'feed_titulo ui-widget-header ui-corner-all'), _class = 'feedbox feed_bloque  izq ui-widget ui-corner-all')
 
-    jQuery(".feedbox .noticia, .feed_titulo").each(function () {
-        if (jQuery(this).text().search(new RegExp(filter, "i")) < 0) {
-            jQuery(this).addClass("hidden");
-        } else {
-            jQuery(this).removeClass("hidden");
-            count++;
-        }
+            for n in db(db.noticia.feed == feedincat.id).select(db.noticia.ALL, orderby =~ db.noticia.id, limitby=(0,4)):
+
+                if n.updated != None:
+                    actualizado = n.updated
+                else:
+                    actualizado = n.created_on
+
+                # armando la url que va en el rss
+                #localurl = 'http://' + request.env.http_host + URL(c = 'default', f = 'blog.html', args = [n.slug,n.id], extension='html')
+
+                # armando el título y enlace a la publicación; armando los bloques de publicación
+                feedbox.append(DIV(DIV(A(n.title.lower()+'...', _name = n.slug, _href = URL(r = request, f = 'blog', args = [catslug,n.slug,n.id], extension=False), _class = 'noticia_link ui-widget-content-a', _target='_blank',extension='html'),DIV(prettydate(actualizado, T), _class = 'noticia_meta'), _class = 'noticia_contenido ui-widget-content ui-corner-all'), _class = 'noticia ui-widget ui-corner-all'))
+
+
+                #entradas.append(dict(title =unicode(n.title,'utf8'), link = localurl, description = unicode('%s (%s)' % (n.description, n.feed.title),'utf8'), created_on = request.now))
+
+
+            publicaciones.append(feedbox)
+
+        response.js = XML('''function filtro(){
+    jQuery("#filtrando").keyup(function () {
+        var filter = jQuery(this).val(), count = 0;
+
+        jQuery(".feedbox .noticia, .feed_titulo").each(function () {
+            if (jQuery(this).text().search(new RegExp(filter, "i")) < 0) {
+                jQuery(this).addClass("hidden");
+            } else {
+                jQuery(this).removeClass("hidden");
+                count++;
+            }
+        });
+        jQuery("#filtrado").text(count);
     });
-    jQuery("#filtrado").text(count);
-});
-}
+    }
 
-jQuery(document).ready(filtro);
-''')
+    jQuery(document).ready(filtro);
+    ''')
 
-    return dict(publicaciones=publicaciones)
+        return dict(publicaciones=publicaciones)
+    else:
+        return dict(publicaciones=u'X_x')
     
 def elimina_tildes(s):
     """
@@ -167,9 +168,10 @@ def blog():
     nid = request.args[len(request.args)-1]
 
     #titulo = db.noticia[nid].title
-    titulo = slugnoticia.capitalize().replace('-',' ')
+    #print(type(nid))
+    
+    #titulo = slugnoticia.replace('-',' ')
 
-    #categoria = db.noticia[nid].feed.categoria.title
     categoria = catslug
 
     response.title='%s: %s' % (categoria.capitalize(),titulo.capitalize())

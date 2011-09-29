@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 def hora():
+    
     hora = str(request.now.now())[:-10]
     return dict(hora=hora)
 
