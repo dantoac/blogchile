@@ -238,7 +238,7 @@ def sitemap():
         prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
         for cat in db((db.categoria.id>0) & (db.categoria.is_active == True)).select(db.categoria.id,db.categoria.title,db.categoria.slug):
             sm.append(str(TAG.url(
-                TAG.loc(prefix,URL(r=request,c='default',f='respira.',args=[cat.slug])),
+                TAG.loc(prefix,URL(r=request,c='default',f='index.html',args=[cat.slug])),
                 TAG.changefreq('always')
                 )))
             sm.append(str(TAG.url(
@@ -253,12 +253,12 @@ def sitemap():
 
         for cat in db((db.categoria.id>0) & (db.categoria.is_active==True)).select(db.categoria.id,db.categoria.title,db.categoria.slug):
 
-            categorias = DIV(H2(A(cat.title.capitalize(),_href=URL(r=request,c='default',f='respira.',args=[cat.slug]))))
+            categorias = DIV(H2(A(cat.title.capitalize(),_href=URL(r=request,c='default',f='index.html',args=[cat.slug]))))
             noticias = UL()
 
             data = db((db.feed.categoria == cat.id)& (db.noticia.feed == db.feed.id)).select(db.noticia.id, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(0,4))
             for noti in data:
-                noticias.append(LI(A(noti.title, _href=URL(c='default',f='go',args=[noti.slug,noti.id]))))
+                noticias.append(LI(A(noti.title, _href=URL(c='default',f='blog',args=[noti.slug,noti.id]))))
             categorias.append(noticias)
             sm.append(categorias)
         return dict(sm=sm)
