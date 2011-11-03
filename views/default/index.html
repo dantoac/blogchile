@@ -27,7 +27,7 @@ jQuery(document).ready(actualiza_feeds);
 <div id="box">
 
 {{=DIV(B('Filtrar:'),INPUT(_name='filtrando',_id='filtrando'),SPAN('Ø',_id='filtrado')," posts",_id='filtro', _class='ui-widget')}}
-{{=LOAD(c='default',f='publicaciones.load',args=request.args, ajax=True, content='Cargando publicaciones...', target='blogs')}}
+{{=LOAD(c='default',f='publicaciones.load',args=request.args, ajax=False, content='Cargando publicaciones...', target='blogs')}}
 
 </div>
 
@@ -39,7 +39,7 @@ jQuery(document).ready(actualiza_feeds);
 
 <div id="fb-root"></div><script src="http://connect.facebook.net/es_CL/all.js#xfbml=1"></script><fb:like-box href="http://www.facebook.com/pages/Blog-Chile/177683725631223" width="160" show_faces="true" border_color="white" stream="false" header="false"></fb:like-box>
 
-{{#=LOAD(c='widget',f='identica_badge.load',ajax=False,content='@blogchile en identi.ca')}}
+
 
 
 {{end}}

@@ -2,13 +2,14 @@
 import locale
 locale.setlocale(locale.LC_ALL, 'es_CL.UTF8')
 
+@cache(request.env.path_info, time_expire=60, cache_model=cache.ram)
 def index():
-
+    '''
     del response.headers['Cache-Control']
     del response.headers['Pragma']
     del response.headers['Expires']
     response.headers['Cache-Control'] = 'max-age=300'
-
+    '''
 
     # redirecciona a feedburner (los rss se generan en c=feed)
     if request.extension == 'rss':
@@ -47,7 +48,7 @@ def index():
     try:
         # muestra un response.flash con la descripción de cada categoría, si es que la hay (en db.feed)
         if request.args:
-            descrip = db(db.categoria.slug == request.args(0)).select(db.categoria.description)[0].description
+            descrip = db(db.categoria.slug == request.args(0)).select(db.categoria.description, cache=(cache.disk,12000))[0].description
             if descrip != None:
                 response.flash = descrip
     except:
@@ -64,6 +65,7 @@ def index():
 def votar():
     return locals()
 
+@cache(request.env.path_info, time_expire=150, cache_model=cache.ram)
 def publicaciones():
     if request.ajax:
         from gluon.tools import prettydate
@@ -71,7 +73,7 @@ def publicaciones():
         #locale.setlocale(locale.LC_ALL,locale='es_CL.UTF8')
 
         if request.args:
-            catslug_data = db(db.categoria.slug == request.args(0)).select(db.categoria.slug)
+            catslug_data = db(db.categoria.slug == request.args(0)).select(db.categoria.slug, cache=(cache.ram,6000))
             for cat in catslug_data:
                 catslug = cat.slug
         else:
@@ -96,7 +98,7 @@ def publicaciones():
                             & (db.feed.categoria == db.categoria.id) 
                             & (db.feed.is_active == True) 
                             & (db.categoria.is_active == True)
-                            ).select(db.feed.id,db.feed.title,db.feed.source)
+                            ).select(db.feed.id,db.feed.title,db.feed.source, cache=(cache.ram,600))
 
 
         for feedincat in feedincat_data:
@@ -104,7 +106,7 @@ def publicaciones():
             # armando feed_bloque y la noticia de cada feed
             feedbox = DIV(DIV(A(feedincat.title,_href=feedincat.source,_target='_blank',_class='ui-widget-header-a'), _class = 'feed_titulo ui-widget-header ui-corner-all'), _class = 'feedbox feed_bloque  izq ui-widget ui-corner-all')
 
-            for n in db(db.noticia.feed == feedincat.id).select(db.noticia.ALL, orderby =~ db.noticia.id, limitby=(0,4)):
+            for n in db(db.noticia.feed == feedincat.id).select(db.noticia.ALL, orderby =~ db.noticia.id, limitby=(0,4), cache=(cache.ram,600)):
 
                 if n.updated != None:
                     actualizado = n.updated
@@ -141,10 +143,11 @@ def publicaciones():
 
     jQuery(document).ready(filtro);
     ''')
-
-        return dict(publicaciones=publicaciones)
+        
+        d = dict(publicaciones=publicaciones)
+        return response.render(d)
     else:
-        return dict(publicaciones=u'X_x')
+        return dict(publicaciones=u':O')
     
 def elimina_tildes(s):
     """
@@ -155,6 +158,7 @@ def elimina_tildes(s):
     normalizado = ''.join((c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn'))
     return str(normalizado)
 
+@cache(request.env.path_info, time_expire=1200, cache_model=cache.disk)
 def blog():
     if request.extension!='html':
         request.extension = 'html'
@@ -199,12 +203,8 @@ def blog():
     #go = DIV(IFRAME(_src = shorturl, _style = 'height:90%;width:inherit;border:0;'), _id = 'godiv', _style = 'display:block;height:100%;width:100%;')
     blog = IFRAME(_src = shorturl, _id='blogiframe', _style='width:inherit;border:0;')
     
-
-    #go = DIV(jqiframe, _id = 'godiv')
-
-    #response.flash = shorturl
-
-    return dict(blog=blog,shorturl=shorturl,referer=referer,cerrarmarco=cerrarmarco)
+    d = dict(blog=blog,shorturl=shorturl,referer=referer,cerrarmarco=cerrarmarco)
+    return response.render(d)
 
 
 
@@ -236,7 +236,7 @@ def sitemap():
     if request.extension == 'xml':
         sm = [str('<?xml version="1.0" encoding="UTF-8" ?> <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')]
         prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
-        for cat in db((db.categoria.id>0) & (db.categoria.is_active == True)).select(db.categoria.id,db.categoria.title,db.categoria.slug):
+        for cat in db((db.categoria.id>0) & (db.categoria.is_active == True)).select(db.categoria.id,db.categoria.title,db.categoria.slug, cache=(cache.disk,600)):
             sm.append(str(TAG.url(
                 TAG.loc(prefix,URL(r=request,c='default',f='index.html',args=[cat.slug])),
                 TAG.changefreq('always')
@@ -256,7 +256,7 @@ def sitemap():
             categorias = DIV(H2(A(cat.title.capitalize(),_href=URL(r=request,c='default',f='index.html',args=[cat.slug]))))
             noticias = UL()
 
-            data = db((db.feed.categoria == cat.id)& (db.noticia.feed == db.feed.id)).select(db.noticia.id, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(0,4))
+            data = db((db.feed.categoria == cat.id)& (db.noticia.feed == db.feed.id)).select(db.noticia.id, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(0,4), cache=(cache.disk,600))
             for noti in data:
                 noticias.append(LI(A(noti.title, _href=URL(c='default',f='blog',args=[noti.slug,noti.id]))))
             categorias.append(noticias)
@@ -282,7 +282,7 @@ def sitemap1():
 
     prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
 
-    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, orderby=~db.noticia.id, limitby=(0,200))
+    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, orderby=~db.noticia.id, limitby=(0,200), cache=(cache.disk,600))
     for noti in data:
         sm.append(str(TAG.url(
             TAG.loc(prefix,URL(c='default',f='blog',args=[noti.slug,noti.id],extension='')),
@@ -298,7 +298,7 @@ def sitemap2():
 
     prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
 
-    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(200,400))
+    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(200,400), cache=(cache.disk,600))
     for noti in data:
         sm.append(str(TAG.url(
             TAG.loc(prefix,URL(c='default',f='blog',args=[noti.slug,noti.id],extension='')),
@@ -314,7 +314,7 @@ def sitemap3():
 
     prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
 
-    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(400,600))
+    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(400,600), cache=(cache.disk,600))
     for noti in data:
         sm.append(str(TAG.url(
             TAG.loc(prefix,URL(c='default',f='blog',args=[noti.slug,noti.id],extension='')),
@@ -328,7 +328,7 @@ def sitemap3():
 def sitemap4():
     sm = [str('<?xml version="1.0" encoding="UTF-8" ?> <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')]
     prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
-    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(600,800))
+    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(600,800), cache=(cache.disk,600))
     for noti in data:
         sm.append(str(TAG.url(
             TAG.loc(prefix,URL(c='default',f='blog',args=[noti.slug,noti.id],extension='')),
@@ -342,7 +342,7 @@ def sitemap4():
 def sitemap5():
     sm = [str('<?xml version="1.0" encoding="UTF-8" ?> <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')]
     prefix = request.env.wsgi_url_scheme+'://'+request.env.http_host
-    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(800,1000))
+    data = db(db.noticia.id>0).select(db.noticia.id, db.noticia.created_on, db.noticia.title, db.noticia.slug, distinct=True, orderby=~db.noticia.id, limitby=(800,1000), cache=(cache.disk,600))
     for noti in data:
         sm.append(str(TAG.url(
             TAG.loc(prefix,URL(c='default',f='blog',args=[noti.slug,noti.id],extension='')),

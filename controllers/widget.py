@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
 def hora():
-    
+    session.forget()
     hora = str(request.now.now())[:-10]
     return dict(hora=hora)
 
 def indicadoreseconomicos():
+    session.forget()
     if request.ajax:
         import urllib2
         import locale
