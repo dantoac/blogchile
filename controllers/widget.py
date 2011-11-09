@@ -53,18 +53,6 @@ def indicadoreseconomicos():
             except Exception,e:
                 ufcalculado = '-'
 
-
-            """
-            html_indicadores = XML(DIV(B(
-                        'Dólar: $%(dolar)s | Euro: $%(euro)s | UF$%(uf)s | UTM$%(utm)s' % dict(
-                            uf=str(ufcalculado)[:8],
-                            dolar=str(dolarcalculado)[:6],
-                            euro=str(eurocalculado)[:6],
-                            utm=str(utmcalculado)
-                            )
-                        ), _id='indicadoreseconomicos'))
-            """
-
             html_indicadores = TABLE(THEAD(TR(TH('Dólar'),TH('Euro'),TH('UF'),TH('UTM'))))
             html_indicadores.append(TR(TD('%s' % str(dolarcalculado)[:6]),
                                        TD('%s' % str(eurocalculado)[:6]),
@@ -75,44 +63,6 @@ def indicadoreseconomicos():
 
 
             html_indicadores = XML(html_indicadores)
-    #
-
-        # try:
-        #     pag = urllib2.urlopen(uri).read()
-
-        #     pag = pag.decode('iso8859-1').encode('utf-8')
-
-        #     html = TAG(pag)
-        #     try:
-
-        #         eurocalculado = locale.atof(html.element('euro')[0])
-        #     except Exception,e:
-        #         eurocalculado = '-'
-
-        #     try:
-        #         dolarcalculado = locale.atof(html.element('dolar')[0])
-        #     except Exception,e:
-        #         dolarcalculado = '-'
-
-
-        #     try:
-        #         #utmcalculado = locale.atof(html.element('utm')[0])
-        #         utmcalculado = html.element('utm')[0]
-        #     except Exception,e:
-        #         utmcalculado = '-'
-
-
-        #     try:
-        #         #ufcalculado = locale.atof(html.element('uf')[0])
-        #         ufcalculado = html.element('uf')[0]
-        #     except Exception,e:
-        #         ufcalculado = '-'
-
-
-
-        #     html_indicadores = DIV(B('UF: $%(uf)s | Dólar: $%(dolar)s | Euro: $%(euro)s' % dict(uf=str(ufcalculado)[:8],dolar=str(dolarcalculado)[:6],euro=str(eurocalculado)[:6])), _class='der', _id='indicadoreseconomicos')
-
-            #html_indicadores = XML(IMG(_src=URL(c='static',f='images/indicadoreseconomicos.png'),_class='izq'))+H2('Indicadores Económicos')+html_indicadores
 
         except Exception,e:
             html_indicadores = DIV('error: No pude obtener los indicadores económicos. %s' % e, _class='error')
@@ -264,7 +214,7 @@ def identica_badge():
     return dict(badge = badge)
 
 def twitterfollow():
-    twitterfollow = XML('<a href="https://twitter.com/blogchile" class="twitter-follow-button" data-width="300px" data-lang="es" data-align="right">@blogosferachile</a><script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>')
+    twitterfollow = XML('<a href="https://twitter.com/blogchile" class="twitter-follow-button" data-width="300px" data-lang="es" data-align="right">@blogchile</a><script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>')
     return dict(twitterfollow=twitterfollow)
 
 def twittearesto():

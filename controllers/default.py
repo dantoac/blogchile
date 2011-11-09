@@ -2,7 +2,6 @@
 import locale
 locale.setlocale(locale.LC_ALL, 'es_CL.UTF8')
 
-@cache(request.env.path_info, time_expire=60, cache_model=cache.ram)
 def index():
     '''
     del response.headers['Cache-Control']
@@ -65,7 +64,7 @@ def index():
 def votar():
     return locals()
 
-@cache(request.env.path_info, time_expire=150, cache_model=cache.ram)
+#@cache(request.env.path_info, time_expire=150, cache_model=cache.ram)
 def publicaciones():
     if request.ajax:
         from gluon.tools import prettydate
@@ -73,7 +72,7 @@ def publicaciones():
         #locale.setlocale(locale.LC_ALL,locale='es_CL.UTF8')
 
         if request.args:
-            catslug_data = db(db.categoria.slug == request.args(0)).select(db.categoria.slug, cache=(cache.ram,6000))
+            catslug_data = db(db.categoria.slug == request.args(0)).select(db.categoria.slug, cache=(cache.disk,6000))
             for cat in catslug_data:
                 catslug = cat.slug
         else:
@@ -84,7 +83,7 @@ def publicaciones():
 
         # obteniendo los feeds categorizados bajo el slug solicitado desde la url
 
-        #### 1 categoría por feed
+        ### 1 categoría por feed
         """
         for feedincat in db((db.categoria.slug == catslug) & (db.feed.categoria == db.categoria.id)
                     #& (db.feed_categoria.feed == db.feed.id)
@@ -98,7 +97,7 @@ def publicaciones():
                             & (db.feed.categoria == db.categoria.id) 
                             & (db.feed.is_active == True) 
                             & (db.categoria.is_active == True)
-                            ).select(db.feed.id,db.feed.title,db.feed.source, cache=(cache.ram,600))
+                            ).select(db.feed.id,db.feed.title,db.feed.source, cache=(cache.disk,600))
 
 
         for feedincat in feedincat_data:
@@ -144,10 +143,11 @@ def publicaciones():
     jQuery(document).ready(filtro);
     ''')
         
-        d = dict(publicaciones=publicaciones)
-        return response.render(d)
-    else:
-        return dict(publicaciones=u':O')
+        #d = dict(publicaciones=publicaciones)
+        #return d #response.render(d)
+        return dict(publicaciones=publicaciones)
+    #else:
+    #    return dict(publicaciones=u':O')
     
 def elimina_tildes(s):
     """
@@ -158,7 +158,7 @@ def elimina_tildes(s):
     normalizado = ''.join((c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn'))
     return str(normalizado)
 
-@cache(request.env.path_info, time_expire=1200, cache_model=cache.disk)
+@cache(request.env.path_info, time_expire=1200, cache_model=cache.ram)
 def blog():
     if request.extension!='html':
         request.extension = 'html'
