@@ -64,12 +64,12 @@ def _u2d(fidx):
             except:
                 DESCRIPTION = e.link
         
-			try:
-				db.noticia.insert(title = XML(e.title), link = e.link, description = XML(DESCRIPTION),
-								updated = actualizado, created_on=request.now.now(), feed = fidx, shorturl=xurl)#, slug = slug)
-				db.commit()
-			except:
-				pass
+            try:
+                db.noticia.insert(title = XML(e.title), link = e.link, description = XML(DESCRIPTION),
+                                  updated = actualizado, created_on=request.now.now(), feed = fidx, shorturl=xurl)#, slug = slug)
+                db.commit()
+            except:
+                pass
 
         limite += 1
         
