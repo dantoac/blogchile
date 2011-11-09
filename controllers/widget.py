@@ -74,7 +74,7 @@ def indicadoreseconomicos():
 
 
 def obtienedatos(urllugar,ubicacion):
-    if not request.ajax: return ''
+    #if not request.ajax: return ''
     session.forget()
     import urllib2
     import time
@@ -160,7 +160,7 @@ def obtienedatos(urllugar,ubicacion):
 
 #@auth.requires(request.cid)
 def pronosticotiempo():
-    if not request.ajax: return ''
+    #if not request.ajax: return ''
     key = '9e6119ed3a211314113107'
 
     lugares = ['arica','iquique','antofagasta','copiapó','la serena','valparaíso','viña del mar','santiago','rancagua','talca','chillán','concepción','temuco','valdivia','puerto montt','coyhaique','punta arenas','robinson crusoe','hanga roa']
