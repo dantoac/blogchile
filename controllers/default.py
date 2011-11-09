@@ -2,6 +2,7 @@
 import locale
 locale.setlocale(locale.LC_ALL, 'es_CL.UTF8')
 
+#@cache(request.env.path_info, time_expire=150, cache_model=cache.ram)
 def index():
     '''
     del response.headers['Cache-Control']
@@ -59,9 +60,10 @@ def index():
         session.avisado = True
     """
 
-    publicaciones = LOAD(c='default',f='publicaciones.load')
+    publicaciones = LOAD(r=request,c='default',f='publicaciones.load',args=request.args)
     
     return dict(publicaciones=publicaciones)
+    #return dict()
 
 def votar():
     return locals()
@@ -147,6 +149,7 @@ jQuery(document).ready(filtro);
 
     d = dict(publicaciones=publicaciones)
     return response.render(d)
+    #return dict(publicaciones=publicaciones)
 
     
 def elimina_tildes(s):
