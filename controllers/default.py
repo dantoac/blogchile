@@ -59,95 +59,95 @@ def index():
         session.avisado = True
     """
 
-    return dict()
+    publicaciones = LOAD(c='default',f='publicaciones.load')
+    
+    return dict(publicaciones=publicaciones)
 
 def votar():
     return locals()
 
-#@cache(request.env.path_info, time_expire=150, cache_model=cache.ram)
+@cache(request.env.path_info, time_expire=150, cache_model=cache.ram)
 def publicaciones():
-    if request.ajax:
-        from gluon.tools import prettydate
-        #import locale
-        #locale.setlocale(locale.LC_ALL,locale='es_CL.UTF8')
+    #if not request.ajax: return ''
+    from gluon.tools import prettydate
+    #import locale
+    #locale.setlocale(locale.LC_ALL,locale='es_CL.UTF8')
 
-        if request.args:
+    if request.args:
             catslug_data = db(db.categoria.slug == request.args(0)).select(db.categoria.slug, cache=(cache.disk,6000))
             for cat in catslug_data:
-                catslug = cat.slug
-        else:
+                    catslug = cat.slug
+    else:
             catslug = 'noticias'
 
 
-        publicaciones = DIV()
+    publicaciones = DIV()
 
-        # obteniendo los feeds categorizados bajo el slug solicitado desde la url
+    # obteniendo los feeds categorizados bajo el slug solicitado desde la url
 
-        ### 1 categoría por feed
-        """
-        for feedincat in db((db.categoria.slug == catslug) & (db.feed.categoria == db.categoria.id)
-                    #& (db.feed_categoria.feed == db.feed.id)
-                    #& (db.feed_categoria.is_active == True)
-                    & (db.feed.is_active == True)
-                    & (db.categoria.is_active == True)
-                    ).select(db.feed.ALL):
-        """
-
-        feedincat_data = db((db.categoria.slug == catslug) 
-                            & (db.feed.categoria == db.categoria.id) 
-                            & (db.feed.is_active == True) 
+    ### 1 categoría por feed
+    """
+    for feedincat in db((db.categoria.slug == catslug) & (db.feed.categoria == db.categoria.id)
+                            #& (db.feed_categoria.feed == db.feed.id)
+                            #& (db.feed_categoria.is_active == True)
+                            & (db.feed.is_active == True)
                             & (db.categoria.is_active == True)
-                            ).select(db.feed.id,db.feed.title,db.feed.source, cache=(cache.disk,600))
+                            ).select(db.feed.ALL):
+    """
+
+    feedincat_data = db((db.categoria.slug == catslug)
+                                            & (db.feed.categoria == db.categoria.id)
+                                            & (db.feed.is_active == True)
+                                            & (db.categoria.is_active == True)
+                                            ).select(db.feed.id,db.feed.title,db.feed.source, cache=(cache.disk,600))
 
 
-        for feedincat in feedincat_data:
+    for feedincat in feedincat_data:
 
             # armando feed_bloque y la noticia de cada feed
             feedbox = DIV(DIV(A(feedincat.title,_href=feedincat.source,_target='_blank',_class='ui-widget-header-a'), _class = 'feed_titulo ui-widget-header ui-corner-all'), _class = 'feedbox feed_bloque  izq ui-widget ui-corner-all')
 
             for n in db(db.noticia.feed == feedincat.id).select(db.noticia.ALL, orderby =~ db.noticia.id, limitby=(0,4), cache=(cache.ram,600)):
 
-                if n.updated != None:
-                    actualizado = n.updated
-                else:
-                    actualizado = n.created_on
+                    if n.updated != None:
+                            actualizado = n.updated
+                    else:
+                            actualizado = n.created_on
 
-                # armando la url que va en el rss
-                #localurl = 'http://' + request.env.http_host + URL(c = 'default', f = 'blog.html', args = [n.slug,n.id], extension='html')
+                    # armando la url que va en el rss
+                    #localurl = 'http://' + request.env.http_host + URL(c = 'default', f = 'blog.html', args = [n.slug,n.id], extension='html')
 
-                # armando el título y enlace a la publicación; armando los bloques de publicación
-                feedbox.append(DIV(DIV(A(n.title.lower()+'...', _name = n.slug, _href = URL(r = request, f = 'blog', args = [catslug,n.slug,n.id], extension=False), _class = 'noticia_link ui-widget-content-a', _target='_blank',extension='html'),DIV(prettydate(actualizado, T), _class = 'noticia_meta'), _class = 'noticia_contenido ui-widget-content ui-corner-all'), _class = 'noticia ui-widget ui-corner-all'))
+                    # armando el título y enlace a la publicación; armando los bloques de publicación
+                    feedbox.append(DIV(DIV(A(n.title.lower()+'...', _name = n.slug, _href = URL(r = request, f = 'blog', args = [catslug,n.slug,n.id], extension=False), _class = 'noticia_link ui-widget-content-a', _target='_blank',extension='html'),DIV(prettydate(actualizado, T), _class = 'noticia_meta'), _class = 'noticia_contenido ui-widget-content ui-corner-all'), _class = 'noticia ui-widget ui-corner-all'))
 
 
-                #entradas.append(dict(title =unicode(n.title,'utf8'), link = localurl, description = unicode('%s (%s)' % (n.description, n.feed.title),'utf8'), created_on = request.now))
+                    #entradas.append(dict(title =unicode(n.title,'utf8'), link = localurl, description = unicode('%s (%s)' % (n.description, n.feed.title),'utf8'), created_on = request.now))
 
 
             publicaciones.append(feedbox)
 
-        response.js = XML('''function filtro(){
-    jQuery("#filtrando").keyup(function () {
-        var filter = jQuery(this).val(), count = 0;
+    response.js = XML('''function filtro(){
+jQuery("#filtrando").keyup(function () {
+    var filter = jQuery(this).val(), count = 0;
 
-        jQuery(".feedbox .noticia, .feed_titulo").each(function () {
+    jQuery(".feedbox .noticia, .feed_titulo").each(function () {
             if (jQuery(this).text().search(new RegExp(filter, "i")) < 0) {
-                jQuery(this).addClass("hidden");
+                    jQuery(this).addClass("hidden");
             } else {
-                jQuery(this).removeClass("hidden");
-                count++;
+                    jQuery(this).removeClass("hidden");
+                    count++;
             }
-        });
-        jQuery("#filtrado").text(count);
     });
-    }
+    jQuery("#filtrado").text(count);
+});
+}
 
-    jQuery(document).ready(filtro);
-    ''')
-        
-        #d = dict(publicaciones=publicaciones)
-        #return d #response.render(d)
-        return dict(publicaciones=publicaciones)
-    #else:
-    #    return dict(publicaciones=u':O')
+jQuery(document).ready(filtro);
+''')
+
+    d = dict(publicaciones=publicaciones)
+    return response.render(d)
+
     
 def elimina_tildes(s):
     """

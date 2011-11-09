@@ -1,77 +1,81 @@
 # -*- coding: utf-8 -*-
 
 def hora():
+
     session.forget()
     hora = str(request.now.now())[:-10]
     return dict(hora=hora)
 
 def indicadoreseconomicos():
+    if not request.ajax: return ''
     session.forget()
-    if request.ajax:
-        import urllib2
-        import locale
+    #if request.ajax:
+    import urllib2
+    import locale
 
 
-        locale.setlocale(locale.LC_ALL, 'es_CL.UTF8')
-        uri = 'http://www.averigualo.cl/feed/indicadores.xml'
+    locale.setlocale(locale.LC_ALL, 'es_CL.UTF8')
+    uri = 'http://www.averigualo.cl/feed/indicadores.xml'
 
-    #
-        import re
-        locale.setlocale(locale.LC_ALL, 'es_CL.UTF8')
-        #uri = 'http://www.averigualo.cl/feed/indicadores.xml'
-        uri = 'http://indicador.eof.cl/xml'
+
+    import re
+    locale.setlocale(locale.LC_ALL, 'es_CL.UTF8')
+    #uri = 'http://www.averigualo.cl/feed/indicadores.xml'
+    uri = 'http://indicador.eof.cl/xml'
+
+    try:
+        pag = urllib2.urlopen(uri).read()
+
+        pag = pag.decode('iso8859-1').encode('utf-8')
+
+        html = TAG(pag)
+        try:
+
+            eurocalculado = locale.atof(html.element('indicador',_nombre='Euro')[0])
+        except Exception,e:
+            eurocalculado = '-'
 
         try:
-            pag = urllib2.urlopen(uri).read()
-
-            pag = pag.decode('iso8859-1').encode('utf-8')
-
-            html = TAG(pag)
-            try:
-
-                eurocalculado = locale.atof(html.element('indicador',_nombre='Euro')[0])
-            except Exception,e:
-                eurocalculado = '-'
-
-            try:
-                #dolarcalculado = locale.atof(html.element('indicador',_nombre='Dólar Observado')[0])
-                dolarcalculado = locale.atof(html.element('indicador',_nombre=re.compile('Observado'))[0])
-            except Exception,e:
-                dolarcalculado = '-'
-
-
-            try:
-                #utmcalculado = locale.atof(html.element('utm')[0])
-                utmcalculado = html.element('indicador',_nombre='UTM (Agosto)')[0]
-            except Exception,e:
-                utmcalculado = '-'
-
-
-            try:
-                #ufcalculado = locale.atof(html.element('uf')[0])
-                ufcalculado = html.element('indicador',_nombre='UF')[0]
-            except Exception,e:
-                ufcalculado = '-'
-
-            html_indicadores = TABLE(THEAD(TR(TH('Dólar'),TH('Euro'),TH('UF'),TH('UTM'))))
-            html_indicadores.append(TR(TD('%s' % str(dolarcalculado)[:6]),
-                                       TD('%s' % str(eurocalculado)[:6]),
-                                       TD('%s' % str(ufcalculado)[:8]),
-                                       TD('%s' % str(utmcalculado))
-                                       )
-                                    )
-
-
-            html_indicadores = XML(html_indicadores)
-
+            #dolarcalculado = locale.atof(html.element('indicador',_nombre='Dólar Observado')[0])
+            dolarcalculado = locale.atof(html.element('indicador',_nombre=re.compile('Observado'))[0])
         except Exception,e:
-            html_indicadores = DIV('error: No pude obtener los indicadores económicos. %s' % e, _class='error')
-        return dict(indicadores=XML(html_indicadores))
-    else:
-        return dict(indicadores='X_x')
+            dolarcalculado = '-'
+
+
+        try:
+            #utmcalculado = locale.atof(html.element('utm')[0])
+            utmcalculado = html.element('indicador',_nombre='UTM (Agosto)')[0]
+        except Exception,e:
+            utmcalculado = '-'
+
+
+        try:
+            #ufcalculado = locale.atof(html.element('uf')[0])
+            ufcalculado = html.element('indicador',_nombre='UF')[0]
+        except Exception,e:
+            ufcalculado = '-'
+
+        html_indicadores = TABLE(THEAD(TR(TH('Dólar'),TH('Euro'),TH('UF'),TH('UTM'))))
+        html_indicadores.append(TR(TD('%s' % str(dolarcalculado)[:6]),
+                                   TD('%s' % str(eurocalculado)[:6]),
+                                   TD('%s' % str(ufcalculado)[:8]),
+                                   TD('%s' % str(utmcalculado))
+                                   )
+                                )
+
+
+        html_indicadores = XML(html_indicadores)
+
+    except Exception,e:
+        html_indicadores = DIV('error: No pude obtener los indicadores económicos. %s' % e, _class='error')
+    return dict(indicadores=XML(html_indicadores))
+    #else:
+    #    return dict(indicadores='X_x')
 
 
 def obtienedatos(urllugar,ubicacion):
+    if not request.ajax: return ''
+    session.forget()
     import urllib2
     import time
     import datetime
@@ -81,7 +85,7 @@ def obtienedatos(urllugar,ubicacion):
 
     #import unicodedata as ud
 
-    session.forget()
+    
 
     #url = urllib.urlencode(urllugar)
 
@@ -156,6 +160,7 @@ def obtienedatos(urllugar,ubicacion):
 
 #@auth.requires(request.cid)
 def pronosticotiempo():
+    if not request.ajax: return ''
     key = '9e6119ed3a211314113107'
 
     lugares = ['arica','iquique','antofagasta','copiapó','la serena','valparaíso','viña del mar','santiago','rancagua','talca','chillán','concepción','temuco','valdivia','puerto montt','coyhaique','punta arenas','robinson crusoe','hanga roa']
@@ -182,6 +187,8 @@ def pronosticotiempo():
     return dict(message=XML(tiempo))
 
 def identishare():
+    #if not request.ajax: return ''
+    session.forget()
     identishare =  XML('''
 <div id="identishare" style="vertical-align: bottom;"></div>
 <script type="text/javascript" src="http://www.tildehash.com/identishare.php" defer="defer"></script>
@@ -201,6 +208,8 @@ def dent():
     return dict(dent=dent)
 
 def identica_badge():
+    #if not request.ajax: return ''
+    session.forget()
     badge = XML('''
 <script type="text/javascript" src="http://identi.ca/js/identica-badge.js">
     {
@@ -214,9 +223,13 @@ def identica_badge():
     return dict(badge = badge)
 
 def twitterfollow():
+    #if not request.ajax: return ''
+    session.forget()
     twitterfollow = XML('<a href="https://twitter.com/blogchile" class="twitter-follow-button" data-width="300px" data-lang="es" data-align="right">@blogchile</a><script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script>')
     return dict(twitterfollow=twitterfollow)
 
 def twittearesto():
+    if not request.ajax: return ''
+    session.forget()
     twittearesto = XML('<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="blogchile" data-lang="es">Tweetear esto</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>')
     return dict(twittearesto=twittearesto)

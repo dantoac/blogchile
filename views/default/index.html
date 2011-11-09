@@ -16,7 +16,7 @@ jQuery(document).ready(actualiza_feeds);
 </script>
 
 <div style="clear: both;"></div>
-{{=LOAD(c='widget',f='pronosticotiempo.load', ajax=False, target='tiempo', content=SPAN('Cargando pronóstico del tiempo...'))}}
+{{=LOAD(c='widget',f='pronosticotiempo.load', ajax=False,target='tiempo', content=SPAN('Cargando pronóstico del tiempo...'))}}
 
 <div style="height:60px;line-height:60px;display:none;"></div>
 
@@ -27,7 +27,8 @@ jQuery(document).ready(actualiza_feeds);
 <div id="box">
 
 {{=DIV(B('Filtrar:'),INPUT(_name='filtrando',_id='filtrando'),SPAN('Ø',_id='filtrado')," posts",_id='filtro', _class='ui-widget')}}
-{{=LOAD(c='default',f='publicaciones.load',args=request.args, ajax=False, content='Cargando publicaciones...', target='blogs')}}
+{{#=LOAD(c='default',f='publicaciones.load',args=request.args, ajax=True, content='Cargando publicaciones...', target='blogs')}}
+{{=publicaciones}}
 
 </div>
 
