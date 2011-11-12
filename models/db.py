@@ -164,3 +164,5 @@ tabla('votos_disponibles',
 '''
 
 #response.generic_patterns = ['*']
+
+T.force('es-es')
