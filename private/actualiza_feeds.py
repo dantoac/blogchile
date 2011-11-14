@@ -29,7 +29,10 @@ def _u2d(fidx):
     import gluon.contrib.feedparser as feedparser
     import urllib2
     from random import choice
-    feed = feedparser.parse(db.feed[fidx].link)
+    try:
+        feed = feedparser.parse(db.feed[fidx].link)
+    except:
+        exit
     maxfeeds = 4
     limite = 0
 
