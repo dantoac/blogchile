@@ -60,7 +60,7 @@ def index():
         session.avisado = True
     """
 
-    publicaciones = LOAD(r=request,c='default',f='publicaciones.load',args=request.args)
+    publicaciones = LOAD(r=request,c='default',f='publicaciones.load',args=request.args,ajax=True)
     
     return dict(publicaciones=publicaciones)
     #return dict()
