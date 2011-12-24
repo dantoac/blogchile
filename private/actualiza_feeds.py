@@ -31,51 +31,52 @@ def _u2d(fidx):
     from random import choice
     try:
         feed = feedparser.parse(db.feed[fidx].link)
+        
+        maxfeeds = 4
+        limite = 0
+
+        #print('%s: %s' % (request.now.now(),db.feed[fidx].title)) ###################### !
+        for e in feed.entries:
+            # revisando si el artículo obtenido ya estaba en la db
+            edata = db((db.noticia.feed == fidx) & (db.noticia.title == XML(e.title))).select(db.noticia.id)
+
+            if limite == maxfeeds:
+                break
+
+            #si no encuentra nada, inserta en la db, sino no hace nada
+            if len(edata) == 0:
+                xurl_api = choice(xurl_service)
+
+                try:
+                    xurl = urllib2.urlopen("%(api)s=%(longurl)s" % dict(api=xurl_api,longurl=e.link)).read()
+                except:
+                    xurl = urllib2.urlopen("%(api)s=%(longurl)s" % dict(api=xurl_api,longurl=e.link)).read()
+
+                print('\t%s' % xurl)
+
+                try:
+                    actualizado=e.updated
+                except:
+                    actualizado=request.now.now()
+
+                #ddg="http://lmddgtfy.com/?q=%(term)s+%(sitio)s" % dict(term=XML(e.title),sitio=XML(db.feed[fidx].title))
+                #ddg = "http://lmddgtfy.com/?q=%(term)s+%(sitio)s" % dict(term=e.slug.replace('-',' '),sitio=XML(e.feed.title))
+                try:
+                    DESCRIPTION = e.description
+                except:
+                    DESCRIPTION = e.link
+
+                try:
+                    db.noticia.insert(title = XML(e.title), link = e.link, description = XML(DESCRIPTION),
+                                      updated = actualizado, created_on=request.now.now(), feed = fidx, shorturl=xurl)#, slug = slug)
+                    db.commit()
+                except:
+                    pass
+
+            limite += 1
+        
     except:
         exit
-    maxfeeds = 4
-    limite = 0
-
-    #print('%s: %s' % (request.now.now(),db.feed[fidx].title)) ###################### !
-    for e in feed.entries:
-        # revisando si el artículo obtenido ya estaba en la db
-        edata = db((db.noticia.feed == fidx) & (db.noticia.title == XML(e.title))).select(db.noticia.id)
-
-        if limite == maxfeeds:
-            break
-        
-        #si no encuentra nada, inserta en la db, sino no hace nada
-        if len(edata) == 0:
-            xurl_api = choice(xurl_service)
-           
-            try:
-                xurl = urllib2.urlopen("%(api)s=%(longurl)s" % dict(api=xurl_api,longurl=e.link)).read()
-            except:
-                xurl = urllib2.urlopen("%(api)s=%(longurl)s" % dict(api=xurl_api,longurl=e.link)).read()
-
-            print('\t%s' % xurl)
-
-            try:
-                actualizado=e.updated
-            except:
-                actualizado=request.now.now()
-
-            #ddg="http://lmddgtfy.com/?q=%(term)s+%(sitio)s" % dict(term=XML(e.title),sitio=XML(db.feed[fidx].title))
-            #ddg = "http://lmddgtfy.com/?q=%(term)s+%(sitio)s" % dict(term=e.slug.replace('-',' '),sitio=XML(e.feed.title))
-            try:
-                DESCRIPTION = e.description
-            except:
-                DESCRIPTION = e.link
-        
-            try:
-                db.noticia.insert(title = XML(e.title), link = e.link, description = XML(DESCRIPTION),
-                                  updated = actualizado, created_on=request.now.now(), feed = fidx, shorturl=xurl)#, slug = slug)
-                db.commit()
-            except:
-                pass
-
-        limite += 1
-        
 """
 feed_data = db((db.feed.categoria == db.categoria.id)
             #& (db.feed_categoria.feed == db.feed.id)
