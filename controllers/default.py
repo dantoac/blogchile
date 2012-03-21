@@ -68,12 +68,11 @@ def index():
 def votar():
     return locals()
 
-@cache(request.env.path_info, time_expire=150, cache_model=cache.ram)
+#@cache(request.env.path_info, time_expire=150, cache_model=cache.disk)
 def publicaciones():
-    #if not request.ajax: return ''
+    if not request.ajax: return ''
     from gluon.tools import prettydate
-    #import locale
-    #locale.setlocale(locale.LC_ALL,locale='es_CL.UTF8')
+    from datetime import datetime
 
     if request.args:
             catslug_data = db(db.categoria.slug == request.args(0)).select(db.categoria.slug, cache=(cache.disk,6000))
@@ -120,7 +119,14 @@ def publicaciones():
                     #localurl = 'http://' + request.env.http_host + URL(c = 'default', f = 'blog.html', args = [n.slug,n.id], extension='html')
 
                     # armando el título y enlace a la publicación; armando los bloques de publicación
-                    feedbox.append(DIV(DIV(A(n.title.lower()+'...', _name = n.slug, _href = URL(r = request, f = 'blog', args = [catslug,n.slug,n.id], extension=False), _class = 'noticia_link ui-widget-content-a', _target='_blank',extension='html'),DIV(prettydate(actualizado, T), _class = 'noticia_meta'), _class = 'noticia_contenido ui-widget-content ui-corner-all'), _class = 'noticia ui-widget ui-corner-all'))
+                    feedbox.append(DIV(DIV(A(n.title.lower()+'...', _name = n.slug, 
+                                             _href = URL(r = request, f = 'blog', args = [catslug,n.slug,n.id], extension=False), 
+                                             _class = 'noticia_link ui-widget-content-a', _target='_blank',extension='html'),
+                                             DIV(prettydate(datetime.strptime(str(actualizado),'%Y-%m-%d %H:%M:%S'),T),
+                                                 _class='noticia_meta'),
+                                                 _class = 'noticia_contenido ui-widget-content ui-corner-all'),
+                                                 _class = 'noticia ui-widget ui-corner-all')
+                        )
 
 
                     #entradas.append(dict(title =unicode(n.title,'utf8'), link = localurl, description = unicode('%s (%s)' % (n.description, n.feed.title),'utf8'), created_on = request.now))

@@ -1,7 +1,7 @@
 cache/*
 sessions/*
 errors/*
-databases/*.*
-*~
-*#
+databases/*
+"*~"
+"*#"
 .git
