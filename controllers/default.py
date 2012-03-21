@@ -68,7 +68,7 @@ def index():
 def votar():
     return locals()
 
-#@cache(request.env.path_info, time_expire=150, cache_model=cache.disk)
+@cache(request.env.path_info, time_expire=150, cache_model=cache.disk)
 def publicaciones():
     if not request.ajax: return ''
     from gluon.tools import prettydate
@@ -111,7 +111,7 @@ def publicaciones():
             for n in db(db.noticia.feed == feedincat.id).select(db.noticia.ALL, orderby =~ db.noticia.id, limitby=(0,4), cache=(cache.ram,600)):
 
                     if n.updated != None:
-                            actualizado = n.updated
+                            actualizado = datetime.strptime(str(n.updated),'%Y-%m-%d %H:%M:%S')
                     else:
                             actualizado = n.created_on
 
@@ -122,7 +122,7 @@ def publicaciones():
                     feedbox.append(DIV(DIV(A(n.title.lower()+'...', _name = n.slug, 
                                              _href = URL(r = request, f = 'blog', args = [catslug,n.slug,n.id], extension=False), 
                                              _class = 'noticia_link ui-widget-content-a', _target='_blank',extension='html'),
-                                             DIV(prettydate(datetime.strptime(str(actualizado),'%Y-%m-%d %H:%M:%S'),T),
+                                             DIV(prettydate(actualizado,T),
                                                  _class='noticia_meta'),
                                                  _class = 'noticia_contenido ui-widget-content ui-corner-all'),
                                                  _class = 'noticia ui-widget ui-corner-all')
