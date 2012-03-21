@@ -168,7 +168,7 @@ def elimina_tildes(s):
     normalizado = ''.join((c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn'))
     return str(normalizado)
 
-@cache(request.env.path_info, time_expire=1200, cache_model=cache.ram)
+@cache(request.env.path_info, time_expire=1200, cache_model=cache.disk)
 def blog():
     if request.extension!='html':
         request.extension = 'html'
@@ -192,7 +192,8 @@ def blog():
     response.title='%s: %s' % (categoria.capitalize(),titulo.capitalize())
     #response.meta.description = '%s %s' % (response.title,db.noticia[nid].feed.title)
 
-    shorturl = db.noticia[nid].shorturl
+    noticia = db.noticia(1)
+    shorturl = noticia.shorturl or None
     #titulo = db.noticia[nid].title
 
     if 'http://lmddgtfy' in shorturl:
