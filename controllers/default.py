@@ -110,13 +110,11 @@ def publicaciones():
 
             for n in db(db.noticia.feed == feedincat.id).select(db.noticia.ALL, orderby =~ db.noticia.id, limitby=(0,4), cache=(cache.ram,600)):
 
-                    if n.updated != None:
-                        try:
-                            actualizado = datetime.strptime(str(n.updated),'%Y-%m-%d %H:%M:%S')
-                        except:
-                            actualizado = None
-                    else:
-                            actualizado = n.created_on
+
+                    try:
+                        actualizado = datetime.strptime(str(n.updated),'%Y-%m-%d %H:%M:%S')
+                    except:
+                        actualizado = n.created_on
 
                     # armando la url que va en el rss
                     #localurl = 'http://' + request.env.http_host + URL(c = 'default', f = 'blog.html', args = [n.slug,n.id], extension='html')
