@@ -100,7 +100,7 @@ def publicaciones():
                                             & (db.feed.categoria == db.categoria.id)
                                             & (db.feed.is_active == True)
                                             & (db.categoria.is_active == True)
-                                            ).select(db.feed.id,db.feed.title,db.feed.source, cache=(cache.disk,600))
+                                            ).select(db.feed.id,db.feed.title,db.feed.source)
 
 
     for feedincat in feedincat_data:
