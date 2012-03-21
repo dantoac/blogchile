@@ -16,7 +16,8 @@ if request.env.web2py_runtime_gae:            # if running on Google App Engine
     # from google.appengine.api.memcache import Client
     # session.connect(request, response, db = MEMDB(Client()))
 else:                                         # else use a normal relational database
-    db = DAL(['mysql://danto_bfra:040e10f4@localhost/danto_bfra','sqlite://storage.sqlite'])       # if not, use SQLite or other DB
+    #db = DAL(['mysql://danto_bfra:040e10f4@localhost/danto_bfra','sqlite://storage.sqlite'])       # if not, use SQLite or other DB
+    db = DAL(['sqlite://storage.sqlite'])
     '''
     acciones_readonly = ['feed']
     if request.controller != 'noticias':
@@ -149,7 +150,7 @@ tabla('noticia',
       Field('link', requires = IS_URL()),
       Field('description', 'text'),
       Field('feed', db.feed),
-      Field('updated', 'datetime', default=request.now),
+      Field('updated', 'string', default=str(request.now.now())),
       Field('shorturl',requires=IS_URL()),
       auth.signature,
       format = '%(slug)s',
