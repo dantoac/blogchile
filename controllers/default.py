@@ -169,6 +169,10 @@ def blog():
     if request.extension!='html':
         request.extension = 'html'
 
+        
+    if not request.args:
+        redirect(URL('default','index.html'))
+        
     response.files.append(URL('static','css/blog.css'))
     #response.files.append(URL('static','js/jquery.iframe.js'))
 
