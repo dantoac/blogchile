@@ -29,12 +29,12 @@ def index():
     if request.args:
         catslug = request.args(0)
         
-        data = db((db.noticia.feed == db.feed.id) & (db.feed.categoria == db.categoria.id) & (db.categoria.slug == catslug)).select(db.noticia.title,db.noticia.link,db.noticia.description,db.noticia.created_on,db.noticia.slug,db.noticia.id,db.noticia.updated,orderby=~db.noticia.id, limitby=(0,10), cache=(cache.disk,600))
+        data = db((db.noticia.feed == db.feed.id) & (db.feed.categoria == db.categoria.id) & (db.categoria.slug == catslug)).select(db.noticia.title,db.noticia.link,db.noticia.description,db.noticia.created_on,db.noticia.slug,db.noticia.id,db.noticia.updated,orderby=~db.noticia.id, limitby=(0,10))
         feed_title = unicode('BlogChile: %s' % catslug.capitalize(),'utf8')
         feed_url = unicode('http://blogchile.cl/index/%s' % catslug,'utf8')
         feed_description = unicode("Últimas publicaciones en blogs de %s" % catslug,"utf8")
     else:
-        data = db(db.noticia.id>0).select(orderby=~db.noticia.id, limitby=(0,10), cache=(cache.disk,600))
+        data = db(db.noticia.id>0).select(orderby=~db.noticia.id, limitby=(0,10))
         feed_title = unicode('BlogChile.cl: Todas las Categorías','utf8')
         feed_url = unicode('http://blogchile.cl/','utf8')
         #feed_description = unicode("Recopilación de las últimas publicaciones de entre todas las categorías","utf8"),
