@@ -64,9 +64,6 @@ def index():
     return dict(publicaciones=publicaciones)
     #return dict()
 
-def votar():
-    return locals()
-
 #@cache(request.env.path_info, time_expire=150, cache_model=cache.disk)
 def publicaciones():
     if not request.ajax: return ''
@@ -194,11 +191,11 @@ def blog():
     if db.noticia(nid):
         shorturl = db.noticia(nid).shorturl
     else:
-        shorturl = None
-    #titulo = db.noticia[nid].title
+        shorturl = 'http://lmddgtfy.net/?q=%s, %s' % (request.args(0).title(),request.args(1).title().replace('-',' '))
+
 
     if 'http://lmddgtfy' in shorturl:
-        response.flash = 'El enlace se ha perdido por algún motivo. Te dirigiremos a una búsqueda privada al respecto.'
+        response.flash = 'El enlace se ha perdido. Te dirigiré a una búsqueda privada usando DuckDuckGo.com. Disculpa las molestias.'
         
     if request.env.http_referer!=None:
         goback = A(SPAN(_class = 'icon leftarrow'), 'Regresar', _title='Volver a la página anterior', _class = 'pill button izq',
@@ -364,7 +361,7 @@ def sitemap5():
     sm.append('</urlset>')
     return sm
 
-'''
+
 ####################################################################################
 # URLs ANTIGUAS. Las funciones a continuación están sólo para compatibilidad retroactiva
 ####################################################################################
@@ -394,4 +391,3 @@ def feed():
         return redirect(URL(r=request,c='default',f='index.rss',args=request.args(0)),301)
     else:
         return redirect(URL(r=request,c='default',f='index',args=request.args(0)),301)
-'''
