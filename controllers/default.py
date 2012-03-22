@@ -177,8 +177,8 @@ def blog():
 
     catslug = request.args(0)
     slugnoticia = request.args(1) #para mostrar la noticia en la url; SEO
-    #nid = request.args(2)
-    nid = int(request.args[len(request.args)-1])
+    nid = request.args(2)
+    #nid = int(request.args[len(request.args)-1])
 
 
     #titulo = db.noticia[nid].title
@@ -191,8 +191,10 @@ def blog():
     response.title='%s: %s' % (categoria.capitalize(),titulo.capitalize())
     #response.meta.description = '%s %s' % (response.title,db.noticia[nid].feed.title)
 
-    noticia = db.noticia(nid)
-    shorturl = noticia.shorturl or None
+    if db.noticia(nid):
+        shorturl = db.noticia(nid).shorturl
+    else:
+        shorturl = None
     #titulo = db.noticia[nid].title
 
     if 'http://lmddgtfy' in shorturl:
@@ -362,7 +364,7 @@ def sitemap5():
     sm.append('</urlset>')
     return sm
 
- 
+'''
 ####################################################################################
 # URLs ANTIGUAS. Las funciones a continuación están sólo para compatibilidad retroactiva
 ####################################################################################
@@ -392,3 +394,4 @@ def feed():
         return redirect(URL(r=request,c='default',f='index.rss',args=request.args(0)),301)
     else:
         return redirect(URL(r=request,c='default',f='index',args=request.args(0)),301)
+'''
