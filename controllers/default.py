@@ -195,11 +195,10 @@ def blog():
     if db.noticia(nid):
         shorturl = db.noticia(nid).shorturl
     else:
-        shorturl = 'http://lmddgtfy.net/?q=%s, %s' % (request.args(0).title(),request.args(1).title().replace('-',' '))
-
+        shorturl = 'http://lmddgtfy.net/?q=%s, %s' % (request.args(0).title().replace('-',' '),request.args(1).title().replace('-',' '))
 
     if 'http://lmddgtfy' in shorturl:
-        response.flash = 'El enlace se ha perdido. Te dirigiré a una búsqueda privada usando DuckDuckGo.com. Disculpa las molestias.'
+        response.flash = 'El enlace se ha perdido. Te dirigiré a una búsqueda PRIVADA usando DuckDuckGo.com. Disculpa las molestias.'
         
     if request.env.http_referer!=None:
         goback = A(SPAN(_class = 'icon leftarrow'), 'Regresar', _title='Volver a la página anterior', _class = 'pill button izq',
