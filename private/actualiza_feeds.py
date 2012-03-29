@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+
 '''
 Este script permite la actualización de los feeds evitando que 2 procesos
 se superpongan como podría pasar al usar cron para estos efectos.
@@ -10,6 +11,7 @@ NECESITA LA LIBERARÍA dateutil <http://niemeyer.net/python-dateutil>
 
 daniel@varpub.org
 '''
+
 import time
 #from subprocess import Popen
 
@@ -80,7 +82,7 @@ def _u2d(feedlink):
                 print('Error registrando noticia: %s' % e)
             limite += 1
         else:
-            print('Ya existe entre las últimas 8 noticias')
+            print('Ya existe entre las últimas noticia.')
             continue
         
 
@@ -93,9 +95,8 @@ feed_data = db((db.feed.id>0) &
 links = [(f.id,f.link) for f in db((db.feed.id>0) & 
                                    (db.feed.is_active==True)).select()]
 
-#try:
-for feedlink in links:
-    
-    _u2d(feedlink)    
-        #except Exception,e:
-        #    print "Excepción: %s" % e
+try:
+    for feedlink in links:
+        _u2d(feedlink)    
+except Exception,e:
+    print "Excepción: %s" % e
